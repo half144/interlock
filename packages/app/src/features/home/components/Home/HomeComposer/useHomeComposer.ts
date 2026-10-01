@@ -3,10 +3,11 @@ import { useStore } from "@/stores/app-store";
 import { canPlanFirst } from "@/daemon/adapters/modes";
 import { useAttachmentDraft } from "@/hooks/useAttachmentDraft";
 import { useEffortChoice } from "@/features/home/hooks/useEffortChoice";
+import type { ProjectSetup } from "@/features/home/hooks/useAddProject";
 import type { ProjectChoice } from "@/features/home/hooks/useProjectChoice";
 import type { ModelChoice } from "@/features/home/types";
 
-export function useHomeComposer(choice: ModelChoice, target: ProjectChoice) {
+export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setup: ProjectSetup) {
   const startTask = useStore((s) => s.startTask);
   const { preset, project, setProjectId, base, setBase } = target;
   const { efforts, effort, setEffort } = useEffortChoice(choice);
@@ -18,12 +19,13 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice) {
 
   const planAvailable = canPlanFirst(choice.kind);
   const plan = planWanted && planAvailable;
-  const ready = text.trim().length > 0 && !starting;
+  const ready = text.trim().length > 0 && !starting && project !== undefined;
+  const dropping = !project && setup.dragging;
 
   useEffect(() => input.current?.focus(), [preset]);
 
   const submit = () => {
-    if (!ready || !project || !base) return;
+    if (!ready || !base) return;
     setStarting(true);
     void startTask({
       projectId: project.id,
@@ -46,6 +48,10 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice) {
 
   return {
     input,
+    placeholder: project ? `Give Interlock a task in ${project.name}` : setup.prompt,
+    dropping,
+    highlighted: attachments.dragging || dropping,
+    setupError: project ? null : setup.error,
     project,
     setProjectId,
     base,

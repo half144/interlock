@@ -4,10 +4,13 @@ import { useFolderDrop } from "@/platform/hooks/useFolderDrop";
 import { useStore } from "@/stores/app-store";
 import { folderName } from "@/features/home/utils/repositories";
 
-const PROMPT = "Choose a git repository, or drop its folder here";
+const PROMPT = "Give Interlock a task, then choose the repository it runs in";
 
-/** Adds the first project from the folder picker, a folder dropped on the window, or a repository found on disk. */
-export function useAddProject() {
+/**
+ * Adds the first project from the folder picker, a folder dropped on the window or a repository found on disk.
+ * Drops are only taken while `enabled`, so they can't compete with a project composer's attachments.
+ */
+export function useAddProject(enabled: boolean) {
   const tryAddProject = useStore((s) => s.tryAddProject);
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState<string | null>(null);
@@ -29,7 +32,7 @@ export function useAddProject() {
     }
   };
 
-  const dragging = useFolderDrop((path) => void add(path));
+  const dragging = useFolderDrop(enabled, (path) => void add(path));
 
   let prompt = PROMPT;
   if (adding) prompt = `Adding ${folderName(adding)}…`;
@@ -44,3 +47,5 @@ export function useAddProject() {
     add: (path: string) => void add(path),
   };
 }
+
+export type ProjectSetup = ReturnType<typeof useAddProject>;

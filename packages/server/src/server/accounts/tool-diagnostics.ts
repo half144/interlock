@@ -96,16 +96,12 @@ function unknownLogin(logger: Logger, id: DiagnosticToolId, error: unknown): Log
   return UNKNOWN_LOGIN;
 }
 
+// `gh auth status` exits 1 when any stored account is broken, even while the active one works,
+// so the active account decides.
 async function probeGh(run: CommandRunner, binary: string): Promise<LoginProbe> {
   const result = await run(binary, ["auth", "status"]);
-  if (result.exitCode !== 0) {
-    return { loggedIn: false, account: null, plan: null };
-  }
-  return {
-    loggedIn: true,
-    account: parseActiveGhAccount(`${result.stdout}\n${result.stderr}`),
-    plan: null,
-  };
+  const account = parseActiveGhAccount(`${result.stdout}\n${result.stderr}`);
+  return { loggedIn: account !== null, account, plan: null };
 }
 
 export function parseActiveGhAccount(output: string): string | null {
@@ -117,7 +113,9 @@ export function parseActiveGhAccount(output: string): string | null {
     if (account) {
       current = account;
       first ??= account;
-    } else if (/Active account:\s*true/u.test(line) && current) {
+    } else if (/Failed to log in to \S+ account/u.test(line)) {
+      current = null;
+    } else if (/Active account:\s*true/u.test(line)) {
       return current;
     }
   }

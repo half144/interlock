@@ -27,13 +27,7 @@ export function EffortMenu({ value, options, model, onPick, onClose }: EffortMen
   const { blurb, pace } = effortCopy(active);
 
   return (
-    <motion.div
-      layout
-      initial={blurIn}
-      animate={{ ...sharp, transition: { ...fadeIn, delay: 0.07 } }}
-      exit={{ opacity: 0, transition: fadeOut }}
-      className="p-1.5"
-    >
+    <div className="p-1.5">
       <p className="flex items-baseline justify-between gap-3 px-2.5 pt-1.5 pb-2 text-[12px]">
         <span className="text-ink-2">Reasoning</span>
         <span className="truncate text-ink-4">{model}</span>
@@ -102,6 +96,6 @@ export function EffortMenu({ value, options, model, onPick, onClose }: EffortMen
           </motion.div>
         </AnimatePresence>
       </div>
-    </motion.div>
+    </div>
   );
 }

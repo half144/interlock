@@ -108,6 +108,29 @@ describe("collectToolDiagnostics", () => {
     });
   });
 
+  it("reports gh as logged in when only an inactive account is broken", async () => {
+    const tools = await collectToolDiagnostics({
+      logger,
+      claudeAuth: { status: async () => ({ loggedIn: false, account: null, plan: null }) },
+      codexAuth: { status: async () => ({ loggedIn: false, account: null, plan: null }) },
+      findBinary: async (name) => installed[name] ?? null,
+      run: async (binary, args) =>
+        args[0] === "auth"
+          ? {
+              exitCode: 1,
+              stdout: "",
+              stderr:
+                "github.com\n  ✓ Logged in to github.com account octo (keyring)\n  - Active account: true\n  X Failed to log in to github.com account stale (keyring)\n",
+            }
+          : run(binary, args),
+    });
+
+    expect(tools.find((tool) => tool.id === "gh")).toMatchObject({
+      loggedIn: true,
+      account: "octo",
+    });
+  });
+
   it("reports gh as logged out when auth status fails", async () => {
     const tools = await collectToolDiagnostics({
       logger,
@@ -138,5 +161,30 @@ describe("parseActiveGhAccount", () => {
     ].join("\n");
 
     expect(parseActiveGhAccount(output)).toBe("second");
+  });
+
+  it("keeps the active account when another stored account has a broken token", () => {
+    const output = [
+      "github.com",
+      "  ✓ Logged in to github.com account octo (keyring)",
+      "  - Active account: true",
+      "  X Failed to log in to github.com account stale (keyring)",
+      "  - Active account: false",
+      "  - The token in keyring is invalid.",
+    ].join("\n");
+
+    expect(parseActiveGhAccount(output)).toBe("octo");
+  });
+
+  it("is null when the active account itself failed", () => {
+    const output = [
+      "github.com",
+      "  ✓ Logged in to github.com account octo (keyring)",
+      "  - Active account: false",
+      "  X Failed to log in to github.com account broken (keyring)",
+      "  - Active account: true",
+    ].join("\n");
+
+    expect(parseActiveGhAccount(output)).toBeNull();
   });
 });
