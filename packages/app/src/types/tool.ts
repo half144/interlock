@@ -1,1 +1,1 @@
-export type ToolName = "read" | "search" | "edit" | "bash" | "web";
+export type ToolName = "shell" | "read" | "edit" | "write" | "search" | "fetch" | "mcp" | "other";

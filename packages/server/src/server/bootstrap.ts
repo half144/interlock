@@ -137,6 +137,8 @@ import {
   type ActiveWorkspaceRef,
 } from "./workspace-archive-service.js";
 import { setupAutoArchiveOnMerge } from "./auto-archive-on-merge/index.js";
+import { createArchiveAfterMergeReader } from "./session/ship/archive-after-merge.js";
+import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import type { TerminalManager } from "../terminal/terminal-manager.js";
 import { createConfiguredTerminalManager } from "../terminal/terminal-manager-factory.js";
 import { getOrCreateServerId } from "./server-id.js";
@@ -353,6 +355,7 @@ export async function createPaseoDaemon(
   const fixedAllowedOrigins = [
     "tauri://localhost",
     "http://tauri.localhost",
+    ...(config.isDev ? ["http://localhost:5174"] : []),
     // For TCP, add localhost variants
     ...(listenTarget.type === "tcp"
       ? [
@@ -648,6 +651,15 @@ export async function createPaseoDaemon(
     markWorkspaceArchiving: markWorkspaceArchivingExternal,
     clearWorkspaceArchiving: clearWorkspaceArchivingExternal,
     emitWorkspaceUpdatesForWorkspaceIds: emitWorkspaceUpdatesExternal,
+    isArchiveEnabled: createArchiveAfterMergeReader(
+      ProjectSettingsStore.forHome(config.paseoHome),
+      logger,
+    ),
+    onMerged: ({ cwd, url, archived }) =>
+      wsServer?.broadcast({
+        type: "session",
+        message: { type: "task_ship_update", payload: { kind: "merged", cwd, url, archived } },
+      }),
   });
 
   logger.info({ elapsed: elapsed() }, "Loading persisted agent registry");

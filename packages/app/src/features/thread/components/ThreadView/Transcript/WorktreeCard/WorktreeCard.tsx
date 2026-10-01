@@ -1,18 +1,15 @@
-import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronUp } from "lucide-react";
 import type { Agent, Thread } from "@/types";
 import { agentLabel } from "@/lib/agentKinds";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { Collapse } from "@/components/ui/Collapse/Collapse";
-import { SwapText } from "@/components/ui/SwapText/SwapText";
-import { finishedLabel, isFinished, statusLine } from "@/lib/agentStatus";
-import { planProgress } from "@/features/thread/utils/planSteps";
+import { CardLine } from "./CardLine/CardLine";
+import { StepCounter } from "./StepCounter/StepCounter";
 import { StepList } from "./StepList/StepList";
+import { useWorktreeCard } from "./useWorktreeCard";
+import { WorktreeMark } from "./WorktreeMark/WorktreeMark";
 import { WorktreeScreen } from "./WorktreeScreen/WorktreeScreen";
-import { WorktreeMark, type WorktreeMarkKind } from "./WorktreeMark/WorktreeMark";
 
 const swap = {
   initial: { opacity: 0 },
@@ -26,23 +23,15 @@ const swap = {
  * work is done it settles into a quieter single line. The full plan only shows when you ask for it.
  */
 export function WorktreeCard({ agent, thread }: { agent: Agent; thread: Thread }) {
-  const openPanel = useStore((s) => s.openPanel);
-  const [expanded, setExpanded] = useState(false);
-  const { steps, statuses, done, index, current, headline } = planProgress(agent, thread);
-  const finished = isFinished(agent);
-  const statusText = statusLine(agent);
-  const mark: WorktreeMarkKind = finished
-    ? agent.aspect === "merged"
-      ? "merged"
-      : "review"
-    : "step";
+  const card = useWorktreeCard(agent, thread);
+  const { steps, statuses, index, current, expanded } = card;
 
   return (
     <div className="relative mx-2 -mb-4 rounded-t-2xl border border-b-0 border-seam bg-inset pb-4">
       <WorktreeScreen
         label={`Open ${agentLabel(agent)}’s worktree`}
-        finished={finished}
-        onOpen={() => openPanel("terminal")}
+        finished={card.finished}
+        onOpen={card.openWorktree}
       />
 
       <Collapse open={expanded}>
@@ -53,10 +42,10 @@ export function WorktreeCard({ agent, thread }: { agent: Agent; thread: Thread }
           <p
             className={cn(
               "truncate text-[12px]",
-              agent.aspect === "running" ? "shimmer" : "text-ink-3",
+              card.statusTone === "shimmer" ? "shimmer" : "text-ink-3",
             )}
           >
-            {statusText}
+            {card.statusText}
           </p>
         </div>
         <StepList steps={steps} statuses={statuses} />
@@ -65,10 +54,10 @@ export function WorktreeCard({ agent, thread }: { agent: Agent; thread: Thread }
       {/* The row settles to a shorter height once the work is done, rather than snapping. */}
       <motion.button
         type="button"
-        onClick={() => steps.length > 0 && setExpanded((e) => !e)}
+        onClick={card.toggle}
         aria-expanded={steps.length > 0 ? expanded : undefined}
         initial={false}
-        animate={{ height: finished || !current ? 40 : 56 }}
+        animate={{ height: card.rowHeight }}
         transition={spring}
         className="flex w-full items-center gap-2.5 pr-3.5 text-left"
       >
@@ -88,55 +77,20 @@ export function WorktreeCard({ agent, thread }: { agent: Agent; thread: Thread }
                 {...swap}
                 className="flex min-w-0 items-center gap-2.5 pl-[88px] [grid-area:1/1]"
               >
-                {current && <WorktreeMark kind={mark} status={statuses[index] ?? "pending"} />}
-                <span className="min-w-0 flex-1">
-                  <SwapText
-                    text={headline ?? statusText}
-                    className={cn(
-                      "text-[13.5px] transition-colors duration-300",
-                      finished ? "text-ink-2" : "text-ink",
-                    )}
-                  />
-                  {!finished && current && (
-                    <SwapText
-                      text={statusText}
-                      className={cn(
-                        "text-[12px]",
-                        agent.aspect === "running"
-                          ? "shimmer"
-                          : agent.aspect === "held"
-                            ? "text-hold"
-                            : "text-ink-3",
-                      )}
-                    />
-                  )}
-                </span>
+                {current && <WorktreeMark kind={card.mark} status={statuses[index] ?? "pending"} />}
+                <CardLine
+                  headline={card.headline}
+                  statusText={card.statusText}
+                  statusTone={card.statusTone}
+                  finished={card.finished}
+                  showStatus={!card.finished && Boolean(current)}
+                />
               </motion.span>
             )}
           </AnimatePresence>
         </span>
         {steps.length > 0 && (
-          <>
-            <span className="shrink-0">
-              <SwapText
-                text={finished && !expanded ? finishedLabel(agent) : `${done} / ${steps.length}`}
-                className={cn(
-                  "text-right tabular-nums",
-                  finished && !expanded
-                    ? agent.aspect === "merged"
-                      ? "text-[12.5px] text-merge"
-                      : "text-[12.5px] text-green"
-                    : "text-[13px] text-ink-3",
-                )}
-              />
-            </span>
-            <ChevronUp
-              className={cn(
-                "size-4 shrink-0 text-ink-3 transition-transform duration-200 ease-out-quint",
-                expanded && "rotate-180",
-              )}
-            />
-          </>
+          <StepCounter text={card.counter} tone={card.counterTone} expanded={expanded} />
         )}
       </motion.button>
     </div>

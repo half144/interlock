@@ -1,8 +1,9 @@
 import { memo } from "react";
 import { motion } from "motion/react";
 import type { Message } from "@/types";
-import { rise } from "@/features/thread/utils/rise";
 import { AgentMessage } from "./AgentMessage/AgentMessage";
+import { rise } from "./rise";
+import { SentAttachments } from "./SentAttachments/SentAttachments";
 
 /**
  * A new message rises in; a new agent reply settles block by block, a beat apart. Messages already on screen
@@ -19,13 +20,14 @@ export const MessageItem = memo(function MessageItem({
   return (
     <motion.div initial={animate ? "hidden" : false} animate="shown">
       {message.role === "user" ? (
-        <motion.div variants={rise} custom={0} className="flex justify-end">
-          <div className="max-w-[85%] rounded-2xl border border-seam bg-raised px-4 py-3 text-[15px] leading-[1.6] text-ink shadow-button [text-wrap:pretty]">
+        <motion.div variants={rise} custom={0} className="flex flex-col items-end">
+          {message.attachments && <SentAttachments items={message.attachments} />}
+          <div className="max-w-[85%] rounded-2xl border border-seam bg-raised px-4 py-3 text-[15px] leading-[1.6] break-words whitespace-pre-wrap text-ink shadow-button [text-wrap:pretty]">
             {message.text}
           </div>
         </motion.div>
       ) : (
-        <AgentMessage blocks={message.blocks} agentId={message.agentId} />
+        <AgentMessage blocks={message.blocks} />
       )}
     </motion.div>
   );

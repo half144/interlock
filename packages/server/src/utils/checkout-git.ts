@@ -817,7 +817,7 @@ export type CheckoutDiffResult =
   | { diff: ""; structured: []; diffTooLarge: true };
 
 export interface CheckoutDiffCompare {
-  mode: "uncommitted" | "base";
+  mode: "uncommitted" | "base" | "base_worktree";
   baseRef?: string;
   ignoreWhitespace?: boolean;
   includeStructured?: boolean;
@@ -3228,11 +3228,10 @@ async function resolveCheckoutDiffRefs(
     return null;
   }
   const bestBaseRef = await resolveBestComparisonBaseRef(cwd, baseRef);
-  return {
-    baseRef: (await tryResolveMergeBase(cwd, bestBaseRef)) ?? bestBaseRef,
-    targetRef: "HEAD",
-    includeUntracked: false,
-  };
+  const mergeBase = (await tryResolveMergeBase(cwd, bestBaseRef)) ?? bestBaseRef;
+  return compare.mode === "base_worktree"
+    ? { baseRef: mergeBase, includeUntracked: true }
+    : { baseRef: mergeBase, targetRef: "HEAD", includeUntracked: false };
 }
 
 export async function getCheckoutDiff(

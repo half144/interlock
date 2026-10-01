@@ -1,4 +1,14 @@
-import { FileSearch, FileText, Globe, Pencil, SquareTerminal, type LucideIcon } from "lucide-react";
+import {
+  FileSearch,
+  FileText,
+  Globe,
+  PencilLine,
+  Pencil,
+  Plug,
+  SquareTerminal,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
 import type { Subagent, SubagentEvent, ToolName } from "@/types";
 import { plural } from "@/lib/utils";
 
@@ -22,14 +32,23 @@ export const tools: Record<ToolName, ToolInfo> = {
     doing: "Searching for",
   },
   edit: { icon: Pencil, label: "Edit files", app: "Editor", verb: "Edited", doing: "Editing" },
-  bash: {
+  write: {
+    icon: PencilLine,
+    label: "Write files",
+    app: "Editor",
+    verb: "Wrote",
+    doing: "Writing",
+  },
+  shell: {
     icon: SquareTerminal,
     label: "Run commands",
     app: "Terminal",
     verb: "Ran",
     doing: "Running",
   },
-  web: { icon: Globe, label: "Use a browser", app: "Browser", verb: "Checked", doing: "Checking" },
+  fetch: { icon: Globe, label: "Fetch pages", app: "Browser", verb: "Fetched", doing: "Fetching" },
+  mcp: { icon: Plug, label: "Use MCP tools", app: "MCP", verb: "Called", doing: "Calling" },
+  other: { icon: Wrench, label: "Use tools", app: "Tools", verb: "Used", doing: "Using" },
 };
 
 export type ToolEvent = SubagentEvent & { kind: ToolName };
@@ -47,12 +66,17 @@ export function doing(sub: Subagent) {
   return `${tools[call.kind].doing} ${call.kind === "search" ? `“${call.text}”` : call.text}`;
 }
 
+const times = (n: number) => (n === 1 ? "once" : `${n} times`);
+
 const phrase: Record<ToolName, (n: number) => string> = {
   read: (n) => `read ${plural(n, "file")}`,
-  search: (n) => `searched ${n === 1 ? "once" : `${n} times`}`,
+  search: (n) => `searched ${times(n)}`,
   edit: (n) => `edited ${plural(n, "file")}`,
-  bash: (n) => `ran ${plural(n, "command")}`,
-  web: (n) => `checked the browser ${n === 1 ? "once" : `${n} times`}`,
+  write: (n) => `wrote ${plural(n, "file")}`,
+  shell: (n) => `ran ${plural(n, "command")}`,
+  fetch: (n) => `fetched ${plural(n, "page")}`,
+  mcp: (n) => `called an MCP tool ${times(n)}`,
+  other: (n) => `used another tool ${times(n)}`,
 };
 
 /** “Read 3 files, searched once and ran 2 commands”, in the order the work happened. */

@@ -13,6 +13,7 @@ export const aspectMeta: Record<
     bg: "bg-ready",
     stroke: "var(--color-ready)",
   },
+  idle: { label: "Idle", text: "text-ink-3", bg: "bg-ink-4", stroke: "var(--color-ink-3)" },
   merged: { label: "Merged", text: "text-merge", bg: "bg-merge", stroke: "var(--color-merge)" },
   failed: { label: "Failed", text: "text-red", bg: "bg-red", stroke: "var(--color-red)" },
   discarded: {

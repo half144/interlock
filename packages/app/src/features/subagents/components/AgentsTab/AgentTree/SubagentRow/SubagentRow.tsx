@@ -1,11 +1,12 @@
 import type { Agent, Subagent } from "@/types";
 import { cn } from "@/lib/utils";
-import { doing, toolUses } from "@/lib/tools";
+import { doing } from "@/lib/tools";
 import { duration, elapsedOf } from "@/lib/clock";
 import { SubStatus } from "@/components/ui/SubStatus/SubStatus";
 import { TreeSelection } from "@/features/subagents/components/tree/TreeSelection/TreeSelection";
+import { statusLine } from "@/features/subagents/utils/stats";
 
-/** A subagent in the tree: status, name, and what it's doing now or how much it did. */
+/** A subagent in the tree: status, name, what it's doing now or how it ended, and the provider's model line. */
 export function SubagentRow({
   sub,
   agent,
@@ -17,6 +18,8 @@ export function SubagentRow({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const running = sub.status === "running";
+
   return (
     <li className="relative">
       <span aria-hidden className="absolute top-[19px] -left-2 h-px w-2 bg-seam" />
@@ -36,24 +39,18 @@ export function SubagentRow({
         <span className="min-w-0 flex-1">
           <span className="flex items-baseline gap-2">
             <span className="min-w-0 flex-1 truncate text-[13.5px] text-ink">{sub.name}</span>
-            {sub.status !== "queued" && sub.status !== "running" && (
+            {!running && (
               <span className="font-mono text-[11.5px] text-ink-3 tabular-nums">
                 {duration(elapsedOf(sub, agent))}
               </span>
             )}
           </span>
-          <span
-            className={cn(
-              "block truncate text-[12px]",
-              sub.status === "running" ? "shimmer" : "text-ink-3",
-            )}
-          >
-            {sub.status === "running"
-              ? doing(sub)
-              : sub.status === "queued"
-                ? "Starts next"
-                : `${toolUses(sub)} tool uses`}
+          <span className={cn("block truncate text-[12px]", running ? "shimmer" : "text-ink-3")}>
+            {running ? doing(sub) : statusLine(sub, agent)}
           </span>
+          {sub.subtitle && (
+            <span className="block truncate text-[11.5px] text-ink-4">{sub.subtitle}</span>
+          )}
         </span>
       </button>
     </li>

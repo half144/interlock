@@ -25,6 +25,7 @@
     "dev:app": "npm run dev --workspace @interlock/app",
     "dev:daemon": "npm run dev --workspace @interlock/server",
     "dev:desktop": "PATH=\"$HOME/.cargo/bin:$PATH\" npm run dev --workspace @interlock/desktop",
+    "build:desktop": "npm run bundle:daemon --workspace @interlock/desktop && PATH=\"$HOME/.cargo/bin:$PATH\" npm run build --workspace @interlock/desktop",
     "prepare": "lefthook install"
   },
   "devDependencies": {

@@ -20,6 +20,7 @@ import {
   createWorktree as createWorktreePrimitive,
   type WorktreeConfig,
 } from "../utils/worktree.js";
+import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import type { TerminalManager } from "../terminal/terminal-manager.js";
 import type { TerminalSession } from "../terminal/terminal.js";
 
@@ -113,18 +114,8 @@ describe.skipIf(isPlatform("win32"))("worktree-bootstrap POSIX-only", () => {
       rmSync(tempDir, { recursive: true, force: true });
     });
     it("streams running setup updates live and persists only a final setup timeline row", async () => {
-      writeFileSync(
-        join(repoDir, "paseo.json"),
-        JSON.stringify({
-          worktree: {
-            setup: ['echo "line-one"; echo "line-two" 1>&2', 'echo "line-three"'],
-          },
-        }),
-      );
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir, stdio: "pipe" });
-      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add setup"], {
-        cwd: repoDir,
-        stdio: "pipe",
+      await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+        setupCommands: ['echo "line-one"; echo "line-two" 1>&2', 'echo "line-three"'],
       });
 
       const worktreeBootstrap = await createBootstrapWorktreeForTest({
@@ -139,6 +130,8 @@ describe.skipIf(isPlatform("win32"))("worktree-bootstrap POSIX-only", () => {
       const live: AgentTimelineItem[] = [];
 
       await runAsyncWorktreeBootstrap({
+        repoRoot: repoDir,
+        paseoHome,
         agentId: "agent-test",
         workspaceId: "ws-agent-test",
         worktree: worktreeBootstrap.worktree,
@@ -224,25 +217,11 @@ describe.skipIf(isPlatform("win32"))("worktree-bootstrap POSIX-only", () => {
     });
 
     it("keeps only the final carriage-return-updated content in command logs", async () => {
-      writeFileSync(
-        join(repoDir, "paseo.json"),
-        JSON.stringify({
-          worktree: {
-            setup: [
-              `node -e "process.stdout.write('fetch 1/3\\\\rfetch 2/3\\\\rfetch 3/3\\\\nready\\\\n')"`,
-            ],
-          },
-        }),
-      );
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir, stdio: "pipe" });
-      execFileSync(
-        "git",
-        ["-c", "commit.gpgsign=false", "commit", "-m", "add carriage return setup"],
-        {
-          cwd: repoDir,
-          stdio: "pipe",
-        },
-      );
+      await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+        setupCommands: [
+          `node -e "process.stdout.write('fetch 1/3\\\\rfetch 2/3\\\\rfetch 3/3\\\\nready\\\\n')"`,
+        ],
+      });
 
       const worktreeBootstrap = await createBootstrapWorktreeForTest({
         cwd: repoDir,
@@ -254,6 +233,8 @@ describe.skipIf(isPlatform("win32"))("worktree-bootstrap POSIX-only", () => {
 
       const persisted: AgentTimelineItem[] = [];
       await runAsyncWorktreeBootstrap({
+        repoRoot: repoDir,
+        paseoHome,
         agentId: "agent-carriage-return",
         workspaceId: "ws-carriage-return",
         worktree: worktreeBootstrap.worktree,
@@ -282,29 +263,18 @@ describe.skipIf(isPlatform("win32"))("worktree-bootstrap POSIX-only", () => {
     });
 
     it("shares the same worktree runtime port across setup and bootstrap terminals", async () => {
+      await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+        setupCommands: ['echo "$INTERLOCK_WORKTREE_PORT" > setup-port.txt'],
+      });
       writeFileSync(
         join(repoDir, "paseo.json"),
-        JSON.stringify({
-          worktree: {
-            setup: ['echo "$INTERLOCK_WORKTREE_PORT" > setup-port.txt'],
-            terminals: [
-              {
-                name: "Port Terminal",
-                command: "true",
-              },
-            ],
-          },
-        }),
+        JSON.stringify({ worktree: { terminals: [{ name: "Port Terminal", command: "true" }] } }),
       );
       execFileSync("git", ["add", "paseo.json"], { cwd: repoDir, stdio: "pipe" });
-      execFileSync(
-        "git",
-        ["-c", "commit.gpgsign=false", "commit", "-m", "add port setup and terminals"],
-        {
-          cwd: repoDir,
-          stdio: "pipe",
-        },
-      );
+      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add terminals"], {
+        cwd: repoDir,
+        stdio: "pipe",
+      });
 
       const worktreeBootstrap = await createBootstrapWorktreeForTest({
         cwd: repoDir,
@@ -319,6 +289,8 @@ describe.skipIf(isPlatform("win32"))("worktree-bootstrap POSIX-only", () => {
       const createTerminalWorkspaceIds: Array<string | undefined> = [];
       const persisted: AgentTimelineItem[] = [];
       await runAsyncWorktreeBootstrap({
+        repoRoot: repoDir,
+        paseoHome,
         agentId: "agent-shared-runtime-port",
         workspaceId: "ws-shared-runtime-port",
         worktree: worktreeBootstrap.worktree,

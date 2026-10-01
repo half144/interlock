@@ -1,10 +1,7 @@
-import { agentKindOptions, agentKinds, defaultModel } from "@/lib/agentKinds";
-import { projects } from "@/mocks/projects";
 import type { Automation } from "@/types";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
-import { optionsOf } from "@/lib/options";
 import { Picker } from "@/components/ui/Picker/Picker";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { useAutomationDraft } from "@/features/automations/hooks/useAutomationDraft";
@@ -19,7 +16,7 @@ export function NewAutomation({
   onCreate: (a: Automation) => void;
   onCancel: () => void;
 }) {
-  const { draft: d, set, startFrom, ready } = useAutomationDraft();
+  const { draft: d, set, startFrom, ready, projects, kinds, models } = useAutomationDraft();
 
   return (
     <section aria-label="New automation" className="rounded-lg border border-seam-2 bg-hover p-5">
@@ -37,7 +34,11 @@ export function NewAutomation({
           <Picker
             label="Project"
             value={d.projectId}
-            options={projects.map((p) => ({ value: p.id, label: p.name, hint: p.repo }))}
+            options={projects.map((p) => ({
+              value: p.id,
+              label: p.name,
+              hint: p.remoteUrl ?? p.rootPath,
+            }))}
             onChange={(projectId) => set({ projectId })}
           />
         </Field>
@@ -58,15 +59,15 @@ export function NewAutomation({
           <Picker
             label="Agent"
             value={d.kind}
-            options={agentKindOptions}
-            onChange={(kind) => set({ kind, model: defaultModel(kind) })}
+            options={kinds}
+            onChange={(kind) => set({ kind, model: "" })}
           />
         </Field>
         <Field label="Model">
           <Picker
             label="Model"
             value={d.model}
-            options={optionsOf(agentKinds[d.kind].models)}
+            options={models}
             onChange={(model) => set({ model })}
           />
         </Field>

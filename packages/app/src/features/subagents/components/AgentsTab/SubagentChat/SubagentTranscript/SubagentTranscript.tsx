@@ -4,15 +4,13 @@ import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
 import { AgentMark } from "@/components/ui/AgentMark/AgentMark";
 import { surface } from "@/lib/styles";
-import { useFresh } from "@/features/subagents/hooks/useFresh";
-import { useSubagents } from "@/hooks/useSubagents";
-import { toEntries } from "@/features/subagents/utils/entries";
 import { AskedBubble } from "./AskedBubble/AskedBubble";
 import { CallGroup } from "./CallGroup/CallGroup";
 import { LiveView } from "./LiveView/LiveView";
 import { NoteMessage } from "./NoteMessage/NoteMessage";
 import { ResultCard } from "./ResultCard/ResultCard";
 import { SpeakerLine } from "./SpeakerLine/SpeakerLine";
+import { useSubagentTranscript } from "./useSubagentTranscript";
 
 /** The subagent's own chat: the brief it was handed, every call it made, and what it sent back. */
 export function SubagentTranscript({
@@ -24,9 +22,7 @@ export function SubagentTranscript({
   agent: Agent;
   parent: string;
 }) {
-  const blocker = useSubagents(sub.parentId).find((s) => s.status === "running");
-  const entries = toEntries(sub.events);
-  const isFresh = useFresh(sub.events);
+  const { entries, isFresh } = useSubagentTranscript(sub);
 
   return (
     <div className="relative flex flex-col gap-4">
@@ -76,7 +72,7 @@ export function SubagentTranscript({
             animate={{ opacity: 1, y: 0, transition: fadeIn }}
             exit={{ opacity: 0, transition: fadeOut }}
           >
-            <LiveView sub={sub} agent={agent} />
+            <LiveView sub={sub} />
           </motion.div>
         ) : sub.result ? (
           <motion.section
@@ -90,14 +86,6 @@ export function SubagentTranscript({
           </motion.section>
         ) : null}
       </AnimatePresence>
-
-      {sub.status === "queued" && (
-        <p className="text-[14px] leading-[1.6] text-ink-3">
-          Starts when {blocker ? `the ${blocker.name.toLowerCase()}` : "the running subagent"}{" "}
-          finishes, so the two don’t edit the same files at once. Anything you send now joins its
-          brief.
-        </p>
-      )}
     </div>
   );
 }

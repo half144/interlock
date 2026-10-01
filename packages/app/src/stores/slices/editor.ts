@@ -1,4 +1,4 @@
-import { diffs } from "@/mocks/diffs";
+import type { FileDiff } from "@/types";
 import type { SliceCreator } from "../types";
 
 export interface EditorTab {
@@ -21,8 +21,12 @@ export interface EditorSlice {
 }
 
 /** Until you touch it, the review shows the first changed file in a preview tab. */
-export function editorOf(editors: Record<string, EditorState>, agentId: string): EditorState {
-  const first = diffs[agentId]?.[0]?.path ?? null;
+export function editorOf(
+  editors: Record<string, EditorState>,
+  agentId: string,
+  files: FileDiff[] = [],
+): EditorState {
+  const first = files[0]?.path ?? null;
   return editors[agentId] ?? { tabs: first ? [{ path: first, preview: true }] : [], active: first };
 }
 
@@ -41,7 +45,9 @@ function withFile(editor: EditorState, path: string, pin: boolean): EditorState 
 
 export const createEditorSlice: SliceCreator<EditorSlice> = (set) => {
   const update = (agentId: string, next: (editor: EditorState) => EditorState) =>
-    set((s) => ({ editors: { ...s.editors, [agentId]: next(editorOf(s.editors, agentId)) } }));
+    set((s) => ({
+      editors: { ...s.editors, [agentId]: next(editorOf(s.editors, agentId, s.diffs[agentId])) },
+    }));
 
   return {
     editors: {},

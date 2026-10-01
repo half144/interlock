@@ -234,3 +234,24 @@ describe("resolveStructuredGenerationProviders", () => {
     expect(snapshots.calls).toEqual([{ cwd: "/tmp/repo", wait: true }]);
   });
 });
+
+test("falls back to each enabled provider's default model when no known cheap model exists", async () => {
+  const providers = await resolveStructuredGenerationProviders({
+    cwd: "/repo",
+    providerSnapshotManager: {
+      listProviders: async () =>
+        [
+          {
+            provider: "codex",
+            enabled: true,
+            models: [
+              { id: "gpt-9", label: "GPT 9", isDefault: true },
+              { id: "gpt-9-pro", label: "GPT 9 Pro" },
+            ],
+          },
+        ] as never,
+    },
+  });
+
+  expect(providers).toEqual([{ provider: "codex", model: "gpt-9" }]);
+});

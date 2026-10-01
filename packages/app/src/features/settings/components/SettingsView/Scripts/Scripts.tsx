@@ -1,37 +1,41 @@
+import { Wand2 } from "lucide-react";
 import type { Project } from "@/types";
-import { Input } from "@/components/ui/Input/Input";
+import { Button } from "@/components/ui/Button/Button";
 import { CodeArea } from "@/features/settings/components/CodeArea/CodeArea";
 import { Row } from "@/features/settings/components/Row/Row";
+import { SavedMark } from "@/features/settings/components/SavedMark/SavedMark";
 import { Section } from "@/features/settings/components/Section/Section";
+import { useScripts } from "./useScripts";
 
 export function Scripts({ project }: { project: Project }) {
+  const scripts = useScripts(project);
+
   return (
     <Section
       id="scripts"
       title="Scripts"
-      description="Commands Interlock runs for you in every worktree of this project."
+      description="Commands Interlock runs in every new worktree of this project, before the agent starts."
+      aside={<SavedMark status={scripts.status} />}
     >
       <Row
         stack
-        label="Setup script"
-        hint="Runs in each new worktree before the agent starts. $ROOT is the main checkout."
+        label="Setup commands"
+        hint="One command per line, run in order from the worktree root. A failing command stops the setup."
       >
-        <CodeArea rows={4} defaultValue={project.setupScript} aria-label="Setup script" />
-      </Row>
-      <Row stack label="Run script" hint="Powers the Run button and the Preview tab.">
-        <Input mono className="w-full" defaultValue={project.runScript} aria-label="Run script" />
-      </Row>
-      <Row
-        label="Base port"
-        hint="Each worktree takes the next free port from here, so previews never collide."
-      >
-        <Input
-          mono
-          className="w-28"
-          defaultValue={project.port}
-          inputMode="numeric"
-          aria-label="Base port"
+        <CodeArea
+          rows={4}
+          value={scripts.text}
+          placeholder="npm ci"
+          aria-label="Setup commands"
+          onChange={(e) => scripts.edit(e.target.value)}
+          onBlur={scripts.flush}
         />
+        <div className="mt-2 flex items-center gap-3">
+          <Button size="sm" icon={<Wand2 />} onClick={() => void scripts.suggest()}>
+            Suggest from lockfile
+          </Button>
+          {scripts.note && <p className="text-[12.5px] text-ink-3">{scripts.note}</p>}
+        </div>
       </Row>
     </Section>
   );

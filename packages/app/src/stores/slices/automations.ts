@@ -1,9 +1,8 @@
-import { automations as seedAutomations } from "@/mocks/automations";
 import type { Automation } from "@/types";
 import type { SliceCreator } from "../types";
 
 export interface AutomationSlice {
-  /** Newest first: ones made in this session sit above the seeded ones. */
+  /** Newest first. Automations are out of v1; the list stays empty and the view is hidden. */
   automations: Automation[];
 
   addAutomation: (automation: Automation) => void;
@@ -11,7 +10,7 @@ export interface AutomationSlice {
 }
 
 export const createAutomationSlice: SliceCreator<AutomationSlice> = (set) => ({
-  automations: seedAutomations,
+  automations: [],
 
   addAutomation: (automation) => set((s) => ({ automations: [automation, ...s.automations] })),
   toggleAutomation: (id) =>

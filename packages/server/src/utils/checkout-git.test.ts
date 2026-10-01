@@ -3508,6 +3508,36 @@ const x = 1;
     expect(baseDiff.structured?.map((file) => file.path)).toEqual(["feature.txt"]);
   });
 
+  it("diffs base_worktree from the merge-base to the working tree, untracked included", async () => {
+    const worktree = await createLegacyWorktreeForTest({
+      branchName: "feature",
+      cwd: repoDir,
+      baseBranch: "main",
+      worktreeSlug: "base-worktree",
+      paseoHome,
+    });
+
+    writeFileSync(join(worktree.worktreePath, "feature.txt"), "feature\n");
+    execFileSync("git", ["add", "feature.txt"], { cwd: worktree.worktreePath });
+    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "feature commit"], {
+      cwd: worktree.worktreePath,
+    });
+    writeFileSync(join(worktree.worktreePath, "file.txt"), "dirty\n");
+    writeFileSync(join(worktree.worktreePath, "untracked.txt"), "untracked\n");
+
+    const result = await getCheckoutDiff(
+      worktree.worktreePath,
+      { mode: "base_worktree", includeStructured: true },
+      { paseoHome },
+    );
+
+    expect(result.structured?.map((file) => file.path)).toEqual([
+      "feature.txt",
+      "file.txt",
+      "untracked.txt",
+    ]);
+  });
+
   it("resolves the repository default branch from origin HEAD", async () => {
     execFileSync("git", ["checkout", "-b", "develop"], { cwd: repoDir });
     execFileSync("git", ["checkout", "main"], { cwd: repoDir });

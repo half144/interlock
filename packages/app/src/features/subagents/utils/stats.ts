@@ -1,8 +1,9 @@
 import type { Agent, Subagent } from "@/types";
 import { duration, elapsedOf } from "@/lib/clock";
 import { toolUses } from "@/lib/tools";
-import { tokens } from "@/lib/utils";
+import { plural } from "@/lib/utils";
+import { statusLabel } from "./statusLabel";
 
-/** What a run has cost, as Claude Code counts it: “12 tool uses · 48k tokens · 1m 05s”. */
-export const runStats = (sub: Subagent, agent: Agent) =>
-  `${toolUses(sub)} tool uses · ${tokens(sub.tokens)} tokens · ${duration(elapsedOf(sub, agent))}`;
+/** "Done · 12 tool uses · 1m 02s", the line a finished subagent ends on. */
+export const statusLine = (sub: Subagent, agent: Agent) =>
+  `${statusLabel[sub.status]} · ${plural(toolUses(sub), "tool use")} · ${duration(elapsedOf(sub, agent))}`;

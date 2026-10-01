@@ -7,7 +7,6 @@ import {
   deletePaseoWorktree,
   InvalidGitBranchNameError,
   getScriptConfigs,
-  getWorktreeSetupCommands,
   getWorktreeTerminalSpecs,
   getWorktreeTeardownCommands,
   isServiceScript,
@@ -31,6 +30,7 @@ import {
 } from "./checkout-git.js";
 import { execFileSync } from "child_process";
 import { isPlatform } from "../test-utils/platform.js";
+import { ProjectSettingsStore } from "../server/project-settings/project-settings-store.js";
 import {
   mkdtempSync,
   mkdirSync,
@@ -111,6 +111,9 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
     afterEach(() => {
       rmSync(tempDir, { recursive: true, force: true });
     });
+
+    const setProjectSetup = (setupCommands: string[]) =>
+      ProjectSettingsStore.forHome(paseoHome).update(repoDir, { setupCommands });
 
     it("creates a worktree for the current branch (main)", async () => {
       const projectHash = await deriveWorktreeProjectHash(repoDir);
@@ -341,10 +344,7 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
       execFileSync("git", ["config", "user.name", "Test"], { cwd: remoteCloneDir });
       execFileSync("git", ["checkout", "-b", "contributor/feature"], { cwd: remoteCloneDir });
       writeFileSync(join(remoteCloneDir, "file.txt"), "from-pr\n");
-      writeFileSync(
-        join(remoteCloneDir, "paseo.json"),
-        JSON.stringify({ worktree: { setup: ['echo "setup ran" > setup.log'] } }),
-      );
+      await setProjectSetup(['echo "setup ran" > setup.log']);
       execFileSync("git", ["add", "."], { cwd: remoteCloneDir });
       execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "pr branch"], {
         cwd: remoteCloneDir,
@@ -742,24 +742,14 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
       expect(branches).toContain("hello-2");
     });
 
-    it("runs setup commands from paseo.json", async () => {
-      // Create paseo.json with setup commands
-      const paseoConfig = {
-        worktree: {
-          setup: [
-            'echo "source=$INTERLOCK_SOURCE_CHECKOUT_PATH" > setup.log',
-            'echo "root_alias=$INTERLOCK_ROOT_PATH" >> setup.log',
-            'echo "worktree=$INTERLOCK_WORKTREE_PATH" >> setup.log',
-            'echo "branch=$INTERLOCK_BRANCH_NAME" >> setup.log',
-            'echo "port=$INTERLOCK_WORKTREE_PORT" >> setup.log',
-          ],
-        },
-      };
-      writeFileSync(join(repoDir, "paseo.json"), JSON.stringify(paseoConfig));
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir });
-      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add paseo.json"], {
-        cwd: repoDir,
-      });
+    it("runs setup commands from the project settings", async () => {
+      await setProjectSetup([
+        'echo "source=$INTERLOCK_SOURCE_CHECKOUT_PATH" > setup.log',
+        'echo "root_alias=$INTERLOCK_ROOT_PATH" >> setup.log',
+        'echo "worktree=$INTERLOCK_WORKTREE_PATH" >> setup.log',
+        'echo "branch=$INTERLOCK_BRANCH_NAME" >> setup.log',
+        'echo "port=$INTERLOCK_WORKTREE_PORT" >> setup.log',
+      ]);
 
       const result = await createLegacyWorktreeForTest({
         branchName: "main",
@@ -784,17 +774,8 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
       expect(portValue).toBeGreaterThan(0);
     });
 
-    it("runs string setup scripts from paseo.json as a single shell command", async () => {
-      const paseoConfig = {
-        worktree: {
-          setup: 'greeting="hello from string setup"\necho "$greeting" > setup.log',
-        },
-      };
-      writeFileSync(join(repoDir, "paseo.json"), JSON.stringify(paseoConfig));
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir });
-      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add string setup"], {
-        cwd: repoDir,
-      });
+    it("runs a multi-line setup script as a single shell command", async () => {
+      await setProjectSetup(['greeting="hello from string setup"\necho "$greeting" > setup.log']);
 
       const result = await createLegacyWorktreeForTest({
         branchName: "main",
@@ -804,9 +785,6 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
         paseoHome,
       });
 
-      expect(getWorktreeSetupCommands(result.worktreePath)).toEqual([
-        'greeting="hello from string setup"\necho "$greeting" > setup.log',
-      ]);
       expect(readFileSync(join(result.worktreePath, "setup.log"), "utf8").trim()).toBe(
         "hello from string setup",
       );
@@ -824,15 +802,6 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
       writeFileSync(join(home, ".bash_profile"), "export PATH=/usr/bin:/bin\n");
       const bashEnvPath = join(home, "bash-env");
       writeFileSync(bashEnvPath, "export PATH=/usr/bin:/bin\n");
-      writeFileSync(
-        join(repoDir, "paseo.json"),
-        JSON.stringify({
-          worktree: {
-            setup: "command -v paseo-shim >/dev/null && paseo-shim ok > setup-path.log",
-          },
-        }),
-      );
-
       const originalHome = process.env.HOME;
       const originalPath = process.env.PATH;
       const originalBashEnv = process.env.BASH_ENV;
@@ -844,6 +813,10 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
         await runWorktreeSetupCommands({
           worktreePath: repoDir,
           branchName: "main",
+          setup: {
+            commands: ["command -v paseo-shim >/dev/null && paseo-shim ok > setup-path.log"],
+            env: {},
+          },
           cleanupOnFailure: false,
           runtimeEnv: {
             INTERLOCK_SOURCE_CHECKOUT_PATH: repoDir,
@@ -874,32 +847,24 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
       expect(readFileSync(join(repoDir, "setup-path.log"), "utf8").trim()).toBe("shim:ok");
     });
 
-    it("treats blank lifecycle strings as empty", () => {
+    it("treats blank teardown strings as empty", () => {
       writeFileSync(
         join(repoDir, "paseo.json"),
         JSON.stringify({
           worktree: {
-            setup: " \n\t ",
             teardown: " \n ",
           },
         }),
       );
 
-      expect(getWorktreeSetupCommands(repoDir)).toEqual([]);
       expect(getWorktreeTeardownCommands(repoDir)).toEqual([]);
     });
 
-    it("filters non-string and blank entries from lifecycle arrays", () => {
+    it("filters non-string and blank entries from teardown arrays", () => {
       writeFileSync(
         join(repoDir, "paseo.json"),
         JSON.stringify({
           worktree: {
-            setup: [
-              'echo "first" > setup-array.log',
-              null,
-              "   ",
-              'echo "second" >> setup-array.log',
-            ],
             teardown: [
               'echo "first" > "$INTERLOCK_SOURCE_CHECKOUT_PATH/teardown-array.log"',
               null,
@@ -910,10 +875,6 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
         }),
       );
 
-      expect(getWorktreeSetupCommands(repoDir)).toEqual([
-        'echo "first" > setup-array.log',
-        'echo "second" >> setup-array.log',
-      ]);
       expect(getWorktreeTeardownCommands(repoDir)).toEqual([
         'echo "first" > "$INTERLOCK_SOURCE_CHECKOUT_PATH/teardown-array.log"',
         'echo "second" >> "$INTERLOCK_SOURCE_CHECKOUT_PATH/teardown-array.log"',
@@ -921,16 +882,7 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
     });
 
     it("does not run setup commands when runSetup=false", async () => {
-      const paseoConfig = {
-        worktree: {
-          setup: ['echo "setup ran" > setup.log'],
-        },
-      };
-      writeFileSync(join(repoDir, "paseo.json"), JSON.stringify(paseoConfig));
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir });
-      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add paseo.json"], {
-        cwd: repoDir,
-      });
+      await setProjectSetup(['echo "setup ran" > setup.log']);
 
       const result = await createLegacyWorktreeForTest({
         branchName: "main",
@@ -946,21 +898,11 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
     });
 
     it("streams setup command progress events while commands are executing", async () => {
-      const paseoConfig = {
-        worktree: {
-          setup: ['echo "first line"; echo "second line" 1>&2'],
-        },
-      };
-      writeFileSync(join(repoDir, "paseo.json"), JSON.stringify(paseoConfig));
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir });
-      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add streaming setup"], {
-        cwd: repoDir,
-      });
-
       const progressEvents: WorktreeSetupCommandProgressEvent[] = [];
       const results = await runWorktreeSetupCommands({
         worktreePath: repoDir,
         branchName: "main",
+        setup: { commands: ['echo "first line"; echo "second line" 1>&2'], env: {} },
         cleanupOnFailure: false,
         onEvent: (event) => {
           progressEvents.push(event);
@@ -1036,17 +978,7 @@ describe.skipIf(isPlatform("win32"))("worktree POSIX-only", () => {
     });
 
     it("cleans up worktree if setup command fails", async () => {
-      // Create paseo.json with failing setup command
-      const paseoConfig = {
-        worktree: {
-          setup: ["exit 1"],
-        },
-      };
-      writeFileSync(join(repoDir, "paseo.json"), JSON.stringify(paseoConfig));
-      execFileSync("git", ["add", "paseo.json"], { cwd: repoDir });
-      execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add paseo.json"], {
-        cwd: repoDir,
-      });
+      await setProjectSetup(["exit 1"]);
 
       const expectedWorktreePath = join(paseoHome, "worktrees", "test-repo", "fail-test");
 

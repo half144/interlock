@@ -1,9 +1,14 @@
 export type * from "./agent";
 export type * from "./automation";
 export type * from "./diff";
-export type * from "./log";
 export type * from "./project";
+export type * from "./provider";
+export type * from "./review";
+export type * from "./ship";
 export type * from "./subagent";
 export type * from "./thread";
 export type * from "./tool";
+export type * from "./usage";
 export type * from "./view";
+export type * from "./workspace";
+export type * from "./diagnostics";

@@ -10,7 +10,6 @@ interface SlashMenuProps {
   onPick: (name: string) => void;
 }
 
-/** Commands for the composer, rising out of it as you type a slash. */
 export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
   return (
     <motion.div

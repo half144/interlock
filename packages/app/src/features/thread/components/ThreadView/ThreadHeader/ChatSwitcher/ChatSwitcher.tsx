@@ -1,27 +1,15 @@
 import { ChevronDown } from "lucide-react";
-import type { Aspect, Thread } from "@/types";
-import { useStore } from "@/stores/app-store";
 import { Lamp } from "@/components/ui/Lamp/Lamp";
 import { MenuItem } from "@/components/ui/MenuItem/MenuItem";
 import { Popover } from "@/components/ui/Popover/Popover";
-
-const ACTIVE: Aspect[] = ["running", "held", "review"];
+import { useChatSwitcher } from "./useChatSwitcher";
 
 /**
  * The mini-IDE's way out: the chat's title opens the list of active chats, and picking one returns to the
  * normal layout with that chat open.
  */
 export function ChatSwitcher({ threadId }: { threadId: string }) {
-  const threads = useStore((s) => s.threads);
-  const agents = useStore((s) => s.agents);
-  const openThread = useStore((s) => s.openThread);
-  const current = threads[threadId];
-  const aspectOf = (t: Thread) => agents[t.agentIds[0] ?? ""]?.aspect;
-  const active = Object.values(threads).flatMap((t) => {
-    const aspect = aspectOf(t);
-    return aspect && ACTIVE.includes(aspect) ? [{ thread: t, aspect }] : [];
-  });
-  const currentAspect = current && aspectOf(current);
+  const { current, currentAspect, active, open: openChat } = useChatSwitcher(threadId);
 
   if (!current || !currentAspect) return null;
 
@@ -50,7 +38,7 @@ export function ChatSwitcher({ threadId }: { threadId: string }) {
               active={t.id === threadId}
               onSelect={() => {
                 close();
-                if (t.id !== threadId) openThread(t.id);
+                openChat(t.id);
               }}
             >
               <Lamp aspect={aspect} />

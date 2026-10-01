@@ -53,20 +53,20 @@ export async function archiveIfSafe(input: {
   options: AutoArchiveArchiveOptions;
   log: Logger;
   deps?: ArchiveIfSafeDependencies;
-}): Promise<void> {
+}): Promise<boolean> {
   const { workspaceId, snapshot, options, log } = input;
   const deps = input.deps ?? defaultDependencies;
   const cwd = snapshot.cwd;
   const pullRequest = snapshot.forge.pullRequest;
 
   if (!pullRequest?.isMerged) {
-    return;
+    return false;
   }
   if (snapshot.git.isDirty === true) {
-    return;
+    return false;
   }
   if (typeof snapshot.git.aheadOfOrigin === "number" && snapshot.git.aheadOfOrigin > 0) {
-    return;
+    return false;
   }
 
   const ownership = await deps.isPaseoOwnedWorktreeCwd(cwd, {
@@ -74,13 +74,13 @@ export async function archiveIfSafe(input: {
     worktreesRoot: options.paseoWorktreesBaseRoot,
   });
   if (!ownership.allowed) {
-    return;
+    return false;
   }
 
   try {
     const autoArchivedChangeRequestUrl = await options.getAutoArchivedChangeRequestUrl(workspaceId);
     if (autoArchivedChangeRequestUrl === pullRequest.url) {
-      return;
+      return false;
     }
 
     await deps.archiveByScope(
@@ -119,7 +119,9 @@ export async function archiveIfSafe(input: {
       { workspaceId, cwd, branch: pullRequest.headRefName, pullRequestUrl: pullRequest.url },
       "Auto-archived worktree after PR merge",
     );
+    return true;
   } catch (error) {
     log.warn({ err: error, cwd }, "Auto-archive after merge failed");
+    return false;
   }
 }

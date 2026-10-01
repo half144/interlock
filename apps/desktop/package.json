@@ -7,13 +7,11 @@
   "scripts": {
     "dev": "tauri dev",
     "build": "tauri build --config src-tauri/tauri.bundle.conf.json",
-    "bundle:daemon": "bash scripts/bundle-daemon.sh",
+    "bundle:daemon": "node scripts/bundle-daemon.mjs",
     "tauri": "tauri"
   },
-  "dependencies": {
-    "@tauri-apps/api": "^2.12.1"
-  },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.12.1"
+    "@tauri-apps/cli": "^2.12.1",
+    "esbuild": "^0.28.2"
   }
 }

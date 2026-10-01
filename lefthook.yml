@@ -10,7 +10,7 @@ pre-commit:
       run: npm run format:check:files -- {staged_files}
     - name: lint
       glob: "*.{js,mjs,jsx,ts,tsx}"
-      run: npx eslint --max-warnings 0 --no-warn-ignored {staged_files}
+      run: node scripts/quality/lint-staged.mjs {staged_files}
     - name: typecheck
       run: npm run typecheck
     - name: secrets

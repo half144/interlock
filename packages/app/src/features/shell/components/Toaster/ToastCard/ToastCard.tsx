@@ -1,25 +1,16 @@
-import { useEffect } from "react";
 import { motion } from "motion/react";
 import { X } from "lucide-react";
-import { useStore, type Toast } from "@/stores/app-store";
+import type { Toast } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { Describer } from "@/components/ui/Describer/Describer";
 import { Lamp } from "@/components/ui/Lamp/Lamp";
 import { surface } from "@/lib/styles";
+import { useToastCard } from "./useToastCard";
 
 /** A finished task or subagent, with a shortcut to it; it dismisses itself after a few seconds. */
 export function ToastCard({ toast }: { toast: Toast }) {
-  const agent = useStore((s) => s.agents[toast.agentId]);
-  const dismiss = useStore((s) => s.dismissToast);
-  const openThread = useStore((s) => s.openThread);
-  const openPanel = useStore((s) => s.openPanel);
-  const openSubagent = useStore((s) => s.openSubagent);
-
-  useEffect(() => {
-    const timer = setTimeout(() => dismiss(toast.id), 6000);
-    return () => clearTimeout(timer);
-  }, [toast.id, dismiss]);
+  const { agent, dismiss, open } = useToastCard(toast);
 
   if (!agent) return null;
 
@@ -43,12 +34,7 @@ export function ToastCard({ toast }: { toast: Toast }) {
       </span>
       <button
         type="button"
-        onClick={() => {
-          openThread(agent.threadId);
-          if (toast.subagentId) openSubagent(toast.subagentId);
-          else openPanel("diff");
-          dismiss(toast.id);
-        }}
+        onClick={open}
         className="rounded-md px-2 py-1 text-[12.5px] font-medium text-ink hover:bg-selected"
       >
         {toast.subagentId ? "View" : "Review"}
@@ -56,7 +42,7 @@ export function ToastCard({ toast }: { toast: Toast }) {
       <button
         type="button"
         aria-label="Dismiss"
-        onClick={() => dismiss(toast.id)}
+        onClick={dismiss}
         className="rounded-md p-1 text-ink-3 hover:bg-selected hover:text-ink"
       >
         <X className="size-3.5" />

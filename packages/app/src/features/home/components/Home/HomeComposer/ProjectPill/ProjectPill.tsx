@@ -1,11 +1,10 @@
 import { Check, ChevronDown, Folder } from "lucide-react";
-import { projects } from "@/mocks/projects";
 import type { Project } from "@/types";
 import { MenuItem } from "@/components/ui/MenuItem/MenuItem";
 import { Pill } from "@/components/ui/Pill/Pill";
 import { Popover } from "@/components/ui/Popover/Popover";
+import { useProjectPill } from "./useProjectPill";
 
-/** Which project the new task runs in. */
 export function ProjectPill({
   project,
   onChange,
@@ -13,6 +12,8 @@ export function ProjectPill({
   project: Project;
   onChange: (projectId: string) => void;
 }) {
+  const projects = useProjectPill();
+
   return (
     <Popover
       trigger={({ open, toggle }) => (
@@ -28,7 +29,10 @@ export function ProjectPill({
           <MenuItem
             key={p.id}
             active={p.id === project.id}
-            onSelect={() => (onChange(p.id), close())}
+            onSelect={() => {
+              onChange(p.id);
+              close();
+            }}
             hint={p.id === project.id ? <Check className="size-3.5" /> : undefined}
           >
             <Folder />

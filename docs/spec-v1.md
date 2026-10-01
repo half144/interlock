@@ -439,7 +439,7 @@ export function useWaitingOnYou() {
 - [ ] Tauri sobe o sidecar com o PATH do login shell; a UI conecta no WebSocket
 - [ ] UI movida para `packages/app`, ainda com mocks, rodando dentro do Tauri (validada no WebKit)
 - [ ] quality-kit em modo time: regras do projeto (arquitetura, nomes, componentes, composição) e a dívida do código herdado congelada
-- [ ] Rotas na UI (uma URL por tela) para a prova em tela e para abrir a tarefa pela notificação
+- [x] Rotas na UI (uma URL por tela) para a prova em tela e para abrir a tarefa pela notificação
 - [ ] Limpeza de comentários na UI migrada: sair tudo que só repete o nome ou narra o código, e ficar só o que for de fato necessário (regra do `CLAUDE.md`)
 
 **M1 — Usável no dia a dia ()**

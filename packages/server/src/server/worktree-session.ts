@@ -25,7 +25,6 @@ import type { TerminalManager } from "../terminal/terminal-manager.js";
 import type { CheckoutExistingBranchResult } from "../utils/checkout-git.js";
 import { expandTilde } from "../utils/path.js";
 import {
-  getWorktreeSetupCommands,
   resolveWorktreeRuntimeEnv,
   runWorktreeSetupCommands,
   slugify,
@@ -35,6 +34,7 @@ import {
   WorktreeSetupError,
 } from "../utils/worktree.js";
 import { toCheckoutError } from "./checkout-git-utils.js";
+import { prepareWorktreeSetup } from "./project-settings/worktree-setup.js";
 import type {
   CreatePaseoWorktreeInput,
   CreatePaseoWorktreeResult,
@@ -695,6 +695,8 @@ export async function createPaseoWorktreeWorkflow(
             workspaceId: workspace.workspaceId,
             worktree: createdWorktree.worktree,
             workspaceCwd: workspace.cwd,
+            repoRoot: createdWorktree.repoRoot,
+            ...(dependencies.paseoHome ? { paseoHome: dependencies.paseoHome } : {}),
             shouldBootstrap: createdWorktree.created,
             terminalManager: setupContinuation.terminalManager,
             appendTimelineItem: (item) => setupContinuation.appendTimelineItem({ agentId, item }),
@@ -852,8 +854,12 @@ export async function runWorktreeSetupInBackground(
         emitSetupProgress("completed", null);
       } else {
         const workspaceCwd = options.workspaceCwd ?? worktree.worktreePath;
-        const setupCommands = getWorktreeSetupCommands(workspaceCwd);
-        if (setupCommands.length === 0) {
+        const setup = await prepareWorktreeSetup({
+          ...(dependencies.paseoHome ? { paseoHome: dependencies.paseoHome } : {}),
+          repoRoot: options.repoRoot,
+          worktreePath: worktree.worktreePath,
+        });
+        if (setup.commands.length === 0) {
           setupStarted = true;
           emitSetupProgress("completed", null);
         } else {
@@ -864,12 +870,13 @@ export async function runWorktreeSetupInBackground(
           });
           dependencies.terminalManager?.registerCwdEnv({
             cwd: workspaceCwd,
-            env: runtimeEnv,
+            env: { ...setup.env, ...runtimeEnv },
           });
           setupStarted = true;
           setupResults = await runWorktreeSetupCommands({
             worktreePath: workspaceCwd,
             branchName: worktree.branchName,
+            setup,
             cleanupOnFailure: false,
             repoRootPath: options.repoRoot,
             runtimeEnv,

@@ -1,29 +1,24 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion } from "motion/react";
 import { Search } from "lucide-react";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
 import { Backdrop } from "@/components/ui/Backdrop/Backdrop";
 import { surface } from "@/lib/styles";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
-import { usePaletteItems } from "@/features/palette/hooks/usePaletteItems";
-import { usePaletteNavigation } from "@/features/palette/hooks/usePaletteNavigation";
 import { PaletteFooter } from "./PaletteFooter/PaletteFooter";
 import { PaletteRow } from "./PaletteRow/PaletteRow";
+import { usePaletteDialog } from "./usePaletteDialog";
 
 /** The ⌘K dialog: a search field over grouped results, driven entirely from the keyboard. */
 export function PaletteDialog() {
-  const setPalette = useStore((s) => s.setPalette);
-  const [query, setQuery] = useState("");
-  const items = usePaletteItems(query);
   const dialog = useRef<HTMLDivElement>(null);
   const list = useRef<HTMLDivElement>(null);
-  const { current, setActive, onKeyDown } = usePaletteNavigation(items, list);
+  const { query, items, current, hover, onKeyDown, close, search } = usePaletteDialog(list);
   useFocusTrap(dialog);
 
   return (
-    <Backdrop align="top" onClose={() => setPalette(false)}>
+    <Backdrop align="top" onClose={close}>
       <motion.div
         ref={dialog}
         role="dialog"
@@ -39,12 +34,9 @@ export function PaletteDialog() {
           <input
             autoFocus
             value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setActive(0);
-            }}
+            onChange={(e) => search(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Search agents, chats, commands…"
+            placeholder="Search tasks, projects, commands…"
             role="combobox"
             aria-expanded="true"
             aria-controls="palette-list"
@@ -63,7 +55,7 @@ export function PaletteDialog() {
             <div className="px-3 py-10 text-center">
               <p className="text-[13px] text-ink-2">Nothing matches “{query.trim()}”.</p>
               <p className="mt-1 text-[12.5px] text-ink-3">
-                Try an ID like CHK-41, a project like ledger-api, or a branch name.
+                Try a task title, a project name or a branch.
               </p>
             </div>
           )}
@@ -82,7 +74,7 @@ export function PaletteDialog() {
               <PaletteRow
                 item={item}
                 active={i === current}
-                onHover={() => setActive(i)}
+                onHover={() => hover(i)}
                 onRun={item.run}
               />
             </div>

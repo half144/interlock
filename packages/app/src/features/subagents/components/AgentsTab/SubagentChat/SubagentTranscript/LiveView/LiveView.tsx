@@ -1,16 +1,17 @@
 import { AnimatePresence, motion } from "motion/react";
-import type { Agent, Subagent } from "@/types";
+import type { Subagent } from "@/types";
 import { doing, lastCall, tools } from "@/lib/tools";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
 import { surface } from "@/lib/styles";
-import { runStats } from "@/features/subagents/utils/stats";
+import { recentCalls } from "@/features/subagents/utils/calls";
 import { ToolBody } from "@/features/subagents/components/chat/ToolBody/ToolBody";
 
 /** Over the subagent's shoulder: the app it's in, the call it's on, and the file or output it's looking at right now. */
-export function LiveView({ sub, agent }: { sub: Subagent; agent: Agent }) {
+export function LiveView({ sub }: { sub: Subagent }) {
   const call = lastCall(sub);
-  const { icon: Icon, app } = tools[call?.kind ?? "bash"];
+  const { icon: Icon, app } = tools[call?.kind ?? "shell"];
+  const { shown, hidden } = recentCalls(sub);
 
   return (
     <div className={cn(surface.card, "overflow-hidden")}>
@@ -46,10 +47,14 @@ export function LiveView({ sub, agent }: { sub: Subagent; agent: Agent }) {
         </div>
       )}
 
-      {/* What the run has cost so far, as Claude Code counts it. A subagent can't know how far along it is, so no progress bar pretends to. */}
-      <p className="border-t border-seam px-3 py-2.5 text-[12.5px] text-ink-3 tabular-nums">
-        {runStats(sub, agent)}
-      </p>
+      <ul className="border-t border-seam px-3 py-2.5 text-[12.5px] text-ink-3">
+        {shown.map((c) => (
+          <li key={`${c.sec}-${c.kind}-${c.text}`} className="truncate">
+            {tools[c.kind].verb} {c.text}
+          </li>
+        ))}
+        {hidden > 0 && <li className="text-ink-4">+{hidden} more tool uses</li>}
+      </ul>
     </div>
   );
 }

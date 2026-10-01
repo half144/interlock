@@ -1,12 +1,16 @@
 import { MotionConfig, motion, useReducedMotion } from "motion/react";
 import { MIN_APP_WIDTH } from "@/lib/layout";
 import { dock } from "@/lib/motion";
+import { FirstRun } from "@/features/onboarding/components/FirstRun/FirstRun";
 import { CommandPalette } from "@/features/palette/components/CommandPalette/CommandPalette";
 import { Sidebar } from "@/features/shell/components/Sidebar/Sidebar";
 import { Toaster } from "@/features/shell/components/Toaster/Toaster";
 import { useRail, useSidebarWidth } from "@/hooks/useRail";
+import { DaemonNotice } from "./DaemonNotice";
+import { useDaemon } from "./useDaemon";
 import { useHotkeys } from "./useHotkeys";
-import { useSimulationClock } from "./useSimulationClock";
+import { usePlatformSync } from "./usePlatformSync";
+import { useRouteSync } from "./useRouteSync";
 import { ViewOutlet } from "./ViewOutlet";
 
 /** The app shell: the sidebar, the current view, and the overlays that float above both. */
@@ -14,8 +18,10 @@ export function App() {
   const rail = useRail();
   const sidebarWidth = useSidebarWidth();
   const reduce = useReducedMotion();
+  useDaemon();
+  useRouteSync();
+  usePlatformSync();
   useHotkeys();
-  useSimulationClock();
 
   return (
     <MotionConfig reducedMotion="user">
@@ -35,6 +41,8 @@ export function App() {
         </main>
         <CommandPalette />
         <Toaster />
+        <FirstRun />
+        <DaemonNotice />
       </div>
     </MotionConfig>
   );

@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import type { FileDiff } from "@/types";
 import type { EditorTab } from "@/stores/slices/editor";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { gitMark } from "@/features/workspace/utils/fileTree";
@@ -11,10 +10,12 @@ import { fileName } from "@/features/workspace/utils/language";
 import { FileGlyph } from "@/features/workspace/components/editor/FileGlyph/FileGlyph";
 
 interface EditorTabsProps {
-  agentId: string;
   tabs: EditorTab[];
   active: string | null;
   files: FileDiff[];
+  /** A click shows the file; pinning (a double click) keeps its tab from being replaced. */
+  onOpen: (path: string, pin?: boolean) => void;
+  onClose: (path: string) => void;
   /** Editor actions, right of the tabs as in VS Code. */
   actions?: ReactNode;
 }
@@ -23,9 +24,7 @@ interface EditorTabsProps {
  * The open files as editor tabs: a single click previews a file in an italic tab the next one replaces,
  * a double click keeps it, a middle click closes it. The active tab opens onto the code below it.
  */
-export function EditorTabs({ agentId, tabs, active, files, actions }: EditorTabsProps) {
-  const openFile = useStore((s) => s.openFile);
-  const closeFile = useStore((s) => s.closeFile);
+export function EditorTabs({ tabs, active, files, onOpen, onClose, actions }: EditorTabsProps) {
   const group = useId();
 
   return (
@@ -50,10 +49,10 @@ export function EditorTabs({ agentId, tabs, active, files, actions }: EditorTabs
                 role="tab"
                 tabIndex={0}
                 aria-selected={selected}
-                onClick={() => openFile(agentId, tab.path)}
-                onDoubleClick={() => openFile(agentId, tab.path, true)}
-                onAuxClick={(e) => e.button === 1 && closeFile(agentId, tab.path)}
-                onKeyDown={(e) => e.key === "Enter" && openFile(agentId, tab.path)}
+                onClick={() => onOpen(tab.path)}
+                onDoubleClick={() => onOpen(tab.path, true)}
+                onAuxClick={(e) => e.button === 1 && onClose(tab.path)}
+                onKeyDown={(e) => e.key === "Enter" && onOpen(tab.path)}
                 className={cn(
                   "group relative isolate flex shrink-0 cursor-pointer items-center gap-1.5 border-r border-b border-seam pr-1 pl-2.5 text-[12.5px] select-none",
                   selected ? "border-b-transparent text-ink" : "text-ink-3 hover:text-ink-2",
@@ -76,7 +75,7 @@ export function EditorTabs({ agentId, tabs, active, files, actions }: EditorTabs
                   aria-label={`Close ${fileName(tab.path)}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    closeFile(agentId, tab.path);
+                    onClose(tab.path);
                   }}
                   className={cn(
                     "flex size-5 items-center justify-center rounded text-ink-3 transition-opacity hover:bg-hover hover:text-ink focus-visible:opacity-100",

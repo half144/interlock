@@ -1,5 +1,7 @@
 import { ProviderSnapshotUpdates } from "./provider-snapshots/index.js";
 import type { SessionEventSubscription } from "@interlock/protocol/messages";
+import type { AuthProvider } from "@interlock/protocol/accounts-schema";
+import type { ProjectSettingsPatch } from "@interlock/protocol/project-settings-schema";
 import {
   ConnectionSubscriptions,
   DEFAULT_CLIENT_CAPABILITIES,
@@ -48,6 +50,9 @@ import type {
   CheckoutPushResponse,
   CheckoutRefreshResponse,
   CheckoutPrCreateResponse,
+  TaskCreatePrResponse,
+  TaskDiscardResponse,
+  TaskPlanItem,
   CheckoutPrMergeResponse,
   CheckoutPrMergeMethod,
   CheckoutForgeSetAutoMergeResponse,
@@ -221,6 +226,8 @@ export type {
 
 export type { TerminalStreamEvent };
 
+type CheckoutDiffMode = "uncommitted" | "base" | "base_worktree";
+
 export type ConnectionState =
   | { status: "idle" }
   | { status: "connecting"; attempt: number }
@@ -272,6 +279,15 @@ export type DaemonEvent =
   | {
       type: "providers_snapshot_update";
       payload: Extract<SessionOutboundMessage, { type: "providers_snapshot_update" }>["payload"];
+    }
+  | {
+      type: "task_ship_update";
+      payload: Extract<SessionOutboundMessage, { type: "task_ship_update" }>["payload"];
+    }
+  | {
+      type: "checkout_status_update";
+      cwd: string;
+      payload: Extract<SessionOutboundMessage, { type: "checkout_status_update" }>["payload"];
     }
   | { type: "error"; message: string };
 
@@ -375,6 +391,8 @@ type CheckoutPullPayload = CheckoutPullResponse["payload"];
 type CheckoutPushPayload = CheckoutPushResponse["payload"];
 type CheckoutRefreshPayload = CheckoutRefreshResponse["payload"];
 type CheckoutPrCreatePayload = CheckoutPrCreateResponse["payload"];
+type TaskCreatePrPayload = TaskCreatePrResponse["payload"];
+type TaskDiscardPayload = TaskDiscardResponse["payload"];
 type CheckoutPrMergePayload = CheckoutPrMergeResponse["payload"];
 type CheckoutForgeSetAutoMergePayload = CheckoutForgeSetAutoMergeResponse["payload"];
 type CheckoutGithubSetAutoMergePayload = CheckoutGithubSetAutoMergeResponse["payload"];
@@ -432,6 +450,7 @@ type GetProvidersSnapshotPayload = GetProvidersSnapshotResponseMessage["payload"
 type RefreshProvidersSnapshotPayload = RefreshProvidersSnapshotResponseMessage["payload"];
 type ProviderDiagnosticPayload = ProviderDiagnosticResponseMessage["payload"];
 type ProviderUsageListPayload = ProviderUsageListResponseMessage["payload"];
+const PROVIDER_AUTH_TIMEOUT_MS = 60_000;
 type ReadProjectConfigPayload = Extract<
   SessionOutboundMessage,
   { type: "read_project_config_response" }
@@ -900,7 +919,7 @@ export class DaemonClient {
     string,
     {
       cwd: string;
-      compare: { mode: "uncommitted" | "base"; baseRef?: string; ignoreWhitespace?: boolean };
+      compare: { mode: CheckoutDiffMode; baseRef?: string; ignoreWhitespace?: boolean };
     }
   >();
   private terminalDirectorySubscriptions = new Map<string, { cwd: string; workspaceId?: string }>();
@@ -3072,10 +3091,10 @@ export class DaemonClient {
   }
 
   private normalizeCheckoutDiffCompare(compare: {
-    mode: "uncommitted" | "base";
+    mode: CheckoutDiffMode;
     baseRef?: string;
     ignoreWhitespace?: boolean;
-  }): { mode: "uncommitted" | "base"; baseRef?: string; ignoreWhitespace?: boolean } {
+  }): { mode: CheckoutDiffMode; baseRef?: string; ignoreWhitespace?: boolean } {
     if (compare.mode === "uncommitted") {
       return compare.ignoreWhitespace === true
         ? { mode: "uncommitted", ignoreWhitespace: true }
@@ -3084,17 +3103,17 @@ export class DaemonClient {
     const trimmedBaseRef = compare.baseRef?.trim();
     if (!trimmedBaseRef) {
       return compare.ignoreWhitespace === true
-        ? { mode: "base", ignoreWhitespace: true }
-        : { mode: "base" };
+        ? { mode: compare.mode, ignoreWhitespace: true }
+        : { mode: compare.mode };
     }
     return compare.ignoreWhitespace === true
-      ? { mode: "base", baseRef: trimmedBaseRef, ignoreWhitespace: true }
-      : { mode: "base", baseRef: trimmedBaseRef };
+      ? { mode: compare.mode, baseRef: trimmedBaseRef, ignoreWhitespace: true }
+      : { mode: compare.mode, baseRef: trimmedBaseRef };
   }
 
   async getCheckoutDiff(
     cwd: string,
-    compare: { mode: "uncommitted" | "base"; baseRef?: string; ignoreWhitespace?: boolean },
+    compare: { mode: CheckoutDiffMode; baseRef?: string; ignoreWhitespace?: boolean },
     requestId?: string,
   ): Promise<CheckoutDiffPayload> {
     const oneShotSubscriptionId = `oneshot-checkout-diff:${crypto.randomUUID()}`;
@@ -3121,7 +3140,7 @@ export class DaemonClient {
 
   async subscribeCheckoutDiff(
     cwd: string,
-    compare: { mode: "uncommitted" | "base"; baseRef?: string; ignoreWhitespace?: boolean },
+    compare: { mode: CheckoutDiffMode; baseRef?: string; ignoreWhitespace?: boolean },
     options?: { subscriptionId?: string; requestId?: string },
   ): Promise<SubscribeCheckoutDiffPayload> {
     const subscriptionId = options?.subscriptionId ?? crypto.randomUUID();
@@ -3314,6 +3333,31 @@ export class DaemonClient {
         baseRef: input.baseRef,
       },
       responseType: "checkout_pr_create_response",
+    });
+  }
+
+  async createTaskPr(
+    input: { cwd: string; title: string; planItems?: TaskPlanItem[]; baseRef?: string },
+    requestId?: string,
+  ): Promise<TaskCreatePrPayload> {
+    return this.sendCorrelatedSessionRequest({
+      requestId,
+      message: {
+        type: "task_create_pr_request",
+        cwd: input.cwd,
+        title: input.title,
+        ...(input.planItems !== undefined ? { planItems: input.planItems } : {}),
+        ...(input.baseRef !== undefined ? { baseRef: input.baseRef } : {}),
+      },
+      responseType: "task_create_pr_response",
+    });
+  }
+
+  async discardTask(cwd: string, requestId?: string): Promise<TaskDiscardPayload> {
+    return this.sendCorrelatedSessionRequest({
+      requestId,
+      message: { type: "task_discard_request", cwd },
+      responseType: "task_discard_response",
     });
   }
 
@@ -4101,6 +4145,67 @@ export class DaemonClient {
       },
       responseType: "write_project_config_response",
     });
+  }
+
+  async getProjectSettings(projectId: string, requestId?: string) {
+    return this.sendNamespacedCorrelatedSessionRequest<"project.settings.get.response">({
+      requestId,
+      message: { type: "project.settings.get.request", projectId },
+    });
+  }
+
+  async updateProjectSettings(input: {
+    projectId: string;
+    patch: ProjectSettingsPatch;
+    requestId?: string;
+  }) {
+    return this.sendNamespacedCorrelatedSessionRequest<"project.settings.update.response">({
+      requestId: input.requestId,
+      message: {
+        type: "project.settings.update.request",
+        projectId: input.projectId,
+        patch: input.patch,
+      },
+    });
+  }
+
+  async suggestProjectSetup(projectId: string, requestId?: string) {
+    return this.sendNamespacedCorrelatedSessionRequest<"project.setup.suggest.response">({
+      requestId,
+      message: { type: "project.setup.suggest.request", projectId },
+    });
+  }
+
+  async getDiagnostics(requestId?: string) {
+    return this.sendNamespacedCorrelatedSessionRequest<"diagnostics.get.response">({
+      requestId,
+      message: { type: "diagnostics.get.request" },
+      timeout: PROVIDER_AUTH_TIMEOUT_MS,
+    });
+  }
+
+  async startProviderLogin(provider: AuthProvider, requestId?: string) {
+    return this.sendNamespacedCorrelatedSessionRequest<"provider.auth.login.response">({
+      requestId,
+      message: { type: "provider.auth.login.request", provider },
+      timeout: PROVIDER_AUTH_TIMEOUT_MS,
+    });
+  }
+
+  async logoutProvider(provider: AuthProvider, requestId?: string) {
+    return this.sendNamespacedCorrelatedSessionRequest<"provider.auth.logout.response">({
+      requestId,
+      message: { type: "provider.auth.logout.request", provider },
+      timeout: PROVIDER_AUTH_TIMEOUT_MS,
+    });
+  }
+
+  onProviderAuthCompleted(
+    handler: (
+      payload: Extract<SessionOutboundMessage, { type: "provider.auth.completed" }>["payload"],
+    ) => void,
+  ): () => void {
+    return this.on("provider.auth.completed", (message) => handler(message.payload));
   }
 
   async refreshProvidersSnapshot(options?: {
@@ -5169,6 +5274,10 @@ export class DaemonClient {
         };
       case "project.update":
         return { type: "project.update", payload: msg.payload };
+      case "task_ship_update":
+        return { type: "task_ship_update", payload: msg.payload };
+      case "checkout_status_update":
+        return { type: "checkout_status_update", cwd: msg.payload.cwd, payload: msg.payload };
       case "workspace_setup_progress":
         return {
           type: "workspace_setup_progress",

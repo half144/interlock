@@ -1,35 +1,26 @@
 import type { ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { projectById } from "@/mocks/projects";
-import { useStore } from "@/stores/app-store";
-import type { Agent } from "@/types";
+import type { Agent, PanelTab } from "@/types";
 import { cn } from "@/lib/utils";
 import { dockCss, fadeIn, fadeOut } from "@/lib/motion";
 import { surface } from "@/lib/styles";
+import { PrButton } from "@/components/ship/PrButton/PrButton";
 import { AgentsTab } from "@/features/subagents/components/AgentsTab/AgentsTab";
-import { useDeferredMount } from "@/features/workspace/hooks/useDeferredMount";
-import { usePullRequest } from "@/features/workspace/hooks/usePullRequest";
 import { ChecksView } from "./ChecksView/ChecksView";
 import { CodeTab } from "./CodeTab/CodeTab";
-import { PrLiveModal } from "./PrLiveModal/PrLiveModal";
-import { PreviewFrame } from "./PreviewFrame/PreviewFrame";
 import { TerminalView } from "./TerminalView/TerminalView";
 import { Toolbar } from "./Toolbar/Toolbar";
+import { useWorkspace } from "./useWorkspace";
 
-/** The agent's workspace beside the chat: preview, code, terminal and checks, and the PR that ships it. */
-export function Workspace({ agentId, onClose }: { agentId: string; onClose: () => void }) {
-  const agent = useStore((s) => s.agents[agentId]);
-  return agent ? <WorkspaceBody agent={agent} onClose={onClose} /> : null;
+interface WorkspaceProps {
+  agentId: string;
+  onClose: () => void;
 }
 
-function WorkspaceBody({ agent, onClose }: { agent: Agent; onClose: () => void }) {
-  const panelTab = useStore((s) => s.panelTab);
-  const setPanelTab = useStore((s) => s.setPanelTab);
-  const maximized = useStore((s) => s.reviewMaximized);
-  const pr = usePullRequest(agent);
-  const project = projectById[agent.projectId];
-  // The tab can be a thousand-node diff; the slide-in never waits on it.
-  const ready = useDeferredMount();
+/** The agent's workspace beside the chat: code, terminal and checks, and the PR that ships it. */
+export function Workspace({ agentId, onClose }: WorkspaceProps) {
+  const { agent, panelTab, maximized, ready } = useWorkspace(agentId);
+  if (!agent) return null;
 
   return (
     // Maximized, the card loses its corners, shadow and gutters on the layout's spring: an editor sits flush.
@@ -41,7 +32,7 @@ function WorkspaceBody({ agent, onClose }: { agent: Agent; onClose: () => void }
         maximized && "rounded-none border-transparent shadow-none",
       )}
     >
-      <Toolbar agent={agent} prNumber={pr.prNumber} onOpenPr={pr.open} onClose={onClose} />
+      <Toolbar agent={agent} pr={<PrButton agent={agent} />} onClose={onClose} />
 
       <div
         className={cn(
@@ -59,39 +50,34 @@ function WorkspaceBody({ agent, onClose }: { agent: Agent; onClose: () => void }
               exit={{ opacity: 0, transition: fadeOut }}
               className="h-full"
             >
-              {panelTab === "preview" && <PreviewFrame key={agent.id} agent={agent} />}
-              {panelTab === "diff" && <CodeTab key={agent.id} agent={agent} />}
-              {panelTab === "terminal" && (
-                <Frame>
-                  <TerminalView agent={agent} />
-                </Frame>
-              )}
-              {panelTab === "agents" && <AgentsTab agentId={agent.id} />}
-              {panelTab === "checks" && (
-                <Frame>
-                  <ChecksView agent={agent} prNumber={pr.prNumber} />
-                </Frame>
-              )}
+              <TabContent tab={panelTab} agent={agent} />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      <AnimatePresence>
-        {pr.live !== null && project && (
-          <PrLiveModal
-            repo={project.repo}
-            number={pr.live}
-            onClose={pr.dismiss}
-            onChecks={() => {
-              setPanelTab("checks");
-              pr.dismiss();
-            }}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
+}
+
+function TabContent({ tab, agent }: { tab: PanelTab; agent: Agent }) {
+  switch (tab) {
+    case "diff":
+      return <CodeTab key={agent.id} agent={agent} />;
+    case "terminal":
+      return (
+        <Frame>
+          <TerminalView agent={agent} />
+        </Frame>
+      );
+    case "checks":
+      return (
+        <Frame>
+          <ChecksView agent={agent} />
+        </Frame>
+      );
+    case "agents":
+      return <AgentsTab agentId={agent.id} />;
+  }
 }
 
 function Frame({ children }: { children: ReactNode }) {

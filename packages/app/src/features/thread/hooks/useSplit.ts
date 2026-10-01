@@ -14,13 +14,13 @@ const splitWidth = (main: number) => clamp(main * 0.4, 420, 580);
 /** In the mini-IDE the chat becomes a side column, like an editor's assistant pane. */
 const ideChatWidth = (main: number) => clamp(main * 0.25, 340, 420);
 
-type Frame = {
+interface Frame {
   chatLeft: number;
   chatWidth: number;
   panelLeft: number;
   panelWidth: number;
   reading: number;
-};
+}
 
 function frameFor(
   viewport: number,
@@ -108,7 +108,7 @@ export function useSplit(panelOpen: boolean, sidebar: number, maximized: boolean
       );
     }
     return () => runs.forEach((run) => run.stop());
-    // `key` stands in for the target numbers; the motion values themselves are stable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `key` stands in for the target numbers; the motion values themselves are stable.
   }, [key, panelOpen, sidebar, maximized, reduce]);
 
   return { ...values, chatOpacity };

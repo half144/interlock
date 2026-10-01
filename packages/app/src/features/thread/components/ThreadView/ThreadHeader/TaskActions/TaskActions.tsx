@@ -1,55 +1,40 @@
 import type { ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { GitPullRequest, Share2 } from "lucide-react";
 import type { Agent } from "@/types";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
 import { DiffStat } from "@/components/ui/DiffStat/DiffStat";
 import { monoText } from "@/lib/styles";
-import { isFinished } from "@/lib/agentStatus";
-import { TaskMenu } from "./TaskMenu/TaskMenu";
+import { useTaskActions } from "./useTaskActions";
 
-/** Header actions for a task: PR, share, the diff toggle, and the rest in a menu. */
-export function TaskActions({ agent }: { agent: Agent }) {
-  const panelOpen = useStore((s) => s.panelOpen);
-  const panelTab = useStore((s) => s.panelTab);
-  const openPanel = useStore((s) => s.openPanel);
-  const setPanelOpen = useStore((s) => s.setPanelOpen);
-  const diffOpen = panelOpen && panelTab === "diff";
+interface TaskActionsProps {
+  agent: Agent;
+  /** The pull request button, shown once the work is ready to ship. */
+  ship: ReactNode;
+  menu: ReactNode;
+}
+
+export function TaskActions({ agent, ship, menu }: TaskActionsProps) {
+  const { diffOpen, toggleDiff, canShip } = useTaskActions(agent);
 
   return (
     <div className="relative flex items-center gap-0.5">
       {/* The PR action appears the moment the work is ready, so it arrives instead of just being there. */}
       <AnimatePresence initial={false} mode="popLayout">
-        {isFinished(agent) && (
+        {canShip && (
           <motion.span
-            key={agent.aspect}
+            key="ship"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1, transition: fadeIn }}
             exit={{ opacity: 0, scale: 0.95, transition: fadeOut }}
           >
-            {agent.aspect === "review" ? (
-              <Ghost onClick={() => openPanel("diff")}>
-                <GitPullRequest className="size-4" />
-                Create PR
-              </Ghost>
-            ) : (
-              <Ghost>
-                <GitPullRequest className="size-4" />
-                PR #{agent.pr}
-              </Ghost>
-            )}
+            {ship}
           </motion.span>
         )}
       </AnimatePresence>
-      <Ghost>
-        <Share2 className="size-4" />
-        Share
-      </Ghost>
       <button
         type="button"
-        onClick={() => (diffOpen ? setPanelOpen(false) : openPanel("diff"))}
+        onClick={toggleDiff}
         aria-pressed={diffOpen}
         aria-label={`Changes: ${agent.additions} added, ${agent.deletions} removed`}
         className={cn(
@@ -60,19 +45,7 @@ export function TaskActions({ agent }: { agent: Agent }) {
       >
         <DiffStat additions={agent.additions} deletions={agent.deletions} />
       </button>
-      <TaskMenu agentId={agent.id} />
+      {menu}
     </div>
-  );
-}
-
-function Ghost({ onClick, children }: { onClick?: () => void; children: ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[14px] text-ink transition-[background-color,scale] duration-150 ease-out-quint hover:bg-hover active:scale-[0.97]"
-    >
-      {children}
-    </button>
   );
 }

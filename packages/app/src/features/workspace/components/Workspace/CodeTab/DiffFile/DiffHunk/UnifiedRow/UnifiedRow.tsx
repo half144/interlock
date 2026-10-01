@@ -4,7 +4,13 @@ import { CodeText } from "@/components/ui/CodeText/CodeText";
 import { lineTone } from "@/features/workspace/utils/diff";
 import { CommentButton } from "@/features/workspace/components/diff/CommentButton/CommentButton";
 
-export function UnifiedRow({ line, onComment }: { line: DiffLine; onComment: () => void }) {
+export function UnifiedRow({
+  line,
+  onComment,
+}: {
+  line: DiffLine;
+  onComment?: (() => void) | undefined;
+}) {
   const tone = lineTone[line.kind];
   return (
     <div
@@ -13,7 +19,7 @@ export function UnifiedRow({ line, onComment }: { line: DiffLine; onComment: () 
         tone.bg,
       )}
     >
-      <CommentButton onClick={onComment} />
+      {onComment && <CommentButton onClick={onComment} />}
       <span className="pr-2 text-right text-ink-4 select-none">{line.oldNo ?? ""}</span>
       <span className="pr-2 text-right text-ink-4 select-none">{line.newNo ?? ""}</span>
       <span className={cn("text-center select-none", tone.signClass)}>{tone.sign}</span>

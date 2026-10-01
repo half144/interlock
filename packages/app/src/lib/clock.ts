@@ -1,14 +1,17 @@
 import type { Agent, Subagent } from "@/types";
 
-/**
- * Seconds into a task, the clock subagent timings are measured on. Until providers send real
- * timestamps it is derived from when the task started and how far along it is.
- */
-export const taskClock = (agent: Agent) => Math.round(agent.startedMin * 60 + agent.progress * 120);
+const LIVE = new Set(["running", "held", "queued"]);
+
+/** Seconds into a task, the clock subagent timings are measured on. A task that stopped keeps the time it stopped at. */
+export const taskClock = (agent: Agent, now = Date.now()) =>
+  Math.max(
+    0,
+    Math.round(((LIVE.has(agent.aspect) ? now : agent.updatedAt) - agent.createdAt) / 1000),
+  );
 
 export function elapsedOf(sub: Subagent, agent: Agent) {
   if (sub.status === "queued") return 0;
-  return (sub.endSec ?? taskClock(agent)) - sub.startSec - (sub.idleSec ?? 0);
+  return (sub.endSec ?? taskClock(agent)) - sub.startSec;
 }
 
 export function duration(sec: number) {

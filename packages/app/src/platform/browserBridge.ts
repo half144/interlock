@@ -8,6 +8,10 @@ export const browserBridge: Bridge = {
   getDaemonConnection: () => Promise.resolve(connectionFromEnv(import.meta.env)),
   onDaemonStatus: () => () => undefined,
   pickFolder: () => Promise.resolve(null),
+  openExternal: (url) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+    return Promise.resolve();
+  },
   notify: (notice) => {
     showWebNotification(notice, (taskId) => {
       openTaskListeners.forEach((listener) => listener(taskId));

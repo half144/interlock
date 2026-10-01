@@ -2,18 +2,15 @@ import type { DiffLine, FileDiff } from "@/types";
 
 export type DiffMode = "unified" | "split";
 
-interface KeyedLine {
+interface HasLine {
   line: DiffLine;
-  key: string;
 }
 
-export const lineKey = (file: number, hunk: number, line: number) => `${file}:${hunk}:${line}`;
-
 /** Lines up removals with the additions that replaced them, so split view reads old beside new. */
-export function pairRows(lines: KeyedLine[]) {
-  const rows: { left?: KeyedLine | undefined; right?: KeyedLine | undefined }[] = [];
-  let dels: KeyedLine[] = [];
-  let adds: KeyedLine[] = [];
+export function pairRows<T extends HasLine>(lines: T[]) {
+  const rows: { left?: T | undefined; right?: T | undefined }[] = [];
+  let dels: T[] = [];
+  let adds: T[] = [];
   const flush = () => {
     for (let i = 0; i < Math.max(dels.length, adds.length); i++)
       rows.push({ left: dels[i], right: adds[i] });

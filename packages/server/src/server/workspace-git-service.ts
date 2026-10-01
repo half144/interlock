@@ -746,7 +746,7 @@ export class WorkspaceGitServiceImpl implements WorkspaceGitService {
   private normalizeCheckoutDiffOptions(options: CheckoutDiffCompare): CheckoutDiffCompare {
     return {
       mode: options.mode,
-      ...(options.mode === "base" && options.baseRef !== undefined
+      ...(options.mode !== "uncommitted" && options.baseRef !== undefined
         ? { baseRef: options.baseRef }
         : {}),
       ...(options.ignoreWhitespace === true ? { ignoreWhitespace: true } : {}),
@@ -761,7 +761,7 @@ export class WorkspaceGitServiceImpl implements WorkspaceGitService {
       "checkout-diff",
       cwd,
       options.mode,
-      options.mode === "base" ? (options.baseRef ?? null) : null,
+      options.mode !== "uncommitted" ? (options.baseRef ?? null) : null,
       options.ignoreWhitespace === true,
       options.includeStructured === true,
     ]);
@@ -770,7 +770,11 @@ export class WorkspaceGitServiceImpl implements WorkspaceGitService {
   private invalidateCheckoutDiffCache(cwd: string, mode: CheckoutDiffCompare["mode"]): void {
     for (const key of this.checkoutDiffCache.keys()) {
       const [kind, cachedCwd, cachedMode] = JSON.parse(key) as unknown[];
-      if (kind === "checkout-diff" && cachedCwd === cwd && cachedMode === mode) {
+      if (
+        kind === "checkout-diff" &&
+        cachedCwd === cwd &&
+        (cachedMode === mode || cachedMode === "base_worktree")
+      ) {
         this.checkoutDiffCache.delete(key);
       }
     }
@@ -3560,10 +3564,11 @@ function computeGenericForgeNextInterval(
   status: WorkspaceGitRuntimeSnapshot["forge"]["pullRequest"],
   consecutiveErrors: number,
 ): number {
-  const isPending =
+  const isActive =
+    status?.state.toLowerCase() === "open" ||
     status?.checksStatus === "pending" ||
     status?.checks?.some((check) => check.status === "pending") === true;
-  const baseInterval = isPending
+  const baseInterval = isActive
     ? FORGE_PR_STATUS_POLL_FAST_INTERVAL_MS
     : FORGE_PR_STATUS_POLL_SLOW_INTERVAL_MS;
   if (consecutiveErrors <= 1) {

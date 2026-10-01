@@ -1,21 +1,17 @@
 import { AnimatePresence, motion } from "motion/react";
 import { Network } from "lucide-react";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
 import { EmptyState } from "@/components/ui/EmptyState/EmptyState";
 import { surface } from "@/lib/styles";
-import { useSubagents } from "@/hooks/useSubagents";
 import { SubagentChat } from "./SubagentChat/SubagentChat";
 import { MainOverview } from "./MainOverview/MainOverview";
 import { AgentTree } from "./AgentTree/AgentTree";
+import { useAgentsTab } from "./useAgentsTab";
 
 /** Every agent on this task: the main agent on top, its subagents beneath, and the selected one's chat on the right. */
 export function AgentsTab({ agentId }: { agentId: string }) {
-  const agent = useStore((s) => s.agents[agentId]);
-  const selected = useStore((s) => s.selectedSubagentId);
-  const subs = useSubagents(agentId);
-  const current = subs.find((s) => s.id === selected);
+  const { agent, subs, current, open } = useAgentsTab(agentId);
 
   if (!agent) return null;
 
@@ -25,7 +21,7 @@ export function AgentsTab({ agentId }: { agentId: string }) {
         <EmptyState
           icon={Network}
           title="No subagents on this task"
-          description="When the agent splits work, like exploring the codebase or writing tests, each helper shows up here as a chat you can read and message."
+          description="When the agent splits work, like exploring the codebase or writing tests, each subagent shows up here with everything it did. Messages about one go to the main agent."
         />
       </div>
     );
@@ -33,7 +29,7 @@ export function AgentsTab({ agentId }: { agentId: string }) {
 
   return (
     <div className={cn(surface.frame, "flex h-full overflow-hidden")}>
-      <AgentTree agent={agent} subs={subs} current={current} />
+      <AgentTree agent={agent} subs={subs} current={current} onSelect={open} />
       <section className="flex min-w-0 flex-1 flex-col">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
@@ -47,7 +43,7 @@ export function AgentsTab({ agentId }: { agentId: string }) {
               <SubagentChat sub={current} agent={agent} />
             ) : (
               <div className="min-h-0 flex-1 overflow-y-auto">
-                <MainOverview agent={agent} subs={subs} />
+                <MainOverview agent={agent} subs={subs} onOpen={open} />
               </div>
             )}
           </motion.div>

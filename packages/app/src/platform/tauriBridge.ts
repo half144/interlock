@@ -17,6 +17,7 @@ export const tauriBridge: Bridge = {
   onDaemonStatus: (callback) =>
     unsubscribe(listen<DaemonStatus>(DAEMON_STATUS_EVENT, (e) => callback(e.payload))),
   pickFolder: () => invoke("pick_folder"),
+  openExternal: (url) => invoke("plugin:shell|open", { path: url }),
   notify: (notice) => invoke("notify", { ...notice }),
   setActivity: (activity) => invoke("set_activity", { ...activity }),
   setFocusedTask: (taskId) => invoke("set_focus", { taskId }),

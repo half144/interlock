@@ -1,48 +1,43 @@
 import type { Hunk } from "@/types";
-import type { ReviewNotes } from "@/features/workspace/hooks/useReviewComments";
-import { lineKey, pairRows, type DiffMode } from "@/features/workspace/utils/diff";
+import { pairRows, type DiffMode } from "@/features/workspace/utils/diff";
 import { LineAnnotations } from "./LineAnnotations/LineAnnotations";
 import { SplitCell } from "./SplitCell/SplitCell";
 import { UnifiedRow } from "./UnifiedRow/UnifiedRow";
+import { useDiffHunk, type HunkRow } from "./useDiffHunk";
 
-interface DiffHunkProps extends ReviewNotes {
+interface DiffHunkProps {
+  agentId: string;
+  path: string;
   hunk: Hunk;
-  fileIndex: number;
-  hunkIndex: number;
   mode: DiffMode;
 }
 
-export function DiffHunk({ hunk, fileIndex, hunkIndex, mode, ...notes }: DiffHunkProps) {
-  const keyed = hunk.lines.map((line, li) => ({ line, key: lineKey(fileIndex, hunkIndex, li) }));
+export function DiffHunk({ agentId, path, hunk, mode }: DiffHunkProps) {
+  const { rows, compose } = useDiffHunk(path, hunk);
+  const commentOn = (row: HunkRow | undefined) => {
+    const key = row?.anchor?.key;
+    return key ? () => compose(key) : undefined;
+  };
+  const anchorsOf = (...picked: (HunkRow | undefined)[]) =>
+    picked.flatMap((row) => (row?.anchor ? [row.anchor] : []));
 
   return (
     <div>
       <div className="bg-inset px-3 py-1 font-mono text-[11px] text-ink-3">{hunk.header}</div>
       {mode === "unified"
-        ? keyed.map(({ line, key }) => (
-            <div key={key}>
-              <UnifiedRow line={line} onComment={() => notes.onCompose(key)} />
-              <LineAnnotations keys={[key]} {...notes} />
+        ? rows.map((row) => (
+            <div key={row.id}>
+              <UnifiedRow line={row.line} onComment={commentOn(row)} />
+              <LineAnnotations agentId={agentId} anchors={anchorsOf(row)} />
             </div>
           ))
-        : pairRows(keyed).map(({ left, right }) => (
-            <div key={(left?.key ?? "") + (right?.key ?? "")}>
+        : pairRows(rows).map(({ left, right }) => (
+            <div key={`${left?.id ?? ""}-${right?.id ?? ""}`}>
               <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] divide-x divide-seam">
-                <SplitCell
-                  line={left?.line}
-                  side="old"
-                  onComment={left ? () => notes.onCompose(left.key) : undefined}
-                />
-                <SplitCell
-                  line={right?.line}
-                  side="new"
-                  onComment={right ? () => notes.onCompose(right.key) : undefined}
-                />
+                <SplitCell line={left?.line} side="old" onComment={commentOn(left)} />
+                <SplitCell line={right?.line} side="new" onComment={commentOn(right)} />
               </div>
-              <LineAnnotations
-                keys={[left?.key, right?.key].filter((k): k is string => Boolean(k))}
-                {...notes}
-              />
+              <LineAnnotations agentId={agentId} anchors={anchorsOf(left, right)} />
             </div>
           ))}
     </div>

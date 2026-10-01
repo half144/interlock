@@ -1,18 +1,15 @@
 import type { Agent } from "@/types";
-import { projectOf } from "@/mocks/projects";
-import { useStore } from "@/stores/app-store";
 import { plural } from "@/lib/utils";
 import { DiffStat } from "@/components/ui/DiffStat/DiffStat";
 import { Lamp } from "@/components/ui/Lamp/Lamp";
-import { useWaitingOnYou } from "@/features/home/hooks/useWaitingOnYou";
+import { useWaitingOnYou } from "./useWaitingOnYou";
 
 /**
  * The tasks blocked on you, across every project, like Codex's review queue: the sidebar lists everything by
  * recency, this lists only what waits for a decision. When nothing does, it says so instead of inventing work.
  */
 export function WaitingOnYou() {
-  const openThread = useStore((s) => s.openThread);
-  const { waiting, working } = useWaitingOnYou();
+  const { waiting, working, projectName, open } = useWaitingOnYou();
 
   return (
     <section className="mt-12">
@@ -26,7 +23,7 @@ export function WaitingOnYou() {
             <li key={agent.id}>
               <button
                 type="button"
-                onClick={() => openThread(agent.threadId)}
+                onClick={() => open(agent.threadId)}
                 className="flex h-11 w-full items-center gap-3 rounded-xl px-3 text-left transition-colors hover:bg-hover"
               >
                 <Lamp aspect={agent.aspect} />
@@ -35,7 +32,7 @@ export function WaitingOnYou() {
                 </span>
                 <Detail agent={agent} />
                 <span className="w-24 shrink-0 truncate text-right text-[12.5px] text-ink-4">
-                  {projectOf(agent.projectId).name}
+                  {projectName(agent.projectId)}
                 </span>
               </button>
             </li>

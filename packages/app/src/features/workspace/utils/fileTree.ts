@@ -3,46 +3,81 @@ import type { FileDiff } from "@/types";
 export interface TreeNode {
   name: string;
   path: string;
-  children?: TreeNode[];
+  kind: "file" | "folder";
+  children: TreeNode[];
+  /** The diff of a changed file. */
   file?: FileDiff;
+  /** A folder that holds a changed file somewhere below it. */
+  changed: boolean;
+  /** Whether the folder's real contents are known, or only the changed files seen through it. */
+  listed: boolean;
 }
 
-const ROOT_FILES = ["package.json", "README.md", "tsconfig.json"];
+interface ListedEntry {
+  name: string;
+  path: string;
+  kind: "file" | "directory";
+}
 
-const sibling = (folder: string) =>
-  folder === "migrations" ? "0141_payout_status.sql" : "index.ts";
+/** The real contents of the folders the daemon has listed, by folder path ("" is the root). */
+export type Listings = Record<string, ListedEntry[]>;
 
-/** Builds a believable repo tree around the changed files: their folders, a sibling each, and the usual root files. */
-export function buildTree(files: FileDiff[]): TreeNode[] {
-  const root: TreeNode = { name: "", path: "", children: [] };
-  const folder = (parent: TreeNode, name: string) => {
-    let node = parent.children!.find((c) => c.name === name && c.children);
-    if (!node) {
-      node = { name, path: parent.path ? `${parent.path}/${name}` : name, children: [] };
-      parent.children!.push(node);
-    }
+const parentOf = (path: string) => path.slice(0, Math.max(0, path.lastIndexOf("/")));
+const nameOf = (path: string) => path.slice(path.lastIndexOf("/") + 1);
+
+/** The folders above a path, outermost first: `a/b/c.ts` gives `a` and `a/b`. */
+export const ancestorsOf = (path: string) =>
+  path
+    .split("/")
+    .slice(0, -1)
+    .map((_, i, parts) => parts.slice(0, i + 1).join("/"));
+
+const byKindThenName = (a: TreeNode, b: TreeNode) =>
+  Number(b.kind === "folder") - Number(a.kind === "folder") || a.name.localeCompare(b.name);
+
+/**
+ * The worktree as it is: the folders the daemon listed, with the changed files in their real places. A
+ * changed file the listing lacks (a deleted one) still shows, and nothing is invented around them.
+ */
+export function buildTree(files: FileDiff[], listings: Listings): TreeNode[] {
+  const nodes = new Map<string, TreeNode>();
+  const root: TreeNode = {
+    name: "",
+    path: "",
+    kind: "folder",
+    children: [],
+    changed: false,
+    listed: "" in listings,
+  };
+  nodes.set("", root);
+
+  const place = (path: string, kind: TreeNode["kind"]): TreeNode => {
+    const known = nodes.get(path);
+    if (known) return known;
+    const node: TreeNode = {
+      name: nameOf(path),
+      path,
+      kind,
+      children: [],
+      changed: false,
+      listed: path in listings,
+    };
+    nodes.set(path, node);
+    place(parentOf(path), "folder").children.push(node);
     return node;
   };
 
-  for (const file of files) {
-    const parts = file.path.split("/");
-    const name = parts.pop()!;
-    const dir = parts.reduce(folder, root);
-    dir.children!.push({ name, path: file.path, file });
-    const extra = sibling(parts[parts.length - 1] ?? "");
-    if (parts.length && !dir.children!.some((c) => c.name === extra))
-      dir.children!.push({ name: extra, path: `${dir.path}/${extra}` });
+  for (const [dir, entries] of Object.entries(listings)) {
+    place(dir, "folder");
+    for (const entry of entries) place(entry.path, entry.kind === "directory" ? "folder" : "file");
   }
-  for (const name of ROOT_FILES) root.children!.push({ name, path: name });
+  for (const file of files) {
+    place(file.path, "file").file = file;
+    for (const folder of ancestorsOf(file.path)) place(folder, "folder").changed = true;
+  }
 
-  const sort = (nodes: TreeNode[]): TreeNode[] =>
-    nodes
-      .map((n) => (n.children ? { ...n, children: sort(n.children) } : n))
-      .sort(
-        (a, b) =>
-          Number(Boolean(b.children)) - Number(Boolean(a.children)) || a.name.localeCompare(b.name),
-      );
-  return sort(root.children!);
+  for (const node of nodes.values()) node.children.sort(byKindThenName);
+  return root.children;
 }
 
 /** The git decoration VS Code puts on a changed file: its letter, and the colour its name takes. */

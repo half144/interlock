@@ -1,59 +1,62 @@
-import { Mic, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ComposerFrame } from "@/components/ui/ComposerFrame/ComposerFrame";
-import { RoundButton } from "@/components/ui/RoundButton/RoundButton";
 import { SendButton } from "@/components/ui/SendButton/SendButton";
+import { AddFilesButton } from "@/components/attachments/AddFilesButton/AddFilesButton";
+import { AttachmentChips } from "@/components/attachments/AttachmentChips/AttachmentChips";
 import { EffortPicker } from "@/components/effort/EffortPicker/EffortPicker";
-import { useHomeComposer } from "@/features/home/hooks/useHomeComposer";
+import type { ProjectChoice } from "@/features/home/hooks/useProjectChoice";
 import type { ModelChoice } from "@/features/home/types";
+import { AddProject } from "./AddProject/AddProject";
+import { PlanFirstToggle } from "./PlanFirstToggle/PlanFirstToggle";
 import { ProjectPill } from "./ProjectPill/ProjectPill";
-import { SkillSuggestions } from "./SkillSuggestions/SkillSuggestions";
+import { useHomeComposer } from "./useHomeComposer";
 import { WorktreeTray } from "./WorktreeTray/WorktreeTray";
 
-/** The new-task composer: the prompt, which project and branch it runs from, how hard to think, and the project's skills. */
-export function HomeComposer({ choice }: { choice: ModelChoice }) {
-  const c = useHomeComposer(choice);
+export function HomeComposer({ choice, target }: { choice: ModelChoice; target: ProjectChoice }) {
+  const c = useHomeComposer(choice, target);
+  const { project, base, attachments } = c;
+  if (!project || !base) return <AddProject />;
 
   return (
     <div className="mt-8">
-      <ComposerFrame className="relative z-10">
+      <ComposerFrame
+        className={cn("relative z-10", attachments.dragging && "ring-1 ring-run/60")}
+        {...attachments.dropTarget}
+      >
+        <AttachmentChips items={attachments.items} onRemove={attachments.remove} />
         <textarea
           ref={c.input}
           value={c.text}
           onChange={(e) => c.setText(e.target.value)}
           onKeyDown={c.onKeyDown}
+          onPaste={attachments.onPaste}
           rows={2}
-          placeholder={`Give Interlock a task in ${c.project.name}`}
+          placeholder={`Give Interlock a task in ${project.name}`}
           className="block w-full resize-none bg-transparent px-5 pt-4 pb-1 text-[15px] leading-relaxed text-ink outline-none placeholder:text-ink-4"
         />
         <div className="flex items-center gap-1.5 px-3 pb-3">
-          <RoundButton label="Add files" variant="outline">
-            <Plus />
-          </RoundButton>
-          <ProjectPill project={c.project} onChange={c.setProjectId} />
+          <AddFilesButton onPick={attachments.add} />
+          <ProjectPill project={project} onChange={c.setProjectId} />
           <span className="ml-auto flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => c.setPlan((p) => !p)}
-              aria-pressed={c.plan}
-              className={cn(
-                "h-8 rounded-full px-3 text-[13px] transition-colors",
-                c.plan ? "bg-selected text-ink" : "text-ink-3 hover:bg-hover hover:text-ink-2",
-              )}
-            >
-              Plan first
-            </button>
-            <EffortPicker value={c.effort} onChange={c.setEffort} model={choice.model} />
-            <RoundButton label="Dictate">
-              <Mic />
-            </RoundButton>
-            <SendButton label="Start task" onClick={c.submit} disabled={!c.text.trim()} />
+            <PlanFirstToggle
+              pressed={c.plan}
+              onToggle={() => c.setPlan((p) => !p)}
+              {...(c.planAvailable
+                ? {}
+                : { disabledReason: "Plan first is not available for this agent" })}
+            />
+            <EffortPicker
+              value={c.effort}
+              options={c.efforts}
+              onChange={c.setEffort}
+              model={choice.model}
+            />
+            <SendButton label="Start task" onClick={c.submit} disabled={!c.ready} />
           </span>
         </div>
       </ComposerFrame>
 
-      <WorktreeTray project={c.project} base={c.base} onBase={c.setBase} />
-      <SkillSuggestions project={c.project} onPick={c.addSkill} />
+      <WorktreeTray project={project} base={base} onBase={c.setBase} />
     </div>
   );
 }

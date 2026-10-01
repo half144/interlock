@@ -1,17 +1,15 @@
-import { useRef } from "react";
 import type { Agent, Subagent } from "@/types";
 import { agentLabel } from "@/lib/agentKinds";
 import { Dock } from "@/components/ui/Dock/Dock";
-import { useFollowScroll } from "@/features/subagents/hooks/useFollowScroll";
 import { ChatHeader } from "./ChatHeader/ChatHeader";
 import { SubagentComposer } from "./SubagentComposer/SubagentComposer";
 import { SubagentTranscript } from "./SubagentTranscript/SubagentTranscript";
+import { useSubagentChat } from "./useSubagentChat";
 
-/** A subagent as a chat of its own: the brief, every call it made with what it saw, what it returned, and a composer to talk to it. */
+/** A subagent as a chat of its own: the brief, every call it made with what it saw, and what it returned. */
 export function SubagentChat({ sub, agent }: { sub: Subagent; agent: Agent }) {
   const parent = agentLabel(agent);
-  const scroller = useRef<HTMLDivElement>(null);
-  useFollowScroll(scroller, `${sub.events.length}:${sub.status}`);
+  const { scroller } = useSubagentChat(sub);
 
   return (
     <>
@@ -21,7 +19,7 @@ export function SubagentChat({ sub, agent }: { sub: Subagent; agent: Agent }) {
           <SubagentTranscript sub={sub} agent={agent} parent={parent} />
         </div>
         <Dock surface="raised" className="px-4 pb-4">
-          <SubagentComposer sub={sub} parentLabel={parent} />
+          <SubagentComposer sub={sub} parent={parent} />
         </Dock>
       </div>
     </>

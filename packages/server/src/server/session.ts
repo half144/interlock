@@ -131,6 +131,7 @@ import {
   setProjectCustomIcon,
 } from "../utils/project-custom-icon.js";
 import { CheckoutSession } from "./session/checkout/checkout-session.js";
+import { ShipSession } from "./session/ship/ship-session.js";
 import {
   createWorkspaceGitObserverService,
   type WorkspaceGitObserverService,
@@ -143,6 +144,12 @@ import { ProviderCatalogSession } from "./session/provider/provider-catalog-sess
 import { WorkspaceFilesSession } from "./session/files/workspace-files-session.js";
 import { AgentConfigSession } from "./session/agent-config/agent-config-session.js";
 import { ProjectConfigSession } from "./session/project-config/project-config-session.js";
+import { ProjectSettingsSession } from "./session/project-settings/project-settings-session.js";
+import { AccountsSession } from "./session/accounts/accounts-session.js";
+import { dispatchSettingsAndAccountsMessage } from "./session/settings-accounts-dispatch.js";
+import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
+import { applyProjectSettingsToAgentLaunch } from "./project-settings/agent-launch-settings.js";
+import { inspectGitProject, NotAGitRepoError } from "./project-settings/project-git-info.js";
 import { DownloadTokenStore } from "./file-download/token-store.js";
 import {
   archivePersistedWorkspaceRecord,
@@ -208,7 +215,11 @@ import {
   handleWorkspaceSetupStatusRequest as handleWorkspaceSetupStatusRequestMessage,
   handleWorkspaceSetupRunRequest as handleWorkspaceSetupRunRequestMessage,
 } from "./worktree-session.js";
-import { archiveByScope, type ActiveWorkspaceRef } from "./workspace-archive-service.js";
+import {
+  archiveByScope,
+  type ActiveWorkspaceRef,
+  type ArchiveDependencies,
+} from "./workspace-archive-service.js";
 import { WorkspaceSetupRuntime } from "./workspace-setup-runtime.js";
 
 function resolveWorkspaceSetupRuntime(
@@ -578,10 +589,13 @@ export class Session {
   private readonly workspaceGitObserver: WorkspaceGitObserverService;
   private readonly workspaceDirectory: WorkspaceDirectory;
   private readonly checkoutSession: CheckoutSession;
+  private readonly shipSession: ShipSession;
   private readonly providerCatalogSession: ProviderCatalogSession;
   private readonly workspaceFilesSession: WorkspaceFilesSession;
   private readonly agentConfigSession: AgentConfigSession;
   private readonly projectConfigSession: ProjectConfigSession;
+  private readonly projectSettingsSession: ProjectSettingsSession;
+  private readonly accountsSession: AccountsSession;
   private readonly agentRequests: Pick<AgentRequests, "create" | "send">;
   private readonly createAgentLifecycleDispatch: CreateAgentLifecycleDispatch;
 
@@ -707,6 +721,13 @@ export class Session {
       worktreesRoot: this.worktreesRoot,
       logger: this.sessionLogger,
     });
+    this.shipSession = new ShipSession({
+      emit: (msg) => this.emit(msg),
+      workspaceGitService: this.workspaceGitService,
+      gitMutation: this.gitMutation,
+      archiveDependencies: () => this.buildArchiveDependencies(),
+      logger: this.sessionLogger,
+    });
     this.workspaceGitObserver = createWorkspaceGitObserverService({
       workspaceGitService: this.workspaceGitService,
       describeWorkspaceRecordWithGitData: (workspace) =>
@@ -761,6 +782,17 @@ export class Session {
         emit: (msg) => this.emit(msg),
       },
       projectRegistry: this.projectRegistry,
+      logger: this.sessionLogger,
+    });
+    this.projectSettingsSession = new ProjectSettingsSession({
+      host: { emit: (msg) => this.emit(msg) },
+      projectRegistry: this.projectRegistry,
+      workspaceGitService: this.workspaceGitService,
+      store: ProjectSettingsStore.forHome(paseoHome),
+      logger: this.sessionLogger,
+    });
+    this.accountsSession = new AccountsSession({
+      host: { emit: (msg) => this.emit(msg) },
       logger: this.sessionLogger,
     });
     this.daemonConfigStore = daemonConfigStore;
@@ -1664,7 +1696,11 @@ export class Session {
     return (
       this.dispatchWorkspaceStateMessage(msg) ??
       this.dispatchWorkspaceSetupMessage(msg) ??
-      this.dispatchWorkspaceAndProjectMessage(msg)
+      this.dispatchWorkspaceAndProjectMessage(msg) ??
+      dispatchSettingsAndAccountsMessage(
+        { projectSettings: this.projectSettingsSession, accounts: this.accountsSession },
+        msg,
+      )
     );
   }
 
@@ -1922,6 +1958,10 @@ export class Session {
         return this.handlePaseoWorktreeListRequest(msg);
       case "paseo_worktree_archive_request":
         return this.handlePaseoWorktreeArchiveRequest(msg);
+      case "task_create_pr_request":
+        return this.shipSession.handleCreatePrRequest(msg);
+      case "task_discard_request":
+        return this.shipSession.handleDiscardRequest(msg);
       case "create_paseo_worktree_request":
         return this.handleCreatePaseoWorktreeRequest(msg);
       case "open_project_request":
@@ -2864,8 +2904,9 @@ export class Session {
 
   private async createSessionAgent(
     msg: CreateAgentRequestMessage,
-    agentId?: string,
+    requestedAgentId?: string,
   ): Promise<AgentSnapshotPayload> {
+    const agentId = requestedAgentId ?? uuidv4();
     const {
       config,
       worktreeName,
@@ -2911,6 +2952,7 @@ export class Session {
         target: worktree,
         firstAgentContext,
         hasLegacyGitOptions: Boolean(git),
+        agentId,
       });
       createdWorktreeForCleanup = createdWorktree;
       const resolvedIntent = await this.resolveSessionCreateAgentIntent({
@@ -2922,6 +2964,7 @@ export class Session {
       if (!(await this.filesystem.isDirectory(resolvedCwd))) {
         throw new Error(`Working directory does not exist or is not a directory: ${resolvedCwd}`);
       }
+      const launchSettings = await this.resolveProjectLaunchSettings(resolvedIntent.config, env);
 
       const { snapshot, liveSnapshot } = await createAgentCommand(
         {
@@ -2935,7 +2978,7 @@ export class Session {
         {
           kind: "session",
           agentId,
-          config: resolvedIntent.config,
+          config: launchSettings.config,
           workspaceId: resolvedIntent.intent.workspaceId,
           worktreeName,
           initialPrompt,
@@ -2945,7 +2988,7 @@ export class Session {
           attachments,
           git,
           labels: resolvedIntent.intent.labels,
-          env,
+          env: launchSettings.env,
           provisionalTitle,
           firstAgentContext,
           buildSessionConfig: (sessionConfig, gitOptions, legacyWorktreeName, ctx) =>
@@ -2981,6 +3024,15 @@ export class Session {
       });
       throw error;
     }
+  }
+
+  private async resolveProjectLaunchSettings(
+    config: AgentSessionConfig,
+    env: Record<string, string> | undefined,
+  ) {
+    const repoRoot = await this.workspaceGitService.resolveRepoRoot(config.cwd).catch(() => null);
+    if (!repoRoot) return { config, env };
+    return applyProjectSettingsToAgentLaunch({ paseoHome: this.paseoHome, repoRoot, config, env });
   }
 
   private async resolveSessionCreateAgentIntent(input: {
@@ -3662,30 +3714,35 @@ export class Session {
     );
   }
 
+  private buildArchiveDependencies(): Omit<ArchiveDependencies, "workspaceGitService"> & {
+    workspaceGitService: WorkspaceGitService;
+  } {
+    return {
+      paseoHome: this.paseoHome,
+      paseoWorktreesBaseRoot: this.worktreesRoot,
+      github: this.github,
+      workspaceGitService: this.workspaceGitService,
+      agentManager: this.agentManager,
+      agentStorage: this.agentStorage,
+      findWorkspaceIdForCwd: (cwd) => this.findWorkspaceIdForCwd(cwd),
+      listActiveWorkspaces: () => this.listActiveWorkspaceRefs(),
+      archiveWorkspaceRecord: (workspaceId) => this.archiveWorkspaceRecord(workspaceId),
+      emitWorkspaceUpdatesForWorkspaceIds: (workspaceIds) =>
+        this.emitWorkspaceUpdatesForWorkspaceIds(workspaceIds),
+      markWorkspaceArchiving: (workspaceIds, archivingAt) =>
+        this.markWorkspaceArchiving(workspaceIds, archivingAt),
+      clearWorkspaceArchiving: (workspaceIds) => this.clearWorkspaceArchiving(workspaceIds),
+      killTerminalsForWorkspace: (workspaceId) =>
+        this.terminalController.killTerminalsForWorkspace(workspaceId),
+      sessionLogger: this.sessionLogger,
+    };
+  }
+
   private async handlePaseoWorktreeArchiveRequest(
     msg: Extract<SessionInboundMessage, { type: "paseo_worktree_archive_request" }>,
   ): Promise<void> {
     return handleWorktreeArchiveRequest(
-      {
-        paseoHome: this.paseoHome,
-        paseoWorktreesBaseRoot: this.worktreesRoot,
-        github: this.github,
-        workspaceGitService: this.workspaceGitService,
-        agentManager: this.agentManager,
-        agentStorage: this.agentStorage,
-        findWorkspaceIdForCwd: (cwd) => this.findWorkspaceIdForCwd(cwd),
-        listActiveWorkspaces: () => this.listActiveWorkspaceRefs(),
-        archiveWorkspaceRecord: (workspaceId) => this.archiveWorkspaceRecord(workspaceId),
-        emit: (message) => this.emit(message),
-        emitWorkspaceUpdatesForWorkspaceIds: (workspaceIds) =>
-          this.emitWorkspaceUpdatesForWorkspaceIds(workspaceIds),
-        markWorkspaceArchiving: (workspaceIds, archivingAt) =>
-          this.markWorkspaceArchiving(workspaceIds, archivingAt),
-        clearWorkspaceArchiving: (workspaceIds) => this.clearWorkspaceArchiving(workspaceIds),
-        killTerminalsForWorkspace: (workspaceId) =>
-          this.terminalController.killTerminalsForWorkspace(workspaceId),
-        sessionLogger: this.sessionLogger,
-      },
+      { ...this.buildArchiveDependencies(), emit: (message) => this.emit(message) },
       msg,
     );
   }
@@ -5289,6 +5346,24 @@ export class Session {
       return;
     }
 
+    let git: Awaited<ReturnType<typeof inspectGitProject>>;
+    try {
+      git = await inspectGitProject(cwd, this.workspaceGitService);
+    } catch (error) {
+      const notGit = error instanceof NotAGitRepoError;
+      this.sessionLogger.info({ err: error, cwd }, "Add project rejected");
+      this.emit({
+        type: "project.add.response",
+        payload: {
+          requestId: request.requestId,
+          project: null,
+          error: error instanceof Error ? error.message : "Failed to inspect git repository",
+          ...(notGit ? { errorCode: "not_a_git_repo" as const } : {}),
+        },
+      });
+      return;
+    }
+
     try {
       const projectsBefore = new Map<string, PersistedProjectRecord>();
       for (const project of await this.projectRegistry.list()) {
@@ -5312,6 +5387,7 @@ export class Session {
         payload: {
           requestId: request.requestId,
           project: await this.buildProjectDescriptor(project),
+          git,
           error: null,
         },
       });
@@ -6699,6 +6775,7 @@ export class Session {
 
     this.workspaceGitObserver.dispose();
     this.workspaceFilesSession.dispose();
+    await this.accountsSession.dispose();
   }
 }
 

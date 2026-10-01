@@ -1,5 +1,3 @@
-import { defaultModel } from "@/lib/agentKinds";
-import { projects } from "@/mocks/projects";
 import type { AgentKind, Automation, Trigger } from "@/types";
 import { describeCron } from "./cron";
 
@@ -27,9 +25,9 @@ export const BLANK_DRAFT: Draft = {
   label: "",
   source: "Sentry",
   prompt: "",
-  projectId: projects[0].id,
+  projectId: "",
   kind: "claude",
-  model: "Sonnet 5.5",
+  model: "",
 };
 
 export const TEMPLATES: { label: string; draft: Partial<Draft> }[] = [
@@ -39,7 +37,6 @@ export const TEMPLATES: { label: string; draft: Partial<Draft> }[] = [
       name: "Nightly Sentry triage",
       type: "schedule",
       cron: "0 3 * * *",
-      projectId: "ledger",
       prompt:
         "Group new Sentry issues from the last 24h, drop known noise, and open a fix for anything reproducible.",
     },
@@ -50,9 +47,7 @@ export const TEMPLATES: { label: string; draft: Partial<Draft> }[] = [
       name: "Plan issues labelled agent",
       type: "issue",
       label: DEFAULT_ISSUE_LABEL,
-      projectId: "checkout",
       kind: "claude",
-      model: defaultModel("claude"),
       prompt: "Read the issue, write a plan in plan mode, and wait for approval before building.",
     },
   },
@@ -62,9 +57,7 @@ export const TEMPLATES: { label: string; draft: Partial<Draft> }[] = [
       name: "Weekly dependency bumps",
       type: "schedule",
       cron: "0 9 * * 1",
-      projectId: "uikit",
       kind: "codex",
-      model: defaultModel("codex"),
       prompt:
         "Bump patch and minor dependencies, run the full suite and the Storybook build, and open one PR.",
     },
@@ -75,9 +68,7 @@ export const TEMPLATES: { label: string; draft: Partial<Draft> }[] = [
       name: "Migration second opinion",
       type: "pr",
       label: "PR touches migrations/**",
-      projectId: "ledger",
-      kind: "gemini",
-      model: defaultModel("gemini"),
+      kind: "codex",
       prompt:
         "Review the migration for locking, backfill safety and rollback. Comment on the PR, do not push.",
     },

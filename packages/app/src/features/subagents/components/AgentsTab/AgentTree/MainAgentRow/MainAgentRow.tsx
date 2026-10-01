@@ -32,7 +32,10 @@ export function MainAgentRow({
         <span className="block truncate text-[13.5px] font-medium text-ink">
           {agentLabel(agent)}
         </span>
-        <span className="block text-[12px] text-ink-3">Main agent · {agent.model}</span>
+        <span className="block text-[12px] text-ink-3">
+          Main agent · {agent.model}
+          {agent.effort ? ` · ${agent.effort}` : ""}
+        </span>
       </span>
       {agent.aspect === "held" ? (
         <CircleAlert className="size-4 shrink-0 text-hold" aria-label="Needs you" />

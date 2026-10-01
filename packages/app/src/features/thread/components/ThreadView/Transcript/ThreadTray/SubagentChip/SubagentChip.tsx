@@ -15,7 +15,6 @@ interface SubagentChipProps {
   onOpen: () => void;
 }
 
-/** One subagent in the composer tray: its status, its name, and how long it's been running. */
 export function SubagentChip({ sub, agent, selected, layoutId, onOpen }: SubagentChipProps) {
   return (
     <button

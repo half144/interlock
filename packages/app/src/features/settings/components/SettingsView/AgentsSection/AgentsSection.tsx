@@ -1,85 +1,62 @@
-import { useState } from "react";
-import { agentKindList, agentKindOptions, agentKinds, defaultModel } from "@/lib/agentKinds";
-import type { AgentKind } from "@/types";
-import { AgentMark } from "@/components/ui/AgentMark/AgentMark";
-import { Tabs } from "@/components/ui/Tabs/Tabs";
-import { Toggle } from "@/components/ui/Toggle/Toggle";
-import { optionsOf } from "@/lib/options";
+import { TriangleAlert } from "lucide-react";
+import type { Autonomy, Project } from "@/types";
 import { Picker } from "@/components/ui/Picker/Picker";
+import { Tabs } from "@/components/ui/Tabs/Tabs";
 import { Row } from "@/features/settings/components/Row/Row";
+import { SavedMark } from "@/features/settings/components/SavedMark/SavedMark";
 import { Section } from "@/features/settings/components/Section/Section";
+import { useAgentsSection } from "./useAgentsSection";
 
-type Permission = "ask" | "edit" | "full";
-
-const PERMISSIONS: { value: Permission; label: string }[] = [
-  { value: "ask", label: "Ask" },
-  { value: "edit", label: "Auto-edit" },
-  { value: "full", label: "Full auto" },
+const AUTONOMY: { value: Autonomy; label: string }[] = [
+  { value: "auto", label: "Auto" },
+  { value: "full-auto", label: "Full auto" },
 ];
 
-const permissionText: Record<Permission, string> = {
-  ask: "Agents ask before every edit and command. Slowest, safest.",
-  edit: "Agents edit files freely and ask before shell commands outside the allowlist.",
-  full: "Agents edit and run commands without asking. Worktrees are isolated, the network is not.",
+const AUTONOMY_HINT: Record<Autonomy, string> = {
+  auto: "Agents work freely inside their worktree and stop to ask before anything riskier.",
+  "full-auto": "Agents never stop to ask for permission.",
 };
 
-export function AgentsSection() {
-  const [kind, setKind] = useState<AgentKind>("claude");
-  const [model, setModel] = useState(defaultModel("claude"));
-  const [allowed, setAllowed] = useState<Record<AgentKind, boolean>>({
-    claude: true,
-    codex: true,
-    gemini: false,
-  });
-  const [permission, setPermission] = useState<Permission>("edit");
+export function AgentsSection({ project }: { project: Project }) {
+  const a = useAgentsSection(project);
 
   return (
     <Section
       id="agents"
       title="Agents"
-      description="Which agents can work on this project, and how much they can do before stopping for you."
+      description="Which agent new tasks start with, and how much it may do before stopping for you."
+      aside={<SavedMark status={a.status} />}
     >
-      <Row label="Default agent" hint="Preselected in New task and in the chat composer.">
+      <Row label="Autonomy" hint={AUTONOMY_HINT[a.autonomy]}>
+        <Tabs value={a.autonomy} onChange={a.setAutonomy} items={AUTONOMY} />
+      </Row>
+      {a.autonomy === "full-auto" && (
+        <div role="note" className="flex gap-3 bg-red/[0.04] px-4 py-3.5 text-[13px] text-ink-2">
+          <TriangleAlert className="mt-0.5 size-4 shrink-0 text-red" />
+          <p className="[text-wrap:pretty]">
+            Full auto lets an agent edit files and run any command, including network calls and
+            deleting files, without asking. The worktree isolates your branches, not your machine.
+            Use it on repositories you trust.
+          </p>
+        </div>
+      )}
+      <Row label="Default agent" hint="Preselected when you start a task in this project.">
         <div className="w-40">
           <Picker
             label="Default agent"
-            value={kind}
-            options={agentKindOptions}
-            onChange={(k) => {
-              setKind(k);
-              setModel(defaultModel(k));
-            }}
+            value={a.kind}
+            options={a.kindOptions}
+            onChange={a.pickKind}
           />
         </div>
-        <div className="w-40">
+        <div className="w-44">
           <Picker
             label="Default model"
-            value={model}
-            options={optionsOf(agentKinds[kind].models)}
-            onChange={setModel}
+            value={a.model}
+            options={a.modelOptions}
+            onChange={a.pickModel}
           />
         </div>
-      </Row>
-      {agentKindList.map((k) => (
-        <Row
-          key={k}
-          label={
-            <span className="flex items-center gap-2.5">
-              <AgentMark kind={k} />
-              {agentKinds[k].label}
-            </span>
-          }
-          hint={agentKinds[k].models.join(", ")}
-        >
-          <Toggle
-            label={`Allow ${agentKinds[k].label}`}
-            checked={allowed[k]}
-            onChange={(v) => setAllowed((a) => ({ ...a, [k]: v }))}
-          />
-        </Row>
-      ))}
-      <Row label="Permission mode" hint={permissionText[permission]}>
-        <Tabs value={permission} onChange={setPermission} items={PERMISSIONS} />
       </Row>
     </Section>
   );

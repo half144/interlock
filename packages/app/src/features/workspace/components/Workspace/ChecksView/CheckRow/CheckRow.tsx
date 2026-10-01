@@ -1,61 +1,45 @@
-import { ChevronRight } from "lucide-react";
+import { openExternal } from "@/platform/desktop";
+import { Check as Passed, ExternalLink, LoaderCircle, Minus, X as Failed } from "lucide-react";
+import type { Check, CheckState } from "@/types";
 import { cn } from "@/lib/utils";
-import { Lamp } from "@/components/ui/Lamp/Lamp";
-import { Collapse } from "@/components/ui/Collapse/Collapse";
-import { checkLabel, checkLamp, type Check } from "@/features/workspace/utils/checks";
 
-interface CheckRowProps {
-  check: Check;
-  expanded: boolean;
-  output: string[];
-  onToggle: () => void;
-}
+const MARK: Record<CheckState, { icon: typeof Passed; tone: string; label: string }> = {
+  success: { icon: Passed, tone: "text-green", label: "Passed" },
+  failure: { icon: Failed, tone: "text-red", label: "Failed" },
+  pending: {
+    icon: LoaderCircle,
+    tone: "animate-spin-slow text-hold",
+    label: "Running",
+  },
+  cancelled: { icon: Minus, tone: "text-ink-3", label: "Cancelled" },
+  skipped: { icon: Minus, tone: "text-ink-4", label: "Skipped" },
+};
 
-/** One CI check. A failed one opens to show its output. */
-export function CheckRow({ check, expanded, output, onToggle }: CheckRowProps) {
-  const expandable = check.status === "failed";
-
+/** One check of the pull request: how it ended, its name, how long it took and a link to its run. */
+export function CheckRow({ check }: { check: Check }) {
+  const { icon: Icon, tone, label } = MARK[check.state];
+  const { url } = check;
   return (
-    <li className="border-b border-seam">
-      <button
-        type="button"
-        disabled={!expandable}
-        onClick={onToggle}
-        aria-expanded={expandable ? expanded : undefined}
-        className="flex h-12 w-full items-center gap-3 px-4 text-left transition-colors duration-150 enabled:hover:bg-raised disabled:cursor-default"
-      >
-        <Lamp aspect={checkLamp[check.status]} size="md" />
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="text-[13px] text-ink">{check.name}</span>
-          <span className="truncate font-mono text-[11px] text-ink-3">{check.detail}</span>
-        </span>
-        <span
-          className={cn(
-            "text-xs transition-colors duration-200",
-            check.status === "failed" ? "text-red" : "text-ink-3",
-          )}
+    <li className="flex h-10 items-center gap-3 border-b border-seam px-4 text-[13px] last:border-b-0">
+      <Icon aria-label={label} className={cn("size-4 shrink-0", tone)} />
+      <span className="min-w-0 flex-1 truncate text-ink">
+        {check.name}
+        {check.workflow && <span className="ml-2 text-ink-3">{check.workflow}</span>}
+      </span>
+      {check.duration && <span className="shrink-0 text-ink-3 tabular-nums">{check.duration}</span>}
+      {url && (
+        <a
+          href={url}
+          onClick={(e) => {
+            e.preventDefault();
+            void openExternal(url);
+          }}
+          aria-label={`Open ${check.name} on GitHub`}
+          className="shrink-0 text-ink-3 hover:text-ink"
         >
-          {checkLabel[check.status]}
-        </span>
-        <span className="w-12 text-right font-mono text-[11px] text-ink-3">
-          {check.status === "passed" || check.status === "failed" ? check.duration : "—"}
-        </span>
-        {expandable ? (
-          <ChevronRight
-            className={cn(
-              "size-3.5 text-ink-3 transition-transform duration-200 ease-out-quint",
-              expanded && "rotate-90",
-            )}
-          />
-        ) : (
-          <span className="w-3.5" />
-        )}
-      </button>
-      <Collapse open={expanded}>
-        <pre className="mx-4 mb-3 overflow-x-auto rounded-md border border-seam bg-inset px-3 py-2.5 font-mono text-xs leading-5 text-red">
-          {output.join("\n")}
-        </pre>
-      </Collapse>
+          <ExternalLink className="size-3.5" />
+        </a>
+      )}
     </li>
   );
 }

@@ -1,30 +1,23 @@
-import { useId } from "react";
+import { useId, type ReactNode } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import {
   Code2,
-  GitBranch,
   ListChecks,
   Maximize2,
   Minimize2,
-  Monitor,
-  MoreHorizontal,
   Network,
   Settings2,
-  Share2,
   SquareTerminal,
   X,
   type LucideIcon,
 } from "lucide-react";
 import type { Agent, PanelTab } from "@/types";
-import { useStore } from "@/stores/app-store";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
 import { fadeIn, fadeOut } from "@/lib/motion";
-import { useSubagents } from "@/hooks/useSubagents";
-import { PrButton } from "@/features/workspace/components/Workspace/Toolbar/PrButton/PrButton";
 import { WorkspaceTab } from "./WorkspaceTab/WorkspaceTab";
+import { useToolbar } from "./useToolbar";
 
 const TABS: { value: PanelTab; label: string; icon: LucideIcon }[] = [
-  { value: "preview", label: "Preview", icon: Monitor },
   { value: "diff", label: "Code", icon: Code2 },
   { value: "terminal", label: "Terminal", icon: SquareTerminal },
   { value: "checks", label: "Checks", icon: ListChecks },
@@ -33,18 +26,14 @@ const TABS: { value: PanelTab; label: string; icon: LucideIcon }[] = [
 
 interface ToolbarProps {
   agent: Agent;
-  prNumber?: number | undefined;
-  onOpenPr: () => void;
+  /** The task's pull request control, which the thread header shares. */
+  pr: ReactNode;
   onClose: () => void;
 }
 
-export function Toolbar({ agent, prNumber, onOpenPr, onClose }: ToolbarProps) {
-  const panelTab = useStore((s) => s.panelTab);
-  const setPanelTab = useStore((s) => s.setPanelTab);
-  const go = useStore((s) => s.go);
-  const maximized = useStore((s) => s.reviewMaximized);
-  const setMaximized = useStore((s) => s.setReviewMaximized);
-  const subCount = useSubagents(agent.id).length;
+export function Toolbar({ agent, pr, onClose }: ToolbarProps) {
+  const { panelTab, selectTab, subagentCount, maximized, toggleMaximized, openSettings } =
+    useToolbar(agent.id, agent.projectId);
   const group = useId();
 
   return (
@@ -57,35 +46,19 @@ export function Toolbar({ agent, prNumber, onOpenPr, onClose }: ToolbarProps) {
               key={tab.value}
               {...tab}
               active={panelTab}
-              count={tab.value === "agents" ? subCount : undefined}
-              onSelect={setPanelTab}
+              count={tab.value === "agents" ? subagentCount : undefined}
+              onSelect={selectTab}
             />
           ))}
         </nav>
       </LayoutGroup>
       <span aria-hidden className="mx-1 h-4 w-px bg-seam" />
-      <IconButton
-        label="Project settings"
-        onClick={() => go({ kind: "settings", projectId: agent.projectId })}
-      >
+      <IconButton label="Project settings" onClick={openSettings}>
         <Settings2 />
       </IconButton>
 
       <div className="ml-auto flex items-center gap-1">
-        <IconButton label="More">
-          <MoreHorizontal />
-        </IconButton>
-        <IconButton label={agent.branch}>
-          <GitBranch />
-        </IconButton>
-        <button
-          type="button"
-          className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[13.5px] text-ink hover:bg-hover"
-        >
-          <Share2 className="size-4" />
-          Share
-        </button>
-        <PrButton agent={agent} prNumber={prNumber} onOpen={onOpenPr} />
+        {pr}
         {/* Only the review can grow into the mini-IDE. */}
         <AnimatePresence initial={false}>
           {panelTab === "diff" && (
@@ -98,7 +71,7 @@ export function Toolbar({ agent, prNumber, onOpenPr, onClose }: ToolbarProps) {
             >
               <IconButton
                 label={maximized ? "Restore layout (Esc)" : "Maximize review"}
-                onClick={() => setMaximized(!maximized)}
+                onClick={toggleMaximized}
               >
                 {maximized ? <Minimize2 /> : <Maximize2 />}
               </IconButton>

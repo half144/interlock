@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/** The little screen poking out of the card; opens the worktree. */
 export function WorktreeScreen({
   label,
   finished,

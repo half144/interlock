@@ -1,47 +1,30 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useId } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Check } from "lucide-react";
-import type { Effort } from "@/types";
+import type { Effort, EffortOption } from "@/types";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { blurIn, sharp } from "@/lib/blur";
-import { LEVELS, efforts } from "@/lib/efforts";
+import { effortCopy } from "@/lib/efforts";
 import { Dots } from "@/components/effort/Dots/Dots";
+import { useEffortMenu } from "./useEffortMenu";
 
 interface EffortMenuProps {
   value: Effort;
+  options: EffortOption[];
   model: string;
   onPick: (effort: Effort) => void;
   onClose: () => void;
 }
 
 /**
- * The four levels as a short list. The highlight follows the pointer or the arrow keys, and the line at the
+ * The model's levels as a short list. The highlight follows the pointer or the arrow keys, and the line at the
  * bottom explains whichever level you're on, so the rows never change height under the cursor.
  */
-export function EffortMenu({ value, model, onPick, onClose }: EffortMenuProps) {
-  const [active, setActive] = useState(value);
+export function EffortMenu({ value, options, model, onPick, onClose }: EffortMenuProps) {
   const id = useId();
-  const list = useRef<HTMLDivElement>(null);
-
-  useEffect(() => list.current?.focus(), []);
-
-  const move = (to: number) => {
-    const level = LEVELS[Math.min(LEVELS.length - 1, Math.max(0, to))];
-    if (level) setActive(level);
-  };
-
-  const onKey = (e: KeyboardEvent) => {
-    const at = LEVELS.indexOf(active);
-    if (e.key === "ArrowDown") move(at + 1);
-    else if (e.key === "ArrowUp") move(at - 1);
-    else if (e.key === "Home") move(0);
-    else if (e.key === "End") move(LEVELS.length - 1);
-    else if (e.key === "Enter" || e.key === " ") onPick(active);
-    else if (e.key === "Escape" || e.key === "Tab") onClose();
-    else return;
-    e.preventDefault();
-  };
+  const { active, setActive, list, onKey } = useEffortMenu(value, options, onPick, onClose);
+  const { blurb, pace } = effortCopy(active);
 
   return (
     <motion.div
@@ -65,17 +48,19 @@ export function EffortMenu({ value, model, onPick, onClose }: EffortMenuProps) {
         onKeyDown={onKey}
         className="outline-none"
       >
-        {LEVELS.map((level) => (
-          <div
-            key={level}
-            id={`${id}-${level}`}
+        {options.map((option, i) => (
+          <button
+            key={option.id}
+            type="button"
+            id={`${id}-${option.id}`}
             role="option"
-            aria-selected={level === value}
-            onPointerEnter={() => setActive(level)}
-            onClick={() => onPick(level)}
-            className="relative flex h-9 cursor-pointer items-center gap-3 px-2.5 text-[13.5px]"
+            aria-selected={option.id === value}
+            onPointerEnter={() => setActive(option.id)}
+            onClick={() => onPick(option.id)}
+            tabIndex={-1}
+            className="relative flex h-9 w-full cursor-pointer items-center gap-3 px-2.5 text-left text-[13.5px]"
           >
-            {level === active && (
+            {option.id === active && (
               <motion.span
                 layoutId={`${id}-active`}
                 transition={spring}
@@ -83,21 +68,22 @@ export function EffortMenu({ value, model, onPick, onClose }: EffortMenuProps) {
               />
             )}
             <Dots
-              level={level}
-              className={cn("relative", level === active ? "text-ink" : "text-ink-3")}
+              filled={i + 1}
+              total={options.length}
+              className={cn("relative", option.id === active ? "text-ink" : "text-ink-3")}
             />
             <span
               className={cn(
                 "relative flex-1 transition-colors duration-150",
-                level === active ? "text-ink" : "text-ink-2",
+                option.id === active ? "text-ink" : "text-ink-2",
               )}
             >
-              {efforts[level].label}
+              {option.label}
             </span>
-            {level === value && (
+            {option.id === value && (
               <Check className="relative size-3.5 text-ink-2" strokeWidth={2.4} />
             )}
-          </div>
+          </button>
         ))}
       </div>
 
@@ -111,10 +97,8 @@ export function EffortMenu({ value, model, onPick, onClose }: EffortMenuProps) {
             transition={fadeIn}
             className="[grid-area:1/1]"
           >
-            <p className="text-[12.5px] leading-[1.45] text-ink-2 [text-wrap:pretty]">
-              {efforts[active].blurb}
-            </p>
-            <p className="mt-1 text-[11.5px] text-ink-4">{efforts[active].pace}</p>
+            <p className="text-[12.5px] leading-[1.45] text-ink-2 [text-wrap:pretty]">{blurb}</p>
+            <p className="mt-1 text-[11.5px] text-ink-4">{pace}</p>
           </motion.div>
         </AnimatePresence>
       </div>

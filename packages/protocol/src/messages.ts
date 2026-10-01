@@ -1,9 +1,23 @@
 import { z } from "zod";
+import {
+  ProjectGitInfoSchema,
+  ProjectSettingsInboundSchemas,
+  ProjectSettingsOutboundSchemas,
+} from "./project-settings-schema.js";
+import { AccountsInboundSchemas, AccountsOutboundSchemas } from "./accounts-schema.js";
 import { TerminalActivitySchema } from "./terminal-activity.js";
 import { CLIENT_CAPS } from "./client-capabilities.js";
 import { AGENT_LIFECYCLE_STATUSES } from "./agent-lifecycle.js";
 import { MAX_EXPLICIT_AGENT_TITLE_CHARS } from "./agent-title-limits.js";
 import { AgentProviderSchema } from "./provider-manifest.js";
+import {
+  TaskCreatePrRequestSchema,
+  TaskCreatePrResponseSchema,
+  TaskDiscardRequestSchema,
+  TaskDiscardResponseSchema,
+  TaskShipUpdateMessageSchema,
+} from "./ship-messages.js";
+export * from "./ship-messages.js";
 import { TOOL_CALL_ICON_NAMES } from "./agent-types.js";
 import {
   PaseoConfigRawSchema,
@@ -1192,7 +1206,7 @@ export type GitSetupOptions = z.infer<typeof GitSetupOptionsSchema>;
 export const CreateAgentWorktreeTargetSchema = z.discriminatedUnion("mode", [
   z.object({
     mode: z.literal("branch-off"),
-    newBranch: z.string().min(1),
+    newBranch: z.string().min(1).optional(),
     base: z.string().min(1).optional(),
   }),
   z.object({
@@ -1601,7 +1615,7 @@ const CheckoutErrorSchema = z.object({
 });
 
 const CheckoutDiffCompareSchema = z.object({
-  mode: z.enum(["uncommitted", "base"]),
+  mode: z.enum(["uncommitted", "base", "base_worktree"]),
   baseRef: z.string().optional(),
   ignoreWhitespace: z.boolean().optional(),
 });
@@ -2433,6 +2447,8 @@ export const SessionInboundMessageSchema = z.discriminatedUnion("type", [
   SetDaemonConfigRequestMessageSchema,
   ReadProjectConfigRequestMessageSchema,
   WriteProjectConfigRequestMessageSchema,
+  ...ProjectSettingsInboundSchemas,
+  ...AccountsInboundSchemas,
   CreateAgentRequestMessageSchema,
   ListProviderModelsRequestMessageSchema,
   ListProviderModesRequestMessageSchema,
@@ -2493,6 +2509,8 @@ export const SessionInboundMessageSchema = z.discriminatedUnion("type", [
   DirectorySuggestionsRequestSchema,
   PaseoWorktreeListRequestSchema,
   PaseoWorktreeArchiveRequestSchema,
+  TaskCreatePrRequestSchema,
+  TaskDiscardRequestSchema,
   CreatePaseoWorktreeRequestSchema,
   WorkspaceSetupStatusRequestSchema,
   WorkspaceSetupRunRequestSchema,
@@ -3269,8 +3287,9 @@ export const ProjectAddResponseSchema = z.object({
   payload: z.object({
     requestId: z.string(),
     project: WorkspaceProjectDescriptorPayloadSchema.nullable(),
+    git: ProjectGitInfoSchema.nullish(),
     error: z.string().nullable(),
-    errorCode: z.enum(["directory_not_found"]).nullish().catch(null),
+    errorCode: z.enum(["directory_not_found", "not_a_git_repo"]).nullish().catch(null),
   }),
 });
 
@@ -5009,6 +5028,9 @@ export const SessionOutboundMessageSchema = z.discriminatedUnion("type", [
   RpcErrorMessageSchema,
   AgentUpdateMessageSchema,
   WorkspaceUpdateMessageSchema,
+  TaskCreatePrResponseSchema,
+  TaskDiscardResponseSchema,
+  TaskShipUpdateMessageSchema,
   ProjectUpdateMessageSchema,
   ProjectListResponseMessageSchema,
   WorkspaceSetupProgressMessageSchema,
@@ -5044,6 +5066,8 @@ export const SessionOutboundMessageSchema = z.discriminatedUnion("type", [
   SetDaemonConfigResponseMessageSchema,
   ReadProjectConfigResponseMessageSchema,
   WriteProjectConfigResponseMessageSchema,
+  ...ProjectSettingsOutboundSchemas,
+  ...AccountsOutboundSchemas,
   SetAgentModeResponseMessageSchema,
   SetAgentModelResponseMessageSchema,
   SetAgentThinkingResponseMessageSchema,

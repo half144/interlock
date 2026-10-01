@@ -5403,3 +5403,173 @@ test("wire snapshot callers own expansion and receive hash references unchanged"
   );
   expect(await request).toEqual(body);
 });
+
+async function connectedClient() {
+  const mock = createMockTransport();
+  const client = new DaemonClient({
+    url: "ws://test",
+    clientId: "clsk_unit_test",
+    logger: createMockLogger(),
+    reconnect: { enabled: false },
+    transportFactory: () => mock.transport,
+  });
+  clients.push(client);
+  const connectPromise = client.connect();
+  mock.triggerOpen();
+  await connectPromise;
+  return { client, mock };
+}
+
+const settingsPayload = {
+  projectId: "prj_1",
+  settings: {
+    setupCommands: ["pnpm install"],
+    env: {},
+    copyFiles: [".env"],
+    autonomy: "auto",
+    defaultProvider: null,
+    defaultModel: null,
+    archiveAfterMerge: true,
+  },
+  worktreeInclude: [".env*"],
+  error: null,
+};
+
+test("reads and updates project settings through the dotted RPCs", async () => {
+  const { client, mock } = await connectedClient();
+
+  const getPromise = client.getProjectSettings("prj_1", "req-get");
+  expect(parseSentFrame(mock.sent[0])).toEqual({
+    type: "project.settings.get.request",
+    requestId: "req-get",
+    projectId: "prj_1",
+  });
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "project.settings.get.response",
+      payload: { requestId: "req-get", ...settingsPayload },
+    }),
+  );
+  await expect(getPromise).resolves.toMatchObject({ settings: { archiveAfterMerge: true } });
+
+  const updatePromise = client.updateProjectSettings({
+    projectId: "prj_1",
+    patch: { autonomy: "full-auto" },
+    requestId: "req-update",
+  });
+  expect(parseSentFrame(mock.sent[1])).toEqual({
+    type: "project.settings.update.request",
+    requestId: "req-update",
+    projectId: "prj_1",
+    patch: { autonomy: "full-auto" },
+  });
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "project.settings.update.response",
+      payload: {
+        requestId: "req-update",
+        ...settingsPayload,
+        settings: { ...settingsPayload.settings, autonomy: "full-auto" },
+      },
+    }),
+  );
+  await expect(updatePromise).resolves.toMatchObject({ settings: { autonomy: "full-auto" } });
+});
+
+test("asks for a setup suggestion and diagnostics", async () => {
+  const { client, mock } = await connectedClient();
+
+  const suggestPromise = client.suggestProjectSetup("prj_1", "req-suggest");
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "project.setup.suggest.response",
+      payload: {
+        requestId: "req-suggest",
+        projectId: "prj_1",
+        suggestion: { packageManager: "pnpm", lockfile: "pnpm-lock.yaml", command: "pnpm install" },
+        error: null,
+      },
+    }),
+  );
+  await expect(suggestPromise).resolves.toMatchObject({ suggestion: { command: "pnpm install" } });
+
+  const diagnosticsPromise = client.getDiagnostics("req-diag");
+  expect(parseSentFrame(mock.sent[1])).toEqual({
+    type: "diagnostics.get.request",
+    requestId: "req-diag",
+  });
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "diagnostics.get.response",
+      payload: { requestId: "req-diag", tools: [], error: null },
+    }),
+  );
+  await expect(diagnosticsPromise).resolves.toEqual({
+    requestId: "req-diag",
+    tools: [],
+    error: null,
+  });
+});
+
+test("starts a provider login and delivers the completion event", async () => {
+  const { client, mock } = await connectedClient();
+  const completed = vi.fn();
+  client.onProviderAuthCompleted(completed);
+
+  const loginPromise = client.startProviderLogin("codex", "req-login");
+  expect(parseSentFrame(mock.sent[0])).toEqual({
+    type: "provider.auth.login.request",
+    requestId: "req-login",
+    provider: "codex",
+  });
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "provider.auth.login.response",
+      payload: {
+        requestId: "req-login",
+        provider: "codex",
+        loginId: "L1",
+        authUrl: "https://auth.openai.com/x",
+        opensBrowser: false,
+        error: null,
+      },
+    }),
+  );
+  await expect(loginPromise).resolves.toMatchObject({ authUrl: "https://auth.openai.com/x" });
+
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "provider.auth.completed",
+      payload: { provider: "codex", loginId: "L1", success: true, account: "a@b.c", error: null },
+    }),
+  );
+  expect(completed).toHaveBeenCalledWith({
+    provider: "codex",
+    loginId: "L1",
+    success: true,
+    account: "a@b.c",
+    error: null,
+  });
+});
+
+test("logs a provider out", async () => {
+  const { client, mock } = await connectedClient();
+
+  const logoutPromise = client.logoutProvider("claude", "req-logout");
+  expect(parseSentFrame(mock.sent[0])).toEqual({
+    type: "provider.auth.logout.request",
+    requestId: "req-logout",
+    provider: "claude",
+  });
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "provider.auth.logout.response",
+      payload: { requestId: "req-logout", provider: "claude", error: null },
+    }),
+  );
+  await expect(logoutPromise).resolves.toEqual({
+    requestId: "req-logout",
+    provider: "claude",
+    error: null,
+  });
+});

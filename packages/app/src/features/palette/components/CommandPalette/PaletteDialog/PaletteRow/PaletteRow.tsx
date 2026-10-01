@@ -26,11 +26,7 @@ export function PaletteRow({ item, active, onHover, onRun }: PaletteRowProps) {
       )}
     >
       <span className="flex w-4 shrink-0 justify-center text-ink-3 [&_svg]:size-4">
-        {item.agent ? (
-          <Lamp aspect={item.agent.aspect} progress={item.agent.progress} />
-        ) : (
-          Icon && <Icon />
-        )}
+        {item.agent ? <Lamp aspect={item.agent.aspect} /> : Icon && <Icon />}
       </span>
       <span className="min-w-0 flex-1 truncate text-[13.5px] text-ink">{item.title}</span>
       {item.hint && <span className="shrink-0 truncate text-[12.5px] text-ink-3">{item.hint}</span>}

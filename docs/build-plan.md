@@ -83,3 +83,10 @@ G8s and G10s both touch `session.ts` / `messages.ts`: re-read right before each 
 ### W3 (revised) — app features in parallel on top of G6
 
 G8a (settings, first-run, login screens), G9 (home + thread), G10a (workspace), G11 (shell, subagents, palette, usage). App side only; server changes only for a gap (small, additive, reported).
+
+### Resource limits (the user's Mac has 16 GB)
+
+- At most **2** build agents run at the same time.
+- Lint only the files you changed: `NODE_OPTIONS=--max-old-space-size=3072 npx eslint <files>`. Never run `node scripts/quality/lint.mjs`, root `npm run lint` or `npm run check` (the orchestrator runs those alone).
+- Typecheck and test only your own workspace. One daemon and one vite at a time, stopped right after verifying. Close your agent-browser session after screenshots.
+- One heavy command at a time (no parallel tsc / eslint / vitest / cargo).

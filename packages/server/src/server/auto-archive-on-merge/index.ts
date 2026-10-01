@@ -10,6 +10,9 @@ import type {
 
 export interface AutoArchiveOnMergeOptions extends AutoArchiveArchiveOptions {
   logger: Logger;
+  /** Per-project override of the daemon-wide `autoArchiveAfterMerge` flag. */
+  isArchiveEnabled?: (snapshot: WorkspaceGitRuntimeSnapshot) => Promise<boolean>;
+  onMerged?: (merged: { cwd: string; url: string; archived: boolean }) => void;
 }
 
 export interface AutoArchiveOnMergeDependencies {
@@ -24,6 +27,39 @@ const defaultDependencies: AutoArchiveOnMergeDependencies = {
   resolvePath: resolve,
 };
 
+function isArchiveEnabled(
+  options: AutoArchiveOnMergeOptions,
+  snapshot: WorkspaceGitRuntimeSnapshot,
+): Promise<boolean> | boolean {
+  return options.isArchiveEnabled
+    ? options.isArchiveEnabled(snapshot)
+    : options.daemonConfigStore.get().autoArchiveAfterMerge === true;
+}
+
+async function archiveAttachedWorkspaces(input: {
+  options: AutoArchiveOnMergeOptions;
+  deps: AutoArchiveOnMergeDependencies;
+  log: Logger;
+  snapshotCwd: string;
+  freshSnapshot: WorkspaceGitRuntimeSnapshot;
+}): Promise<boolean> {
+  const { options, deps, log, snapshotCwd, freshSnapshot } = input;
+  const attachedWorkspaces = (await options.listActiveWorkspaces()).filter(
+    (workspace) => deps.resolvePath(workspace.cwd) === snapshotCwd,
+  );
+  let archived = false;
+  for (const workspace of attachedWorkspaces) {
+    const archivedWorkspace = await deps.archiveIfSafe({
+      workspaceId: workspace.workspaceId,
+      snapshot: freshSnapshot,
+      options,
+      log,
+    });
+    archived ||= archivedWorkspace;
+  }
+  return archived;
+}
+
 export function setupAutoArchiveOnMerge(
   options: AutoArchiveOnMergeOptions,
   deps: AutoArchiveOnMergeDependencies = defaultDependencies,
@@ -33,14 +69,12 @@ export function setupAutoArchiveOnMerge(
   const openPullRequestUrlsByCwd = new LRUCache<string, string>({
     max: OPEN_PULL_REQUEST_LATCH_MAX,
   });
+  const notifiedMergeUrlsByCwd = new LRUCache<string, string>({
+    max: OPEN_PULL_REQUEST_LATCH_MAX,
+  });
 
   return options.workspaceGitService.onSnapshotUpdated((snapshot) => {
     const snapshotCwd = deps.resolvePath(snapshot.cwd);
-    if (options.daemonConfigStore.get().autoArchiveAfterMerge !== true) {
-      openPullRequestUrlsByCwd.delete(snapshotCwd);
-      return;
-    }
-
     const pullRequest = snapshot.forge.pullRequest;
     if (!pullRequest?.isMerged) {
       if (pullRequest?.state.toLowerCase() === "open") {
@@ -84,16 +118,16 @@ export function setupAutoArchiveOnMerge(
         return;
       }
 
-      const attachedWorkspaces = (await options.listActiveWorkspaces()).filter(
-        (workspace) => deps.resolvePath(workspace.cwd) === snapshotCwd,
-      );
-      for (const workspace of attachedWorkspaces) {
-        await deps.archiveIfSafe({
-          workspaceId: workspace.workspaceId,
-          snapshot: freshSnapshot,
-          options,
-          log,
-        });
+      const archiveEnabled = await isArchiveEnabled(options, freshSnapshot);
+      const archived = archiveEnabled
+        ? await archiveAttachedWorkspaces({ options, deps, log, snapshotCwd, freshSnapshot })
+        : false;
+      if (!archiveEnabled) {
+        openPullRequestUrlsByCwd.delete(snapshotCwd);
+      }
+      if (notifiedMergeUrlsByCwd.get(snapshotCwd) !== freshPullRequest.url) {
+        notifiedMergeUrlsByCwd.set(snapshotCwd, freshPullRequest.url);
+        options.onMerged?.({ cwd: snapshot.cwd, url: freshPullRequest.url, archived });
       }
     })()
       .catch((error) => {

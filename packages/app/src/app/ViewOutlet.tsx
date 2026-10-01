@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useStore } from "@/stores/app-store";
 import { fadeIn } from "@/lib/motion";
 import type { View } from "@/types";
+import { AccountsView } from "@/features/settings/components/AccountsView/AccountsView";
 import { AutomationsView } from "@/features/automations/components/AutomationsView/AutomationsView";
 import { Home } from "@/features/home/components/Home/Home";
 import { SettingsView } from "@/features/settings/components/SettingsView/SettingsView";
@@ -26,6 +27,7 @@ export function ViewOutlet() {
       {view.kind === "yard" && <Home />}
       {view.kind === "thread" && <ThreadView threadId={view.threadId} />}
       {view.kind === "automations" && <AutomationsView />}
+      {view.kind === "accounts" && <AccountsView />}
       {view.kind === "settings" && <SettingsView projectId={view.projectId} />}
     </motion.div>
   );

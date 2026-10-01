@@ -15,6 +15,8 @@ import type {
   SessionOutboundMessage,
 } from "../messages.js";
 import type { AgentManager, AgentSubscriber, SubscribeOptions } from "./agent-manager.js";
+import { resolveFirstAgentPromptTitle } from "./create-agent-title.js";
+import { buildProvisionalTaskNames } from "./provisional-task-names.js";
 import type { AgentStorage } from "./agent-storage.js";
 
 interface CreateAgentLifecycleDispatchDependencies {
@@ -62,6 +64,7 @@ export class CreateAgentLifecycleDispatch {
     target: CreateAgentWorktreeTarget | undefined;
     firstAgentContext: FirstAgentContext;
     hasLegacyGitOptions: boolean;
+    agentId: string;
   }): Promise<CreatePaseoWorktreeWorkflowResult | null> {
     if (input.target && input.hasLegacyGitOptions) {
       throw new Error("create_agent_request worktree cannot be combined with git options");
@@ -70,7 +73,12 @@ export class CreateAgentLifecycleDispatch {
       return null;
     }
 
-    return this.createWorktreeForTarget(input.cwd, input.target, input.firstAgentContext);
+    return this.createWorktreeForTarget(
+      input.cwd,
+      input.target,
+      input.firstAgentContext,
+      input.agentId,
+    );
   }
 
   registerAutoArchiveIfRequested(input: {
@@ -115,6 +123,7 @@ export class CreateAgentLifecycleDispatch {
     cwd: string,
     target: CreateAgentWorktreeTarget,
     firstAgentContext: FirstAgentContext,
+    agentId: string,
   ): Promise<CreatePaseoWorktreeWorkflowResult> {
     const baseInput = {
       cwd,
@@ -125,16 +134,23 @@ export class CreateAgentLifecycleDispatch {
     } as const;
 
     switch (target.mode) {
-      case "branch-off":
+      case "branch-off": {
+        const names = target.newBranch
+          ? { worktreeSlug: target.newBranch }
+          : buildProvisionalTaskNames({
+              agentId,
+              promptTitle: resolveFirstAgentPromptTitle(firstAgentContext),
+            });
         return this.dependencies.createPaseoWorktreeWorkflow(
           {
             ...baseInput,
-            worktreeSlug: target.newBranch,
+            ...names,
             action: "branch-off",
             ...(target.base ? { refName: target.base } : {}),
           },
           target.base ? { resolveDefaultBranch: async () => target.base! } : undefined,
         );
+      }
       case "checkout-branch":
         return this.dependencies.createPaseoWorktreeWorkflow({
           ...baseInput,

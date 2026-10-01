@@ -9,9 +9,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { Aspect, Thread } from "@/types";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { spring } from "@/lib/motion";
+import { useTaskRow } from "./useTaskRow";
 
 const icon: Record<Aspect, { Icon: LucideIcon; className: string }> = {
   running: { Icon: LoaderCircle, className: "animate-spin-slow text-ink-3" },
@@ -20,20 +20,20 @@ const icon: Record<Aspect, { Icon: LucideIcon; className: string }> = {
   review: { Icon: CircleCheck, className: "text-ready" },
   merged: { Icon: GitMerge, className: "text-merge" },
   queued: { Icon: CircleDashed, className: "text-ink-3" },
+  idle: { Icon: MessageSquare, className: "text-ink-3" },
   discarded: { Icon: MessageSquare, className: "text-ink-4" },
 };
 
 /** A task in the sidebar: its state as a small icon, plus an unread count. The selection background slides between rows. */
 export function TaskRow({ thread, active }: { thread: Thread; active: boolean }) {
-  const openThread = useStore((s) => s.openThread);
-  const agent = useStore((s) => (thread.agentIds[0] ? s.agents[thread.agentIds[0]] : undefined));
+  const { agent, open } = useTaskRow(thread);
   if (!agent) return null;
   const { Icon, className } = icon[agent.aspect];
 
   return (
     <button
       type="button"
-      onClick={() => openThread(thread.id)}
+      onClick={open}
       aria-current={active ? "page" : undefined}
       className={cn(
         "relative flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-left transition-colors duration-150",

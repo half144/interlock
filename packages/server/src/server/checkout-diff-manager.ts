@@ -152,15 +152,15 @@ export class CheckoutDiffManager {
     }
     const trimmedBaseRef = compare.baseRef?.trim();
     return trimmedBaseRef
-      ? { mode: "base", baseRef: trimmedBaseRef, ignoreWhitespace }
-      : { mode: "base", ignoreWhitespace };
+      ? { mode: compare.mode, baseRef: trimmedBaseRef, ignoreWhitespace }
+      : { mode: compare.mode, ignoreWhitespace };
   }
 
   private buildTargetKey(cwd: string, compare: CheckoutDiffCompareInput): string {
     return JSON.stringify([
       cwd,
       compare.mode,
-      compare.mode === "base" ? (compare.baseRef ?? "") : "",
+      compare.mode !== "uncommitted" ? (compare.baseRef ?? "") : "",
       compare.ignoreWhitespace === true,
     ]);
   }

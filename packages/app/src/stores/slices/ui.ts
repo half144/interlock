@@ -1,8 +1,8 @@
 import type { PanelTab, View } from "@/types";
-import { patchAgent } from "../helpers";
+import { nextToastId, patchAgent } from "../helpers";
 import type { AppState, SliceCreator, Toast } from "../types";
 
-export type SidebarMode = "auto" | "open" | "rail";
+type SidebarMode = "auto" | "open" | "rail";
 
 export interface UiSlice {
   view: View;
@@ -31,6 +31,8 @@ export interface UiSlice {
   setSidebar: (mode: SidebarMode) => void;
   setReviewMaximized: (maximized: boolean) => void;
   dismissToast: (id: number) => void;
+  /** Marks a task that wants you while you are elsewhere: an unseen count and a toast. */
+  flagTask: (agentId: string, text: string) => void;
 }
 
 /**
@@ -40,11 +42,11 @@ export interface UiSlice {
 const tuckSidebar = (s: AppState) =>
   s.panelOpen || s.sidebar !== "open" ? {} : { sidebar: "auto" as const };
 
-export const createUiSlice: SliceCreator<UiSlice> = (set, get) => ({
+export const createUiSlice: SliceCreator<UiSlice> = (set) => ({
   view: { kind: "yard" },
   selectedAgentId: null,
   selectedSubagentId: null,
-  panelTab: "preview",
+  panelTab: "diff",
   panelOpen: false,
   paletteOpen: false,
   newTaskProjectId: null,
@@ -56,15 +58,14 @@ export const createUiSlice: SliceCreator<UiSlice> = (set, get) => ({
   go: (view) => set({ view, paletteOpen: false, reviewMaximized: false }),
 
   openThread: (threadId) => {
-    const agentId = get().threads[threadId]?.agentIds[0] ?? null;
     set((s) => ({
       view: { kind: "thread", threadId },
-      selectedAgentId: agentId,
+      selectedAgentId: threadId,
       selectedSubagentId: null,
       panelOpen: false,
       paletteOpen: false,
       reviewMaximized: false,
-      agents: agentId ? patchAgent(s.agents, agentId, { unseen: 0 }) : s.agents,
+      agents: patchAgent(s.agents, threadId, { unseen: 0 }),
     }));
   },
 
@@ -95,4 +96,9 @@ export const createUiSlice: SliceCreator<UiSlice> = (set, get) => ({
   setSidebar: (sidebar) => set({ sidebar }),
   setReviewMaximized: (reviewMaximized) => set({ reviewMaximized }),
   dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+  flagTask: (agentId, text) =>
+    set((s) => ({
+      agents: patchAgent(s.agents, agentId, { unseen: (s.agents[agentId]?.unseen ?? 0) + 1 }),
+      toasts: [...s.toasts, { id: nextToastId(), agentId, text }].slice(-4),
+    })),
 });

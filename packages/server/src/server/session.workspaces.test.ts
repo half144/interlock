@@ -37,6 +37,7 @@ import type {
   AgentStreamEvent,
 } from "./agent/agent-sdk-types.js";
 import { createWorktree } from "../utils/worktree.js";
+import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import { createRealpathAwarePathMatcher } from "../utils/path.js";
 import {
   readPaseoWorktreeMetadata,
@@ -9077,4 +9078,97 @@ test("workspace.create.request reports an archived explicit project", async () =
     workspace: null,
     errorCode: "archived_project",
   });
+});
+
+test("project.add rejects a folder that is not a git repository without registering it", async () => {
+  const emitted: SessionOutboundMessage[] = [];
+  const session = createSessionForWorkspaceTests({ onMessage: (message) => emitted.push(message) });
+  const registerProject = vi.fn();
+  session.workspaceProvisioning.findOrCreateProjectForDirectory = registerProject;
+
+  await session.handleMessage({
+    type: "project.add.request",
+    requestId: "req-add-plain",
+    cwd: REPO_CWD,
+  });
+
+  const payload = findByType(emitted, "project.add.response")?.payload;
+  expect(payload).toMatchObject({
+    requestId: "req-add-plain",
+    project: null,
+    errorCode: "not_a_git_repo",
+  });
+  expect(payload?.error).toContain("git init");
+  expect(registerProject).not.toHaveBeenCalled();
+});
+
+test("project.add returns the default branch and remote of a git repository", async () => {
+  const emitted: SessionOutboundMessage[] = [];
+  const session = createSessionForWorkspaceTests({
+    onMessage: (message) => emitted.push(message),
+    workspaceGitService: createNoopWorkspaceGitService({
+      getCheckout: async (cwd: string) => ({
+        cwd,
+        isGit: true,
+        currentBranch: "main",
+        remoteUrl: "git@github.com:acme/app.git",
+        worktreeRoot: cwd,
+        isPaseoOwnedWorktree: false,
+        mainRepoRoot: null,
+      }),
+      resolveDefaultBranch: async () => "develop",
+    }),
+  });
+  const project = createPersistedProjectRecord({
+    projectId: "prj_added",
+    rootPath: REPO_CWD,
+    kind: "git",
+    displayName: "repo",
+    createdAt: "2026-03-01T00:00:00.000Z",
+    updatedAt: "2026-03-01T00:00:00.000Z",
+  });
+  session.workspaceProvisioning.findOrCreateProjectForDirectory = async () => project;
+
+  await session.handleMessage({
+    type: "project.add.request",
+    requestId: "req-add-git",
+    cwd: REPO_CWD,
+  });
+
+  expect(findByType(emitted, "project.add.response")?.payload).toMatchObject({
+    requestId: "req-add-git",
+    error: null,
+    project: { projectId: "prj_added", projectDisplayName: "repo" },
+    git: {
+      defaultBranch: "develop",
+      remoteName: "origin",
+      remoteUrl: "git@github.com:acme/app.git",
+    },
+  });
+});
+
+test("agent creation takes the autonomy mode and project env from the project settings", async () => {
+  const paseoHome = mkdtempSync(path.join(tmpdir(), "paseo-launch-settings-"));
+  try {
+    await ProjectSettingsStore.forHome(paseoHome).update(REPO_CWD, {
+      autonomy: "full-auto",
+      env: { API_URL: "http://localhost:3000" },
+    });
+    const session = createSessionForWorkspaceTests({ paseoHome });
+
+    const claude = await session.resolveProjectLaunchSettings(
+      { provider: "claude", cwd: REPO_CWD },
+      { TOKEN: "request" },
+    );
+    const codex = await session.resolveProjectLaunchSettings(
+      { provider: "codex", cwd: REPO_CWD },
+      undefined,
+    );
+
+    expect(claude.config.modeId).toBe("bypassPermissions");
+    expect(claude.env).toEqual({ API_URL: "http://localhost:3000", TOKEN: "request" });
+    expect(codex.config.modeId).toBe("full-access");
+  } finally {
+    rmSync(paseoHome, { recursive: true, force: true });
+  }
 });

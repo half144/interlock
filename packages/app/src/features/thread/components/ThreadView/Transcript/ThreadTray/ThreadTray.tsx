@@ -1,22 +1,13 @@
-import { useId } from "react";
 import { FolderGit2, GitBranch, GitPullRequest, Network } from "lucide-react";
 import type { Agent } from "@/types";
-import { useStore } from "@/stores/app-store";
 import { ComposerTray } from "@/components/ui/ComposerTray/ComposerTray";
-import { useSubagents } from "@/hooks/useSubagents";
 import { SubagentChip } from "./SubagentChip/SubagentChip";
+import { useThreadTray } from "./useThreadTray";
 
 const SHOWN = 3;
 
-/** Under the composer: the task's subagents, one click each, and the branch the work lands on. */
 export function ThreadTray({ agent }: { agent: Agent }) {
-  const subs = useSubagents(agent.id);
-  const openSubagent = useStore((s) => s.openSubagent);
-  const openPanel = useStore((s) => s.openPanel);
-  const selected = useStore((s) =>
-    s.panelOpen && s.panelTab === "agents" ? s.selectedSubagentId : undefined,
-  );
-  const group = useId();
+  const { subs, selected, layoutId, openSubagent, openDiff } = useThreadTray(agent.id);
 
   return (
     <ComposerTray className="pt-[19px] pr-1.5 pb-1 pl-3">
@@ -34,7 +25,7 @@ export function ThreadTray({ agent }: { agent: Agent }) {
               sub={s}
               agent={agent}
               selected={selected === s.id}
-              layoutId={`${group}-selected`}
+              layoutId={layoutId}
               onOpen={() => openSubagent(s.id)}
             />
           ))}
@@ -51,7 +42,7 @@ export function ThreadTray({ agent }: { agent: Agent }) {
       )}
       <button
         type="button"
-        onClick={() => openPanel("diff")}
+        onClick={openDiff}
         title={agent.branch}
         className="ml-auto inline-flex h-6 min-w-0 shrink items-center gap-1.5 rounded-full px-1.5 transition-colors hover:bg-hover hover:text-ink-2"
       >

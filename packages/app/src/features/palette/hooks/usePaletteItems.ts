@@ -1,18 +1,10 @@
-import { Layers, MessageSquare, Plus, Settings, Workflow } from "lucide-react";
-import { projectOf, projects } from "@/mocks/projects";
+import { Bot, Layers, MessageSquare, Plus, Settings } from "lucide-react";
 import { useStore } from "@/stores/app-store";
 import { byRecentActivity } from "@/lib/threads";
-import type { SubagentStatus, Thread } from "@/types";
-import { roleIcon } from "@/lib/roleIcon";
-import type { PaletteGroup, PaletteItem } from "@/features/palette/types";
+import type { Project, SubagentStatus, Thread } from "@/types";
+import type { PaletteItem } from "@/features/palette/types";
+import { selectPaletteItems } from "@/features/palette/utils/selectItems";
 
-const GROUP_ORDER: PaletteGroup[] = ["Needs you", "Threads", "Subagents", "Commands"];
-const LIMIT: Record<PaletteGroup, number> = {
-  "Needs you": 4,
-  Threads: 6,
-  Subagents: 3,
-  Commands: 5,
-};
 const SUB_ORDER: Record<SubagentStatus, number> = {
   running: 0,
   queued: 1,
@@ -21,12 +13,9 @@ const SUB_ORDER: Record<SubagentStatus, number> = {
   done: 4,
 };
 
-const matches = (query: string, ...fields: (string | undefined)[]) =>
-  !query || fields.some((f) => f?.toLowerCase().includes(query));
-
 const s = useStore.getState;
 
-const commands: PaletteItem[] = [
+const commandsFor = (projects: Project[]): PaletteItem[] => [
   {
     id: "cmd-new",
     group: "Commands",
@@ -43,14 +32,6 @@ const commands: PaletteItem[] = [
     keys: ["G", "H"],
     run: () => s().go({ kind: "yard" }),
   },
-  {
-    id: "cmd-auto",
-    group: "Commands",
-    title: "Go to automations",
-    icon: Workflow,
-    keys: ["G", "A"],
-    run: () => s().go({ kind: "automations" }),
-  },
   ...projects.map<PaletteItem>((p) => ({
     id: `cmd-settings-${p.id}`,
     group: "Commands",
@@ -65,7 +46,7 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
   const agents = useStore((s) => s.agents);
   const threads = useStore((s) => s.threads);
   const subagents = useStore((s) => s.subagents);
-  const query = rawQuery.trim().toLowerCase();
+  const projects = useStore((s) => s.projects);
   const agentOf = (t: Thread) => {
     const id = t.agentIds[0];
     return id ? agents[id] : undefined;
@@ -77,7 +58,7 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
       id: `needs-${a.id}`,
       group: "Needs you",
       title: a.hold?.title ?? a.title,
-      hint: projectOf(a.projectId).name,
+      hint: projects[a.projectId]?.name ?? "",
       agent: a,
       run: () => s().openThread(a.threadId),
     }));
@@ -88,7 +69,7 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
       id: `thread-${t.id}`,
       group: "Threads",
       title: t.title,
-      hint: projectOf(t.projectId).name,
+      hint: projects[t.projectId]?.name ?? "",
       icon: MessageSquare,
       agent: agentOf(t),
       run: () => s().openThread(t.id),
@@ -104,7 +85,7 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
         group: "Subagents",
         title: `${sub.name}: ${sub.brief}`,
         hint: parent.headcode,
-        icon: roleIcon[sub.role],
+        icon: Bot,
         run: () => {
           s().openThread(parent.threadId);
           s().openSubagent(sub.id);
@@ -112,17 +93,8 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
       };
     });
 
-  const searchable = (item: PaletteItem) => [
-    item.title,
-    item.hint,
-    item.agent?.headcode,
-    item.agent?.branch,
-  ];
-  const all = [...needsYou, ...threadItems, ...subagentItems, ...commands].filter((item) =>
-    matches(query, ...searchable(item)),
-  );
-
-  return GROUP_ORDER.flatMap((group) =>
-    all.filter((i) => i.group === group).slice(0, query ? 8 : LIMIT[group]),
+  return selectPaletteItems(
+    [...needsYou, ...threadItems, ...subagentItems, ...commandsFor(Object.values(projects))],
+    rawQuery,
   );
 }

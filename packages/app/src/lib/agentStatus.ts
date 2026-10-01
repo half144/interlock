@@ -5,8 +5,10 @@ import { agentLabel } from "@/lib/agentKinds";
 export const isFinished = (agent: Agent) => agent.aspect === "review" || agent.aspect === "merged";
 
 /** How a finished task names its state. */
-export const finishedLabel = (agent: Agent) =>
-  agent.aspect === "merged" ? `Merged as #${agent.pr}` : "Ready for review";
+export function finishedLabel(agent: Agent) {
+  if (agent.aspect !== "merged") return "Ready for review";
+  return agent.pr ? `Merged as #${agent.pr}` : "Merged";
+}
 
 const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
@@ -20,6 +22,8 @@ export function statusLine(agent: Agent) {
       return `${name} is waiting for you`;
     case "review":
       return `${name} finished · ready for review`;
+    case "idle":
+      return `${name} is idle`;
     case "merged":
       return `${name} is idle · merged`;
     case "queued":

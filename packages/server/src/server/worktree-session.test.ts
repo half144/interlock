@@ -14,6 +14,7 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import pino, { type Logger } from "pino";
 
 import type { SessionOutboundMessage, WorkspaceDescriptorPayload } from "./messages.js";
+import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import {
   buildAgentSessionConfig,
   createPaseoWorktreeWorkflow,
@@ -458,14 +459,12 @@ describe("create-agent worktree setup boundary", () => {
     const paseoHome = path.join(tempDir, ".paseo");
     const setupMarker = path.join(tempDir, "setup-ran");
     const emitted: SessionOutboundMessage[] = [];
+    await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+      setupCommands: [`node -e "require('fs').writeFileSync('${setupMarker}', 'ran')"`],
+    });
     writeFileSync(
       path.join(repoDir, "paseo.json"),
-      JSON.stringify({
-        worktree: {
-          setup: [`node -e "require('fs').writeFileSync('${setupMarker}', 'ran')"`],
-          terminals: [{ command: "unsafe-terminal" }],
-        },
-      }),
+      JSON.stringify({ worktree: { terminals: [{ command: "unsafe-terminal" }] } }),
     );
 
     try {
@@ -680,21 +679,17 @@ describe("runWorktreeSetupInBackground", () => {
     cleanupPaths.push(tempDir);
     const sourceWorkspaceCwd = path.join(repoDir, "packages", "app");
     mkdirSync(sourceWorkspaceCwd, { recursive: true });
-    writeFileSync(
-      path.join(sourceWorkspaceCwd, "paseo.json"),
-      JSON.stringify({
-        worktree: {
-          setup: ["pwd > setup-cwd.txt"],
-        },
-      }),
-    );
+    writeFileSync(path.join(sourceWorkspaceCwd, "index.ts"), "export {};\n");
     execFileSync("git", ["add", "."], { cwd: repoDir, stdio: "pipe" });
-    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add app setup"], {
+    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add app"], {
       cwd: repoDir,
       stdio: "pipe",
     });
 
     const paseoHome = path.join(tempDir, ".paseo");
+    await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+      setupCommands: ["pwd > setup-cwd.txt"],
+    });
     const createdWorktree = await createLegacyWorktreeForTest({
       branchName: "feature-subdirectory-setup",
       cwd: repoDir,
@@ -835,14 +830,9 @@ describe("runWorktreeSetupInBackground", () => {
     const { tempDir, repoDir } = createGitRepo();
     cleanupPaths.push(tempDir);
 
-    writeFileSync(path.join(repoDir, "paseo.json"), "{ invalid json\n");
-    execFileSync("git", ["add", "paseo.json"], { cwd: repoDir, stdio: "pipe" });
-    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "broken config"], {
-      cwd: repoDir,
-      stdio: "pipe",
-    });
-
     const paseoHome = path.join(tempDir, ".paseo");
+    mkdirSync(paseoHome, { recursive: true });
+    writeFileSync(path.join(paseoHome, "project-settings.json"), "{ invalid json\n");
     const createdWorktree = await createLegacyWorktreeForTest({
       branchName: "broken-feature",
       cwd: repoDir,
@@ -893,12 +883,14 @@ describe("runWorktreeSetupInBackground", () => {
     expect(progressMessages[0]?.payload.error).toBeNull();
     expect(progressMessages[1]?.payload.status).toBe("failed");
     expect(progressMessages[1]?.payload.error).toMatch(
-      /Failed to parse paseo\.json at .*paseo\.json/,
+      /Project settings file .*project-settings\.json is not readable/,
     );
     expect(progressMessages[1]?.payload.detail.commands).toEqual([]);
     expect(snapshots.get(workspaceId)).toMatchObject({
       status: "failed",
-      error: expect.stringMatching(/Failed to parse paseo\.json at .*paseo\.json/),
+      error: expect.stringMatching(
+        /Project settings file .*project-settings\.json is not readable/,
+      ),
     });
     expect(archiveWorkspaceRecord).toHaveBeenCalledWith(workspaceId);
     expect(emitWorkspaceUpdateForWorkspaceId).toHaveBeenCalledWith(workspaceId);
@@ -908,16 +900,13 @@ describe("runWorktreeSetupInBackground", () => {
   test.skipIf(isPlatform("win32"))(
     "emits running setup snapshots before completed for real setup commands",
     async () => {
-      const { tempDir, repoDir } = createGitRepo({
-        paseoConfig: {
-          worktree: {
-            setup: ["sh -c \"printf 'phase-one\\\\n'; sleep 0.1; printf 'phase-two\\\\n'\""],
-          },
-        },
-      });
+      const { tempDir, repoDir } = createGitRepo();
       cleanupPaths.push(tempDir);
 
       const paseoHome = path.join(tempDir, ".paseo");
+      await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+        setupCommands: ["sh -c \"printf 'phase-one\\\\n'; sleep 0.1; printf 'phase-two\\\\n'\""],
+      });
       const createdWorktree = await createLegacyWorktreeForTest({
         branchName: "feature-running-setup",
         cwd: repoDir,
@@ -1028,9 +1017,6 @@ describe("runWorktreeSetupInBackground", () => {
   test("emits completed when reusing an existing worktree without bootstrapping or auto-starting scripts", async () => {
     const { tempDir, repoDir } = createGitRepo({
       paseoConfig: {
-        worktree: {
-          setup: ["printf 'ran' > setup-ran.txt"],
-        },
         scripts: {
           web: {
             command: "npm run dev",
@@ -1041,6 +1027,9 @@ describe("runWorktreeSetupInBackground", () => {
     cleanupPaths.push(tempDir);
 
     const paseoHome = path.join(tempDir, ".paseo");
+    await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+      setupCommands: ["printf 'ran' > setup-ran.txt"],
+    });
     const existingWorktree = await createLegacyWorktreeForTest({
       branchName: "reused-worktree",
       cwd: repoDir,
@@ -1389,14 +1378,13 @@ describe("runWorktreeSetupInBackground", () => {
     cleanupPaths.push(tempDir);
     execFileSync("git", ["init", "-b", "fork-branch"], { cwd: tempDir, stdio: "ignore" });
     const setupMarker = path.join(tempDir, "setup-ran");
+    const paseoHome = path.join(tempDir, ".paseo");
+    await ProjectSettingsStore.forHome(paseoHome).update(tempDir, {
+      setupCommands: [`node -e "require('fs').writeFileSync('setup-ran', 'ran')"`],
+    });
     writeFileSync(
       path.join(tempDir, "paseo.json"),
-      JSON.stringify({
-        worktree: {
-          setup: [`node -e "require('fs').writeFileSync('setup-ran', 'ran')"`],
-          terminals: [{ command: "start-preview" }],
-        },
-      }),
+      JSON.stringify({ worktree: { terminals: [{ command: "start-preview" }] } }),
     );
     const emitted: SessionOutboundMessage[] = [];
     let blocked = true;
@@ -1411,6 +1399,7 @@ describe("runWorktreeSetupInBackground", () => {
     } as PersistedWorkspaceRecord;
     const terminalManager = createTerminalManagerStub();
     const dependencies = {
+      paseoHome,
       getWorkspace: async () => workspace,
       clearAutomationBlock: async () => {
         if (!blocked) return false;

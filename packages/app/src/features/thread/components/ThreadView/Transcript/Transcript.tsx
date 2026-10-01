@@ -1,13 +1,11 @@
 import { AnimatePresence, motion, type MotionValue } from "motion/react";
-import { useStore } from "@/stores/app-store";
 import { Dock } from "@/components/ui/Dock/Dock";
 import { Outcome } from "@/features/thread/components/ThreadView/Transcript/Outcome/Outcome";
-import { useScrollToLatest } from "@/features/thread/hooks/useScrollToLatest";
-import { useThread } from "@/features/thread/hooks/useThread";
 import { isFinished } from "@/lib/agentStatus";
 import { Composer } from "./Composer/Composer";
 import { MessageItem } from "./MessageItem/MessageItem";
 import { ThreadTray } from "./ThreadTray/ThreadTray";
+import { useTranscript } from "./useTranscript";
 import { WorktreeCard } from "./WorktreeCard/WorktreeCard";
 
 /**
@@ -21,10 +19,7 @@ export function Transcript({
   threadId: string;
   reading: MotionValue<number>;
 }) {
-  const { thread, agent } = useThread(threadId);
-  // Docked in the mini-IDE, the status bar and the Agents tab carry the worktree and subagents.
-  const docked = useStore((s) => s.reviewMaximized);
-  const { scroller, seen } = useScrollToLatest(thread?.messages.length ?? 0);
+  const { thread, agent, docked, scroller, seen } = useTranscript(threadId);
 
   if (!thread || !agent) return null;
 

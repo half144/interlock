@@ -4,6 +4,5 @@ export const SECTIONS = [
   { id: "environment", label: "Environment" },
   { id: "scripts", label: "Scripts" },
   { id: "agents", label: "Agents" },
-  { id: "mcp", label: "MCP & skills" },
-  { id: "budget", label: "Budget" },
+  { id: "danger", label: "Danger zone" },
 ];

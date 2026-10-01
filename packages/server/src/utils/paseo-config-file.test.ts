@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { isPlatform } from "../test-utils/platform.js";
-import { getWorktreeSetupCommands, getWorktreeTeardownCommands } from "./worktree.js";
+import { getWorktreeTeardownCommands } from "./worktree.js";
 import {
   readPaseoConfigForEdit,
   statPaseoConfigPath,
@@ -63,18 +63,16 @@ describe("paseo config file substrate", () => {
     });
   });
 
-  it("keeps runtime lifecycle commands normalized for execution", () => {
+  it("keeps runtime teardown commands normalized for execution", () => {
     writeFileSync(
       join(tempDir, "paseo.json"),
       JSON.stringify({
         worktree: {
-          setup: "npm install",
           teardown: ["npm run clean", "", 42, "npm run reset"],
         },
       }),
     );
 
-    expect(getWorktreeSetupCommands(tempDir)).toEqual(["npm install"]);
     expect(getWorktreeTeardownCommands(tempDir)).toEqual(["npm run clean", "npm run reset"]);
   });
 

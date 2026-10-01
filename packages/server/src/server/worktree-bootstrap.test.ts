@@ -10,6 +10,7 @@ import {
   createWorktree as createWorktreePrimitive,
   type WorktreeConfig,
 } from "../utils/worktree.js";
+import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import type { TerminalManager } from "../terminal/terminal-manager.js";
 import type { TerminalSession } from "../terminal/terminal.js";
 
@@ -89,18 +90,8 @@ describe("runAsyncWorktreeBootstrap", () => {
   });
 
   it("does not fail setup when live timeline emission throws", async () => {
-    writeFileSync(
-      join(repoDir, "paseo.json"),
-      JSON.stringify({
-        worktree: {
-          setup: ['echo "ok"'],
-        },
-      }),
-    );
-    execFileSync("git", ["add", "paseo.json"], { cwd: repoDir, stdio: "pipe" });
-    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add setup"], {
-      cwd: repoDir,
-      stdio: "pipe",
+    await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+      setupCommands: ['echo "ok"'],
     });
 
     const worktreeBootstrap = await createBootstrapWorktreeForTest({
@@ -114,6 +105,8 @@ describe("runAsyncWorktreeBootstrap", () => {
     const persisted: AgentTimelineItem[] = [];
     await expect(
       runAsyncWorktreeBootstrap({
+        repoRoot: repoDir,
+        paseoHome,
         agentId: "agent-live-failure",
         workspaceId: "ws-live-failure",
         worktree: worktreeBootstrap.worktree,
@@ -141,18 +134,8 @@ describe("runAsyncWorktreeBootstrap", () => {
   it("truncates each command output to 64kb in the middle", async () => {
     const largeOutputCommand =
       "node -e \"process.stdout.write('prefix-'); process.stdout.write('x'.repeat(70000)); process.stdout.write('-suffix')\"";
-    writeFileSync(
-      join(repoDir, "paseo.json"),
-      JSON.stringify({
-        worktree: {
-          setup: [largeOutputCommand],
-        },
-      }),
-    );
-    execFileSync("git", ["add", "paseo.json"], { cwd: repoDir, stdio: "pipe" });
-    execFileSync("git", ["-c", "commit.gpgsign=false", "commit", "-m", "add large output setup"], {
-      cwd: repoDir,
-      stdio: "pipe",
+    await ProjectSettingsStore.forHome(paseoHome).update(repoDir, {
+      setupCommands: [largeOutputCommand],
     });
 
     const worktreeBootstrap = await createBootstrapWorktreeForTest({
@@ -165,6 +148,8 @@ describe("runAsyncWorktreeBootstrap", () => {
 
     const persisted: AgentTimelineItem[] = [];
     await runAsyncWorktreeBootstrap({
+      repoRoot: repoDir,
+      paseoHome,
       agentId: "agent-large-output",
       workspaceId: "ws-large-output",
       worktree: worktreeBootstrap.worktree,
@@ -235,6 +220,8 @@ describe("runAsyncWorktreeBootstrap", () => {
     let outputListener: ((chunk: { data: string }) => void) | null = null;
 
     await runAsyncWorktreeBootstrap({
+      repoRoot: repoDir,
+      paseoHome,
       agentId: "agent-terminal-readiness",
       workspaceId: "ws-terminal-readiness",
       worktree: worktreeBootstrap.worktree,

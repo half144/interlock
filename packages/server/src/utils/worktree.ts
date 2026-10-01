@@ -32,6 +32,10 @@ import {
 import { runGitCommand } from "./run-git-command.js";
 import { spawnProcess } from "./spawn.js";
 import { resolvePaseoHome } from "../server/paseo-home.js";
+import {
+  prepareWorktreeSetup,
+  type WorktreeSetup,
+} from "../server/project-settings/worktree-setup.js";
 import { createExternalProcessEnv } from "../server/paseo-env.js";
 import { parseGitRevParsePath, resolveGitRevParsePath } from "./git-rev-parse-path.js";
 import { expandTilde, getRealpathAwareRelativePath, isPathInsideRoot } from "./path.js";
@@ -267,10 +271,6 @@ function readPaseoConfigOrThrow(repoRoot: string): PaseoConfig | null {
     throw paseoConfigParseError(result);
   }
   return result.config;
-}
-
-export function getWorktreeSetupCommands(repoRoot: string): string[] {
-  return readPaseoConfigOrThrow(repoRoot)?.worktree?.setup ?? [];
 }
 
 export function getWorktreeTeardownCommands(repoRoot: string): string[] {
@@ -627,14 +627,14 @@ async function inferRepoRootPathFromWorktreePath(worktreePath: string): Promise<
 export async function runWorktreeSetupCommands(options: {
   worktreePath: string;
   branchName: string;
+  setup: WorktreeSetup;
   cleanupOnFailure: boolean;
   repoRootPath?: string;
   runtimeEnv?: WorktreeRuntimeEnv;
   signal?: AbortSignal;
   onEvent?: (event: WorktreeSetupCommandProgressEvent) => void;
 }): Promise<WorktreeSetupCommandResult[]> {
-  // Read paseo.json from the worktree (it will have the same content as the source repo)
-  const setupCommands = getWorktreeSetupCommands(options.worktreePath);
+  const setupCommands = options.setup.commands;
   if (setupCommands.length === 0) {
     return [];
   }
@@ -646,7 +646,9 @@ export async function runWorktreeSetupCommands(options: {
       branchName: options.branchName,
       ...(options.repoRootPath ? { repoRootPath: options.repoRootPath } : {}),
     }));
-  const setupEnv = createStringCommandShellEnv(createExternalProcessEnv(process.env, runtimeEnv));
+  const setupEnv = createStringCommandShellEnv(
+    createExternalProcessEnv(process.env, options.setup.env, runtimeEnv),
+  );
 
   const results: WorktreeSetupCommandResult[] = [];
   for (const [index, cmd] of setupCommands.entries()) {
@@ -1244,9 +1246,15 @@ export const createWorktree = async ({
   await seedPaseoConfigFile({ sourceCwd: cwd, targetCwd: worktreePath });
 
   if (runSetup) {
+    const setup = await prepareWorktreeSetup({
+      paseoHome,
+      repoRoot: await inferRepoRootPathFromWorktreePath(worktreePath),
+      worktreePath,
+    });
     await runWorktreeSetupCommands({
       worktreePath,
       branchName: sourcePlan.branchName,
+      setup,
       cleanupOnFailure: true,
     });
   }

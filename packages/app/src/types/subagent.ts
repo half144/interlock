@@ -1,14 +1,5 @@
 import type { ToolName } from "./tool";
 
-export type SubagentRole =
-  | "explore"
-  | "tests"
-  | "review"
-  | "migration"
-  | "a11y"
-  | "visual"
-  | "schema";
-
 export type SubagentStatus = "queued" | "running" | "done" | "failed" | "stopped";
 
 /**
@@ -20,6 +11,7 @@ export interface SubagentEvent {
   kind: ToolName | "note" | "you";
   /** Path, query, command or URL for tool calls; the words themselves for notes and messages. */
   text: string;
+  /** Seconds into the parent task. */
   sec: number;
   /** Short trailing fact: a line range, a result count, an exit status, a diff size. */
   meta?: string;
@@ -31,20 +23,16 @@ export interface SubagentEvent {
 export interface Subagent {
   id: string;
   parentId: string;
-  role: SubagentRole;
+  /** The tool call of the parent that started it. */
+  toolCallId: string | null;
   name: string;
   brief: string;
+  /** The provider's compact line: model, effort and tokens when it reports them. */
+  subtitle: string | null;
   status: SubagentStatus;
-  progress: number;
+  /** Seconds into the parent task. */
   startSec: number;
   endSec?: number | undefined;
-  /** Time it sat finished before you messaged it again, left out of how long it worked. */
-  idleSec?: number | undefined;
-  model: string;
-  tokens: number;
-  cost: number;
   events: SubagentEvent[];
   result?: string | undefined;
-  findings?: string[] | undefined;
-  usedIn?: string | undefined;
 }

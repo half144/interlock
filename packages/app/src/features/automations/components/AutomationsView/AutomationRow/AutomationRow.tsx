@@ -1,5 +1,5 @@
 import { Calendar, GitPullRequest, OctagonAlert, Tag } from "lucide-react";
-import { projectOf } from "@/mocks/projects";
+import { useAutomationRow } from "./useAutomationRow";
 import { ago, cn } from "@/lib/utils";
 import type { Aspect, Automation, AutomationRun, Trigger } from "@/types";
 import { AgentMark } from "@/components/ui/AgentMark/AgentMark";
@@ -35,6 +35,7 @@ interface AutomationRowProps {
 }
 
 export function AutomationRow({ automation: a, onToggle }: AutomationRowProps) {
+  const { projectName } = useAutomationRow(a.projectId);
   const Icon = triggerIcon[a.trigger.type];
   const runs = a.runs.slice(0, 5);
   // A paused automation fades everything but its toggle.
@@ -54,7 +55,7 @@ export function AutomationRow({ automation: a, onToggle }: AutomationRowProps) {
       <div className={cn("min-w-0", dim)}>
         <h2 className="truncate text-[13.5px] font-medium text-ink">{a.name}</h2>
         <p className="mt-0.5 truncate text-[12.5px] text-ink-3">
-          <span className="text-ink-2">{projectOf(a.projectId).name}</span> · {a.prompt}
+          <span className="text-ink-2">{projectName}</span> · {a.prompt}
         </p>
       </div>
 

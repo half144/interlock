@@ -1,13 +1,22 @@
 import { spawn } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import { mkdtempSync, readdirSync, rmSync } from "node:fs";
+import { createServer, type AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { WebSocket } from "ws";
 import { fileURLToPath } from "node:url";
 import { DaemonClient } from "../src/server/test-utils/daemon-client.js";
 
-const LISTEN = "127.0.0.1:6868";
+async function freePort(): Promise<number> {
+  const server = createServer();
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const { port } = server.address() as AddressInfo;
+  await new Promise((resolve) => server.close(resolve));
+  return port;
+}
+
+const LISTEN = `127.0.0.1:${await freePort()}`;
 const token = randomBytes(32).toString("hex");
 const root = mkdtempSync(path.join(tmpdir(), "interlock-smoke-"));
 const home = path.join(root, "home");

@@ -1,17 +1,7 @@
-import type { SubagentRole } from "@/types";
+import { Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { roleIcon } from "@/lib/roleIcon";
 
-export function RoleTile({
-  role,
-  size = "md",
-  className,
-}: {
-  role: SubagentRole;
-  size?: "sm" | "md";
-  className?: string;
-}) {
-  const Icon = roleIcon[role];
+export function RoleTile({ size = "md", className }: { size?: "sm" | "md"; className?: string }) {
   return (
     <span
       aria-hidden
@@ -21,7 +11,7 @@ export function RoleTile({
         className,
       )}
     >
-      <Icon className={size === "sm" ? "size-3" : "size-4"} />
+      <Bot className={size === "sm" ? "size-3" : "size-4"} />
     </span>
   );
 }

@@ -2,6 +2,7 @@ import type pino from "pino";
 import type { FirstAgentContext } from "@interlock/protocol/messages";
 
 import { resolveFirstAgentPromptTitle } from "./agent/create-agent-title.js";
+import { keepTaskBranchPrefix } from "./agent/provisional-task-names.js";
 import type { AgentManager } from "./agent/agent-manager.js";
 import type { ProviderSnapshotManager } from "./agent/provider-snapshot-manager.js";
 import type { StructuredGenerationDaemonConfig } from "./agent/structured-generation-providers.js";
@@ -113,15 +114,14 @@ export class WorkspaceAutoName {
     const result: AttemptFirstAgentBranchAutoNameResult = await attemptFirstAgentBranchAutoName({
       cwd: worktreeRoot,
       firstAgentContext: input.firstAgentContext,
-      generateBranchNameFromContext: ({ firstAgentContext }) => {
-        return this.generateFromContext({
+      generateBranchNameFromContext: async ({ firstAgentContext }) => {
+        generated = await this.generateFromContext({
           cwd: input.workspace.cwd,
           firstAgentContext,
           currentSelection: input.currentSelection,
-        }).then((nextGenerated) => {
-          generated = nextGenerated;
-          return nextGenerated?.branch ?? null;
         });
+        const branch = generated?.branch;
+        return branch ? keepTaskBranchPrefix(input.workspace.branch, branch) : null;
       },
     });
 

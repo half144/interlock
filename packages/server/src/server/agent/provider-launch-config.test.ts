@@ -320,7 +320,7 @@ describe("ProviderOverrideSchema", () => {
 });
 
 describe("migrateProviderSettings", () => {
-  const builtinProviderIds = ["claude", "codex", "copilot", "opencode", "pi", "omp"];
+  const builtinProviderIds = ["claude", "codex"];
 
   test("passes through entries already in the new format", () => {
     const migrated = migrateProviderSettings(
@@ -415,10 +415,10 @@ describe("migrateProviderSettings", () => {
   test("preserves legacy env while migrating old entries", () => {
     const migrated = migrateProviderSettings(
       {
-        opencode: {
+        codex: {
           command: {
             mode: "replace",
-            argv: ["opencode"],
+            argv: ["codex"],
           },
           env: {
             PATH: "/custom/bin",
@@ -429,8 +429,8 @@ describe("migrateProviderSettings", () => {
     );
 
     expect(migrated).toEqual({
-      opencode: {
-        command: ["opencode"],
+      codex: {
+        command: ["codex"],
         env: {
           PATH: "/custom/bin",
         },

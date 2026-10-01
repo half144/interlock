@@ -1,17 +1,17 @@
-import { useId, useRef, useState } from "react";
+import { useId } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import type { Effort } from "@/types";
+import type { Effort, EffortOption } from "@/types";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, morph } from "@/lib/motion";
 import { surface } from "@/lib/styles";
-import { useClickOutside } from "@/hooks/useClickOutside";
 import { blurIn, sharp } from "@/lib/blur";
-import { efforts } from "@/lib/efforts";
 import { Dots } from "../Dots/Dots";
 import { EffortMenu } from "./EffortMenu/EffortMenu";
+import { useEffortPicker } from "./useEffortPicker";
 
 interface EffortPickerProps {
   value: Effort;
+  options: EffortOption[];
   onChange: (effort: Effort) => void;
   model: string;
 }
@@ -19,19 +19,15 @@ interface EffortPickerProps {
 /**
  * How hard the agent thinks, set per message next to Send. The pill doesn't open a menu so much as become
  * one: its shape stretches up into the list, and folds back into the pill with the new level once you pick.
+ * The levels are the ones the model offers; a model with none gets no pill.
  */
-export function EffortPicker({ value, onChange, model }: EffortPickerProps) {
-  const [open, setOpen] = useState(false);
+export function EffortPicker({ value, options, onChange, model }: EffortPickerProps) {
   const shape = useId();
-  const root = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
+  const { open, root, trigger, show, close } = useEffortPicker();
+  if (options.length === 0) return null;
 
-  useClickOutside(root, () => setOpen(false), open);
-
-  const close = () => {
-    setOpen(false);
-    trigger.current?.focus();
-  };
+  const at = options.findIndex((o) => o.id === value);
+  const label = options[at]?.label ?? value;
 
   return (
     <div ref={root} className="relative">
@@ -39,10 +35,10 @@ export function EffortPicker({ value, onChange, model }: EffortPickerProps) {
         ref={trigger}
         layout
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={show}
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label={`Reasoning effort: ${efforts[value].label}`}
+        aria-label={`Reasoning effort: ${label}`}
         title="Reasoning effort"
         transition={morph}
         className="relative inline-flex h-8 items-center px-3 text-[13px] text-ink-2 transition-colors duration-150 hover:text-ink"
@@ -56,7 +52,7 @@ export function EffortPicker({ value, onChange, model }: EffortPickerProps) {
           />
         )}
         <motion.span layout="position" className="relative flex items-center gap-2">
-          <Dots level={value} />
+          <Dots filled={at + 1} total={options.length} />
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.span
               key={value}
@@ -64,7 +60,7 @@ export function EffortPicker({ value, onChange, model }: EffortPickerProps) {
               animate={{ ...sharp, transition: { ...fadeIn, delay: 0.12 } }}
               exit={{ ...blurIn, transition: fadeOut }}
             >
-              {efforts[value].label}
+              {label}
             </motion.span>
           </AnimatePresence>
         </motion.span>
@@ -84,6 +80,7 @@ export function EffortPicker({ value, onChange, model }: EffortPickerProps) {
           >
             <EffortMenu
               value={value}
+              options={options}
               model={model}
               onPick={(effort) => {
                 onChange(effort);

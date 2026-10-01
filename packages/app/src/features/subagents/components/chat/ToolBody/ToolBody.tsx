@@ -12,7 +12,7 @@ export function ToolBody({ call, className }: { call: ToolEvent; className?: str
         className,
       )}
     >
-      {call.kind === "bash" && <p className="px-3 whitespace-pre text-ink">$ {call.text}</p>}
+      {call.kind === "shell" && <p className="px-3 whitespace-pre text-ink">$ {call.text}</p>}
       {call.body.map((line, i) => (
         <ToolLine
           key={i}

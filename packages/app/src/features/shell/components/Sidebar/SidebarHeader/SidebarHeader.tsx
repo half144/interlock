@@ -1,20 +1,20 @@
 import { PanelLeft } from "lucide-react";
-import { useStore } from "@/stores/app-store";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "@/components/ui/LogoMark/LogoMark";
 import { Fold } from "@/features/shell/components/Fold/Fold";
 import { SidebarIconButton } from "@/features/shell/components/SidebarIconButton/SidebarIconButton";
+import { useSidebarHeader } from "./useSidebarHeader";
 
 /** The mark, the wordmark and the collapse control. Folded, the mark itself expands the sidebar on hover. */
 export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
-  const setSidebar = useStore((s) => s.setSidebar);
+  const { expand, collapse } = useSidebarHeader();
 
   return (
     <div className="flex h-[52px] shrink-0 items-center pl-3.5">
       <button
         type="button"
         disabled={!collapsed}
-        onClick={() => setSidebar("open")}
+        onClick={expand}
         aria-label={collapsed ? "Expand sidebar" : undefined}
         title={collapsed ? "Expand sidebar" : undefined}
         className="group/logo relative inline-flex size-6 shrink-0 items-center justify-center rounded-md text-ink"
@@ -31,7 +31,7 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
         <span className="font-serif text-[17px] leading-none tracking-[-0.01em] text-ink">
           interlock
         </span>
-        <SidebarIconButton label="Collapse sidebar" onClick={() => setSidebar("rail")}>
+        <SidebarIconButton label="Collapse sidebar" onClick={collapse}>
           <PanelLeft />
         </SidebarIconButton>
       </Fold>

@@ -43,6 +43,7 @@ function parseConfig(argv: string[]): DaemonRunnerConfig {
 
 function resolveWorkerEntry(): string {
   const candidates = [
+    fileURLToPath(new URL("./daemon-worker.mjs", import.meta.url)),
     fileURLToPath(new URL("../server/server/daemon-worker.js", import.meta.url)),
     fileURLToPath(new URL("../dist/server/server/daemon-worker.js", import.meta.url)),
     fileURLToPath(new URL("../src/server/daemon-worker.ts", import.meta.url)),
@@ -77,9 +78,9 @@ function resolveWorkerExecArgv(workerEntry: string, devMode: boolean): string[] 
     "--report-on-fatalerror",
     "--report-directory=/tmp/interlock-reports",
   ];
-  const inspectArg = process.env.INTERLOCK_NODE_INSPECT ?? "--inspect";
-  if (inspectArg !== "0" && inspectArg !== "false" && inspectArg !== "off") {
-    devArgs.push(inspectArg);
+  const inspectArg = process.env.INTERLOCK_NODE_INSPECT;
+  if (inspectArg && inspectArg !== "0" && inspectArg !== "false" && inspectArg !== "off") {
+    devArgs.push(inspectArg === "1" || inspectArg === "true" ? "--inspect" : inspectArg);
   }
   return [...devArgs, ...execArgv];
 }

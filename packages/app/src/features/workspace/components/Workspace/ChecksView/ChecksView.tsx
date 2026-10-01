@@ -1,48 +1,44 @@
-import { useState } from "react";
+import { ListChecks } from "lucide-react";
 import type { Agent } from "@/types";
-import { useStore } from "@/stores/app-store";
-import { checksFor, failureOutput } from "@/features/workspace/utils/checks";
+import { EmptyState } from "@/components/ui/EmptyState/EmptyState";
 import { CheckRow } from "./CheckRow/CheckRow";
-import { Lever } from "./Lever/Lever";
-import { PrStatusBar } from "./PrStatusBar/PrStatusBar";
+import { ChecksHeader } from "./ChecksHeader/ChecksHeader";
+import { useChecksView } from "./useChecksView";
 
-export function ChecksView({ agent, prNumber }: { agent: Agent; prNumber?: number | undefined }) {
-  const logs = useStore((s) => s.logs[agent.id]);
-  const [open, setOpen] = useState<string | null>(null);
-  const [autoFix, setAutoFix] = useState(true);
-  const [autoMerge, setAutoMerge] = useState(false);
-  const failure = failureOutput(agent, logs);
+/** The pull request's checks, from `gh`: name, how each ended, how long it took, and a link to its run. */
+export function ChecksView({ agent }: { agent: Agent }) {
+  const { pr, blocker } = useChecksView(agent);
+
+  if (pr.phase === "none") {
+    return (
+      <EmptyState
+        icon={ListChecks}
+        title="No pull request yet"
+        description={
+          blocker
+            ? `${blocker.title}. ${blocker.hint}`
+            : "Checks show up here once the task has a pull request."
+        }
+      />
+    );
+  }
 
   return (
-    <div className="h-full overflow-y-auto">
-      {prNumber && <PrStatusBar agent={agent} pr={prNumber} />}
-
-      <ul>
-        {checksFor(agent).map((check) => (
-          <CheckRow
-            key={check.name}
-            check={check}
-            expanded={open === check.name}
-            output={failure}
-            onToggle={() => setOpen(open === check.name ? null : check.name)}
-          />
-        ))}
-      </ul>
-
-      <div className="flex flex-col gap-4 px-4 py-5">
-        <Lever
-          label="Auto-fix failing checks"
-          detail={`Sends failures back to ${agent.headcode} and re-runs, up to 3 times.`}
-          checked={autoFix}
-          onChange={setAutoFix}
+    <div className="flex h-full flex-col">
+      <ChecksHeader agent={agent} title={pr.title} url={pr.url} />
+      {pr.checks.length > 0 ? (
+        <ul className="min-h-0 flex-1 overflow-y-auto">
+          {pr.checks.map((check) => (
+            <CheckRow key={check.id} check={check} />
+          ))}
+        </ul>
+      ) : (
+        <EmptyState
+          icon={ListChecks}
+          title="No checks reported"
+          description="GitHub has not started any checks for this pull request. They appear here as soon as it does."
         />
-        <Lever
-          label="Auto-merge when green"
-          detail="Merges into main once required checks pass and a reviewer approves."
-          checked={autoMerge}
-          onChange={setAutoMerge}
-        />
-      </div>
+      )}
     </div>
   );
 }

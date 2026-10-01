@@ -1,13 +1,20 @@
-export const slashCommands = [
-  { name: "/plan", hint: "Draft a plan before touching code" },
-  { name: "/review", hint: "AI review of the current diff" },
-  { name: "/handoff", hint: "Hand this chat to another agent" },
-  { name: "/checkpoint", hint: "Save a checkpoint of the worktree" },
-  { name: "/btw", hint: "Side question, kept out of context" },
-];
+export interface SlashCommand {
+  name: string;
+  hint: string;
+}
 
-export type SlashCommand = (typeof slashCommands)[number];
+const PLAN: SlashCommand = { name: "/plan", hint: "Plan the next request before touching code" };
+
+/** Only the commands that do something: `/plan` switches the agent into plan mode, where its provider has one. */
+export const commandsFor = (canPlan: boolean): SlashCommand[] => (canPlan ? [PLAN] : []);
 
 /** Commands matching a lone slash word, like `/pl`; anything else typed means no menu. */
-export const matchSlash = (text: string) =>
-  /^\/\S*$/.test(text) ? slashCommands.filter((c) => c.name.startsWith(text.toLowerCase())) : [];
+export const matchSlash = (commands: SlashCommand[], text: string) =>
+  /^\/\S*$/.test(text) ? commands.filter((c) => c.name.startsWith(text.toLowerCase())) : [];
+
+/** A message that starts with a command: which one, and what is left to send. */
+export function parseSlash(commands: SlashCommand[], text: string) {
+  const [word = "", ...rest] = text.trim().split(/\s+/);
+  const command = commands.find((c) => c.name === word.toLowerCase());
+  return command ? { command, rest: rest.join(" ") } : null;
+}

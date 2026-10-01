@@ -1,13 +1,12 @@
-import { Check, ChevronDown, GitBranch } from "lucide-react";
+import { ChevronDown, GitBranch } from "lucide-react";
 import type { Project } from "@/types";
 import { ComposerTray } from "@/components/ui/ComposerTray/ComposerTray";
-import { MenuItem } from "@/components/ui/MenuItem/MenuItem";
 import { Popover } from "@/components/ui/Popover/Popover";
-import { useStartingBranches } from "@/features/home/hooks/useStartingBranches";
+import { BranchMenu } from "./BranchMenu/BranchMenu";
 
 /**
  * Where the task will run, tucked under the composer: every task gets its own worktree, cut from the project's
- * default branch or from a branch another task is still working on, as Codex lets you pick a starting branch.
+ * default branch or from any other branch of the repository, as Codex lets you pick a starting branch.
  */
 export function WorktreeTray({
   project,
@@ -18,8 +17,6 @@ export function WorktreeTray({
   base: string;
   onBase: (branch: string) => void;
 }) {
-  const branches = useStartingBranches(project);
-
   return (
     <ComposerTray className="pt-[21px] pr-4 pb-1.5 pl-4">
       <GitBranch className="size-3 shrink-0" />
@@ -39,29 +36,16 @@ export function WorktreeTray({
         )}
       >
         {(close) => (
-          <>
-            <p className="px-2 pt-1 pb-1.5 text-[12px] text-ink-3">Starting branch</p>
-            {branches.map((branch) => (
-              <MenuItem
-                key={branch}
-                active={branch === base}
-                onSelect={() => (onBase(branch), close())}
-                hint={
-                  branch === base ? (
-                    <Check />
-                  ) : branch === project.defaultBranch ? (
-                    "default"
-                  ) : undefined
-                }
-              >
-                <GitBranch />
-                <span className="truncate font-mono text-[12px]">{branch}</span>
-              </MenuItem>
-            ))}
-          </>
+          <BranchMenu
+            project={project}
+            base={base}
+            onPick={(branch) => {
+              onBase(branch);
+              close();
+            }}
+          />
         )}
       </Popover>
-      <span className="ml-auto shrink-0 text-ink-4">{project.stack}</span>
     </ComposerTray>
   );
 }

@@ -4,7 +4,6 @@ import type { Agent } from "@/types";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { finishedLabel } from "@/lib/agentStatus";
 
-/** The task's end state. It rises in when the task finishes while you watch. */
 export function Outcome({ agent }: { agent: Agent }) {
   return (
     <motion.p

@@ -80,6 +80,18 @@ export async function resolveStructuredGenerationProviders(
     providers.push(currentSelection);
   }
 
+  // Last resort so a machine with only Claude or only Codex still names its tasks.
+  for (const entry of providers.length === 0 ? enabledEntries : []) {
+    const fallback = resolveConfiguredCandidate(
+      { provider: entry.provider },
+      modelEntries,
+      entriesByProvider,
+    );
+    if (fallback) {
+      providers.push(fallback);
+    }
+  }
+
   return dedupeProviders(providers);
 }
 

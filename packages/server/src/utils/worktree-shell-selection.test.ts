@@ -130,20 +130,11 @@ describe("worktree shell selection", () => {
     const originalBashEnv = process.env.BASH_ENV;
     process.env.BASH_ENV = "should-not-leak";
     try {
-      writeFileSync(
-        join(worktreePath, "paseo.json"),
-        JSON.stringify({
-          worktree: {
-            setup: ["Write-Output 'setup'"],
-          },
-        }),
-        "utf8",
-      );
-
       const { runWorktreeSetupCommands } = await import("./worktree.js");
       await runWorktreeSetupCommands({
         worktreePath,
         branchName: "main",
+        setup: { commands: ["Write-Output 'setup'"], env: {} },
         cleanupOnFailure: false,
         runtimeEnv: {
           INTERLOCK_SOURCE_CHECKOUT_PATH: worktreePath,

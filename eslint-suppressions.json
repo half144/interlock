@@ -9,27 +9,9 @@
       "count": 1
     }
   },
-  "packages/app/src/components/effort/EffortPicker/EffortMenu/EffortMenu.tsx": {
-    "jsx-a11y/click-events-have-key-events": {
-      "count": 1
-    },
-    "jsx-a11y/interactive-supports-focus": {
-      "count": 1
-    }
-  },
-  "packages/app/src/components/preview/api/ApiMock/ApiBlock/ApiBlock.tsx": {
-    "react/no-array-index-key": {
-      "count": 1
-    }
-  },
   "packages/app/src/components/ui/CodeText/CodeText.tsx": {
     "react/no-array-index-key": {
       "count": 1
-    }
-  },
-  "packages/app/src/components/ui/ScaledFrame/ScaledFrame.tsx": {
-    "@typescript-eslint/no-non-null-assertion": {
-      "count": 6
     }
   },
   "packages/app/src/features/automations/components/AutomationsView/AutomationsView.tsx": {
@@ -48,44 +30,8 @@
       "count": 1
     }
   },
-  "packages/app/src/features/home/components/Home/HomeComposer/ProjectPill/ProjectPill.tsx": {
-    "@typescript-eslint/no-confusing-void-expression": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/home/components/Home/HomeComposer/WorktreeTray/WorktreeTray.tsx": {
-    "@typescript-eslint/no-confusing-void-expression": {
-      "count": 1
-    },
-    "no-nested-ternary": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/home/components/Home/ModelPicker/ModelPicker.tsx": {
-    "@typescript-eslint/no-confusing-void-expression": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/home/components/Home/WaitingOnYou/WaitingOnYou.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/palette/components/CommandPalette/CommandPalette.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
   "packages/app/src/features/palette/components/CommandPalette/PaletteDialog/PaletteDialog.tsx": {
     "jsx-a11y/no-autofocus": {
-      "count": 1
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/settings/components/SettingsView/Budget/Budget.tsx": {
-    "no-restricted-imports": {
       "count": 1
     }
   },
@@ -94,78 +40,13 @@
       "count": 1
     }
   },
-  "packages/app/src/features/shell/components/Sidebar/Sidebar.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/shell/components/Sidebar/SidebarFooter/SidebarFooter.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/shell/components/Sidebar/SidebarHeader/SidebarHeader.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/shell/components/Sidebar/SidebarProjects/SidebarProjects.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/shell/components/Sidebar/SidebarTasks/SidebarTasks.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/shell/components/Sidebar/SidebarTasks/TaskRow/TaskRow.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
   "packages/app/src/features/shell/components/Toaster/ToastCard/ToastCard.tsx": {
-    "no-restricted-imports": {
-      "count": 2
-    }
-  },
-  "packages/app/src/features/shell/components/Toaster/Toaster.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/subagents/components/AgentsTab/AgentTree/AgentTree.tsx": {
     "no-restricted-imports": {
       "count": 1
     }
   },
   "packages/app/src/features/subagents/components/AgentsTab/AgentTree/MainAgentRow/MainAgentRow.tsx": {
     "no-nested-ternary": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/subagents/components/AgentsTab/AgentTree/SubagentRow/SubagentRow.tsx": {
-    "no-nested-ternary": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/subagents/components/AgentsTab/AgentsTab.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/subagents/components/AgentsTab/MainOverview/MainOverview.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/subagents/components/AgentsTab/SubagentChat/ChatHeader/ChatHeader.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/subagents/components/AgentsTab/SubagentChat/SubagentComposer/SubagentComposer.tsx": {
-    "no-restricted-imports": {
       "count": 1
     }
   },
@@ -195,148 +76,6 @@
       "count": 2
     }
   },
-  "packages/app/src/features/thread/components/ThreadView/ThreadHeader/ChatSwitcher/ChatSwitcher.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/ThreadHeader/TaskActions/TaskActions.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/ThreadHeader/TaskActions/TaskMenu/TaskMenu.tsx": {
-    "@typescript-eslint/no-confusing-void-expression": {
-      "count": 2
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/ThreadView.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    },
-    "react/jsx-max-depth": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/Composer/Composer.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/AgentMessage.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    },
-    "react/no-array-index-key": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/CheckpointCard/CheckpointCard.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    },
-    "react/no-array-index-key": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/DelegateCard/DelegateCard.tsx": {
-    "no-nested-ternary": {
-      "count": 1
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/HoldCard/HoldCard.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/HoldCard/HoldQuestion/HoldQuestion.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/StepItem/StepItem.tsx": {
-    "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 1
-    },
-    "complexity": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/ThreadTray/ThreadTray.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/Transcript.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/ThreadView/Transcript/WorktreeCard/WorktreeCard.tsx": {
-    "complexity": {
-      "count": 1
-    },
-    "no-nested-ternary": {
-      "count": 3
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/components/blocks/Prose/Prose.tsx": {
-    "react/no-array-index-key": {
-      "count": 2
-    }
-  },
-  "packages/app/src/features/thread/hooks/useScrollToLatest.ts": {
-    "@typescript-eslint/no-non-null-assertion": {
-      "count": 2
-    }
-  },
-  "packages/app/src/features/thread/hooks/useSplit.ts": {
-    "@typescript-eslint/consistent-type-definitions": {
-      "count": 1
-    },
-    "react-hooks/exhaustive-deps": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/utils/focusComposer.ts": {
-    "@typescript-eslint/unbound-method": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/utils/planSteps.ts": {
-    "no-nested-ternary": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/thread/utils/rise.ts": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/ChecksView/ChecksView.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/CodeTab/Breadcrumbs/Breadcrumbs.tsx": {
-    "react/no-array-index-key": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/CodeTab/CodeTab.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
   "packages/app/src/features/workspace/components/Workspace/CodeTab/DiffFile/DiffHunk/LineAnnotations/CommentComposer/CommentComposer.tsx": {
     "jsx-a11y/no-autofocus": {
       "count": 1
@@ -344,83 +83,16 @@
   },
   "packages/app/src/features/workspace/components/Workspace/CodeTab/EditorTabs/EditorTabs.tsx": {
     "no-restricted-imports": {
-      "count": 2
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/PreviewFrame/PreviewCanvas/PreviewCanvas.tsx": {
-    "no-nested-ternary": {
-      "count": 2
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/PreviewFrame/PreviewCanvas/VisualEdit/DescribePanel/DescribePanel.tsx": {
-    "jsx-a11y/no-autofocus": {
-      "count": 1
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/PreviewFrame/PreviewCanvas/VisualEdit/VisualEdit.tsx": {
-    "jsx-a11y/click-events-have-key-events": {
-      "count": 1
-    },
-    "jsx-a11y/no-static-element-interactions": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/TerminalView/TerminalOutput/TerminalOutput.tsx": {
-    "react/no-array-index-key": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/Toolbar/PrButton/PrPanel/PrPanel.tsx": {
-    "no-nested-ternary": {
       "count": 1
     }
   },
   "packages/app/src/features/workspace/components/Workspace/Toolbar/Toolbar.tsx": {
     "jsx-a11y/no-noninteractive-element-to-interactive-role": {
       "count": 1
-    },
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/Workspace/Workspace.tsx": {
-    "no-restricted-imports": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/components/editor/StatusBar/StatusBar.tsx": {
-    "no-nested-ternary": {
-      "count": 2
-    }
-  },
-  "packages/app/src/features/workspace/hooks/useTerminal.ts": {
-    "no-nested-ternary": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/utils/checks.ts": {
-    "complexity": {
-      "count": 1
-    },
-    "no-nested-ternary": {
-      "count": 6
     }
   },
   "packages/app/src/features/workspace/utils/diff.ts": {
     "@typescript-eslint/prefer-regexp-exec": {
-      "count": 1
-    }
-  },
-  "packages/app/src/features/workspace/utils/fileTree.ts": {
-    "@typescript-eslint/no-non-null-assertion": {
-      "count": 8
-    }
-  },
-  "packages/app/src/features/workspace/utils/hotspots.ts": {
-    "@typescript-eslint/no-unnecessary-condition": {
       "count": 1
     }
   },
@@ -463,43 +135,13 @@
       "count": 1
     }
   },
-  "packages/app/src/lib/parseDiff.ts": {
-    "@typescript-eslint/prefer-regexp-exec": {
-      "count": 1
-    }
-  },
   "packages/app/src/main.tsx": {
     "@typescript-eslint/no-non-null-assertion": {
       "count": 1
     }
   },
-  "packages/app/src/mocks/agents.ts": {
-    "max-lines": {
-      "count": 1
-    }
-  },
-  "packages/app/src/mocks/diffs.ts": {
-    "max-lines": {
-      "count": 1
-    }
-  },
-  "packages/app/src/mocks/subagents.ts": {
-    "max-lines": {
-      "count": 1
-    }
-  },
-  "packages/app/src/mocks/threads.ts": {
-    "max-lines": {
-      "count": 1
-    }
-  },
   "packages/app/src/stores/slices/editor.ts": {
     "no-nested-ternary": {
-      "count": 1
-    }
-  },
-  "packages/app/src/stores/slices/subagents.ts": {
-    "complexity": {
       "count": 1
     }
   },
@@ -2560,7 +2202,7 @@
       "count": 3
     },
     "@typescript-eslint/require-await": {
-      "count": 6
+      "count": 5
     },
     "@typescript-eslint/return-await": {
       "count": 1

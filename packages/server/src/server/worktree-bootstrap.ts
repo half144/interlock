@@ -12,6 +12,7 @@ import {
   type WorktreeSetupCommandResult,
   type WorktreeRuntimeEnv,
 } from "../utils/worktree.js";
+import { prepareWorktreeSetup } from "./project-settings/worktree-setup.js";
 import type { AgentTimelineItem, ToolCallDetail } from "./agent/agent-sdk-types.js";
 
 interface WorktreeBootstrapTerminalResult {
@@ -29,6 +30,8 @@ export interface RunAsyncWorktreeBootstrapOptions {
   workspaceId: string;
   worktree: WorktreeConfig;
   workspaceCwd?: string;
+  repoRoot: string;
+  paseoHome?: string;
   shouldBootstrap?: boolean;
   terminalManager: TerminalManager | null;
   appendTimelineItem: (item: AgentTimelineItem) => Promise<boolean>;
@@ -485,7 +488,7 @@ function terminalHasOutput(state: ReturnType<TerminalSession["getState"]>): bool
 }
 
 async function runWorktreeTerminalBootstrap(
-  options: RunAsyncWorktreeBootstrapOptions,
+  options: Omit<RunAsyncWorktreeBootstrapOptions, "repoRoot" | "paseoHome">,
   runtimeEnv: WorktreeRuntimeEnv,
 ): Promise<void> {
   const workspaceCwd = options.workspaceCwd ?? options.worktree.worktreePath;
@@ -643,14 +646,20 @@ export async function runAsyncWorktreeBootstrap(
       worktreePath: options.worktree.worktreePath,
       branchName: options.worktree.branchName,
     });
+    const setup = await prepareWorktreeSetup({
+      ...(options.paseoHome ? { paseoHome: options.paseoHome } : {}),
+      repoRoot: options.repoRoot,
+      worktreePath: options.worktree.worktreePath,
+    });
     options.terminalManager?.registerCwdEnv({
       cwd: workspaceCwd,
-      env: runtimeEnv,
+      env: { ...setup.env, ...runtimeEnv },
     });
 
     setupResults = await runWorktreeSetupCommands({
       worktreePath: workspaceCwd,
       branchName: options.worktree.branchName,
+      setup,
       cleanupOnFailure: false,
       runtimeEnv,
       onEvent: (event) => {

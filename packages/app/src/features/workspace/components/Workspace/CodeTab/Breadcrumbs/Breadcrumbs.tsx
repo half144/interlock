@@ -3,6 +3,7 @@ import { Box, ChevronRight } from "lucide-react";
 import type { FileDiff } from "@/types";
 import { DiffStat } from "@/components/ui/DiffStat/DiffStat";
 import { symbolOf } from "@/features/workspace/utils/diff";
+import { ancestorsOf } from "@/features/workspace/utils/fileTree";
 import { fileName } from "@/features/workspace/utils/language";
 import { FileGlyph } from "@/features/workspace/components/editor/FileGlyph/FileGlyph";
 
@@ -16,15 +17,12 @@ export function Breadcrumbs({ file }: { file: FileDiff }) {
       aria-label="Breadcrumbs"
       className="flex h-[26px] shrink-0 items-center gap-1 px-3 text-[12px] whitespace-nowrap text-ink-3"
     >
-      {file.path
-        .split("/")
-        .slice(0, -1)
-        .map((folder, i) => (
-          <Fragment key={i}>
-            <span>{folder}</span>
-            {separator}
-          </Fragment>
-        ))}
+      {ancestorsOf(file.path).map((folder) => (
+        <Fragment key={folder}>
+          <span>{fileName(folder)}</span>
+          {separator}
+        </Fragment>
+      ))}
       <FileGlyph path={file.path} className="-mx-0.5" />
       <span className="truncate text-ink-2">{fileName(file.path)}</span>
       {symbol && (

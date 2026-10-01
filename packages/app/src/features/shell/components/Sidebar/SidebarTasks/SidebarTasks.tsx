@@ -1,24 +1,23 @@
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { ListFilter } from "lucide-react";
-import { useStore } from "@/stores/app-store";
+import { X } from "lucide-react";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
-import { useSidebarTasks } from "@/features/shell/hooks/useSidebarTasks";
+import { useSidebarTasks } from "./useSidebarTasks";
 import { TaskRow } from "./TaskRow/TaskRow";
 import { SidebarIconButton } from "@/features/shell/components/SidebarIconButton/SidebarIconButton";
 
 /** Every task, newest activity first, optionally narrowed to one project. */
 export function SidebarTasks() {
-  const view = useStore((s) => s.view);
-  const setProjectFilter = useStore((s) => s.setProjectFilter);
-  const { tasks, order, filterName } = useSidebarTasks();
+  const { tasks, order, filterName, activeThreadId, clearFilter } = useSidebarTasks();
 
   return (
     <>
       <div className="mt-5 flex h-8 items-center justify-between pr-2 pl-4">
         <span className="placard">{filterName ? `Tasks in ${filterName}` : "All tasks"}</span>
-        <SidebarIconButton label="Filter tasks" onClick={() => setProjectFilter(null)}>
-          <ListFilter />
-        </SidebarIconButton>
+        {clearFilter && (
+          <SidebarIconButton label="Show all tasks" onClick={clearFilter}>
+            <X />
+          </SidebarIconButton>
+        )}
       </div>
       {/* Rows re-render on every tick, so only real changes animate: a new task grows in, the rest reflow, and the selection slides. */}
       <LayoutGroup id="sidebar-tasks">
@@ -38,7 +37,7 @@ export function SidebarTasks() {
                 exit={{ opacity: 0, height: 0, transition: { height: spring, opacity: fadeOut } }}
                 transition={spring}
               >
-                <TaskRow thread={t} active={view.kind === "thread" && view.threadId === t.id} />
+                <TaskRow thread={t} active={activeThreadId === t.id} />
               </motion.div>
             ))}
           </AnimatePresence>
