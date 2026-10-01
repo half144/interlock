@@ -28,8 +28,11 @@ pub fn parse_lock(raw: &str) -> Option<PidLock> {
         .filter(|lock| lock.pid > 1)
 }
 
+/// The daemon renames itself once running (`process.title`), so `ps` may show only the title.
 pub fn command_looks_like_daemon(command: &str) -> bool {
-    command.contains("daemon/index.mjs")
+    command.starts_with("Interlock Supervisor")
+        || command.starts_with("Interlock Daemon")
+        || command.contains("daemon/index.mjs")
         || command.contains("@interlock/server")
         || command.contains("packages/server")
 }
@@ -129,6 +132,8 @@ mod tests {
             LISTEN,
             "node --import tsx scripts/dev-runner.ts /x/packages/server"
         ));
+        assert!(is_ours(&ours, LISTEN, "Interlock Supervisor"));
+        assert!(is_ours(&ours, LISTEN, "Interlock Daemon"));
     }
 
     #[test]
