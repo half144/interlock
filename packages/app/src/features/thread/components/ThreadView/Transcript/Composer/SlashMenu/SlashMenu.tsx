@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
 import type { SlashCommand } from "@/features/thread/utils/slashCommands";
 import { surface } from "@/lib/styles";
+import { SlashMenuItem } from "./SlashMenuItem/SlashMenuItem";
 
 interface SlashMenuProps {
   items: SlashCommand[];
@@ -19,26 +20,19 @@ export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
       animate={{ opacity: 1, y: 0, scale: 1, transition: fadeIn }}
       exit={{ opacity: 0, y: 2, transition: fadeOut }}
       style={{ transformOrigin: "bottom left" }}
-      className={cn(surface.overlay, "absolute bottom-full left-0 z-30 mb-2 w-80 rounded-lg p-1")}
+      className={cn(
+        surface.overlay,
+        "absolute inset-x-0 bottom-full z-30 mb-2 max-h-[360px] overflow-y-auto rounded-2xl p-1.5",
+      )}
     >
       {items.map((item, i) => (
-        <button
+        <SlashMenuItem
           key={item.name}
-          type="button"
-          role="option"
-          aria-selected={i === active}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onPick(item.name);
-          }}
-          className={cn(
-            "flex h-8 w-full items-center gap-3 rounded-[5px] px-2 text-left transition-colors duration-100",
-            i === active ? "bg-selected" : "hover:bg-selected",
-          )}
-        >
-          <span className="w-24 shrink-0 font-mono text-[12px] text-ink">{item.name}</span>
-          <span className="truncate text-[12.5px] text-ink-3">{item.hint}</span>
-        </button>
+          command={item}
+          index={i}
+          active={i === active}
+          onPick={onPick}
+        />
       ))}
     </motion.div>
   );

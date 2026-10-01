@@ -1,5 +1,9 @@
-import { useState, type KeyboardEvent } from "react";
-import { matchSlash, type SlashCommand } from "@/features/thread/utils/slashCommands";
+import { useEffect, useState, type KeyboardEvent } from "react";
+import {
+  matchSlash,
+  slashOptionId,
+  type SlashCommand,
+} from "@/features/thread/utils/slashCommands";
 
 export function useSlashCommands(
   commands: SlashCommand[],
@@ -8,6 +12,10 @@ export function useSlashCommands(
 ) {
   const [active, setActive] = useState(0);
   const items = matchSlash(commands, text);
+  useEffect(() => {
+    document.getElementById(slashOptionId(active))?.scrollIntoView({ block: "nearest" });
+  }, [active, items.length]);
+
   const pick = (name: string) => setText(`${name} `);
 
   /** Handles the menu's keys and reports whether it did, so the composer leaves those keys alone. */
