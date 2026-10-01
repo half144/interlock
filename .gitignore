@@ -14,3 +14,4 @@ target/
 /tmp/
 apps/desktop/src-tauri/binaries/
 apps/desktop/src-tauri/resources/daemon/
+.npm-install.lock
