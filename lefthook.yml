@@ -12,7 +12,7 @@ pre-commit:
       glob: "*.{js,mjs,jsx,ts,tsx}"
       run: node scripts/quality/lint-staged.mjs {staged_files}
     - name: typecheck
-      run: npm run typecheck
+      run: node scripts/quality/scope.mjs typecheck --staged
     - name: secrets
       run: command -v gitleaks >/dev/null && gitleaks protect --staged --redact || echo "gitleaks not installed, skipping (brew install gitleaks)"
 
@@ -24,4 +24,4 @@ commit-msg:
 pre-push:
   commands:
     check:
-      run: npm run check
+      run: node scripts/quality/pre-push.mjs

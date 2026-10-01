@@ -9,7 +9,7 @@
   ],
   "type": "module",
   "scripts": {
-    "check": "npm run build:deps && npm run format:check && npm run lint && npm run typecheck && npm run structure && npm run knip && npm run dup && npm run test",
+    "check": "npm run build:deps && npm run format:check && npm run lint && npm run typecheck && npm run structure && npm run knip && npm run dup && npm run test && node scripts/quality/pre-push.mjs --stamp",
     "lint": "node scripts/quality/lint.mjs",
     "lint:fix": "node scripts/quality/lint.mjs --fix",
     "typecheck": "npm run typecheck --workspaces --if-present",
