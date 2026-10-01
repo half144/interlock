@@ -13,4 +13,5 @@ export const notify = bridge.notify;
 export const setActivity = bridge.setActivity;
 export const setFocusedTask = bridge.setFocusedTask;
 export const onOpenTask = bridge.onOpenTask;
+export const onDragDrop = bridge.onDragDrop;
 export type { Activity, DaemonConnection, Notice } from "./types";

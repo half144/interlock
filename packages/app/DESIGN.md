@@ -291,9 +291,9 @@ Warm neutral graphite with light warm ink; saturated colour appears only where s
 - **Git Modified** (`mod` #e2c08d) with Diff Add: the git decoration on changed files in the explorer (name and letter) and the letter on editor tabs. Nowhere outside the review editor.
 - **File marks** (`lang-ts` #6aa0d6, `lang-sql` #d790b8, `lang-json` #d4b961, `lang-md` #8ea6c6): the short file-type glyph (TS, SQL, {}, M↓) before a file name in the explorer, tabs and breadcrumbs. Never a fill or a UI accent.
 
-### Agent tints
+### Agent marks
 
-- **Claude** (glyph #eba184 on #d9775729), **Codex** (Ink 2 on Selected), **Gemini** (glyph #9cc2ff on #6aa4ff24): only inside the 16–18px AgentMark disc that identifies which CLI an agent is. They are identity, not decoration: never a fill, a glow, a chart colour or a background outside that disc.
+- Each CLI is identified by its vendor's mark (Claude, OpenAI) drawn in monochrome ink, never in brand colour. Colour next to a mark always means state (warning amber, danger red, from the provider's own `tone`), so identity and state never compete.
 
 ### Neutral
 
@@ -310,7 +310,7 @@ Warm neutral graphite with light warm ink; saturated colour appears only where s
 
 **The Ink Not Accent Rule.** Action is light ink on graphite. A primary button, send and stop are ink with Ground glyphs; buttons are never blue, violet or tinted.
 
-**The Colour Means State Rule.** Chrome stays ink on graphite. Colour appears only for agent status, diff, syntax, focus, selection, run blue for what is live, and the agent tint inside its mark. Navigation and selection are white alpha washes.
+**The Colour Means State Rule.** Chrome stays ink on graphite. Colour appears only for agent status, diff, syntax, focus, selection, run blue for what is live, and a usage window running out (amber, then red). Navigation and selection are white alpha washes.
 
 **The Syntax Stays Home Rule.** `syn-*`, `add` and `del` live inside code and diff surfaces. They never signal app state, and status colours never appear inside code.
 
@@ -354,7 +354,7 @@ Numbers that update or align (counts, costs, progress, elapsed time) are tabular
 A fixed desktop app shell with no breakpoints: the app holds a 1100px minimum width, the body never scrolls, each view scrolls its own column.
 
 - **Sidebar ↔ rail:** one sidebar, 264px on Ground, that folds to a 52px icon rail. It folds when you collapse it, and on its own while a task's workspace is open (`useRail`); opening the workspace hands a manually expanded sidebar back to auto. Icons sit on a fixed 26px centre line in both states, so while the width closes they stay put; labels and lists fade out at once and return only once there's room. Rows are 36px with 2px gaps inside an 8px gutter.
-- **Main bar:** 52px, 16px side padding. Model picker or title left; task actions, notifications, spend pill and avatar right. Compact while the workspace is open.
+- **Main bar:** 52px, 16px side padding. Model picker or title left; task actions, notifications, the usage pill (each provider's mark and what is left of its tightest window) and avatar right. Compact while the workspace is open.
 - **Home:** one centered column, max 720px, 24px gutters, starting 15vh from the top: headline, composer 32px below with its worktree tray, the project's skills 16px below, then "Waiting on you" 48px below. Everything on it is real: no connector nudges, no generic intents, no integrations we don't have.
 - **Thread alone:** one reading column, **700px** wide (`READING_WIDTH`), 24px gutters. 28px between turns, 12px between blocks of a turn. The worktree strip, composer and tray dock at the bottom of the same column.
 - **Thread with workspace:** the chat narrows to **40%** of the main area (clamped 420–580px) and the workspace takes the other **60%**, inset 8px top/bottom/right so it floats as a card. The conversation's reading width animates from 700px to the chat width on the same spring, so it slides as a block.
@@ -450,7 +450,7 @@ The agent's computer beside the chat: `surface.card` inset 8px from the view edg
 
 - **Lamp** (`Lamp`): 14–16px SVG status glyphs in the status colours; a new state pops in, a first render doesn't. Cut-outs use Ground.
 - **Describer** (`Describer`): the agent ID in 11.5px mono Ink 3, struck through when discarded.
-- **AgentMark** (`AgentMark`): a 16–18px tinted disc with a neutral glyph (asterisk, hexagon, sparkle). Never a vendor logo.
+- **AgentMark** (`AgentMark`): the provider's mark in monochrome ink, 14px by default; `className` sizes the slot and the glyph fills 80% of it. Paths come from Paseo (Apache-2.0); the marks are their owners' trademarks, used only to say which CLI runs.
 
 ### Toggle, Kbd, EmptyState
 

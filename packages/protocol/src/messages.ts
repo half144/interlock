@@ -5,6 +5,10 @@ import {
   ProjectSettingsOutboundSchemas,
 } from "./project-settings-schema.js";
 import { AccountsInboundSchemas, AccountsOutboundSchemas } from "./accounts-schema.js";
+import {
+  ProjectDiscoveryInboundSchemas,
+  ProjectDiscoveryOutboundSchemas,
+} from "./project-discovery-schema.js";
 import { TerminalActivitySchema } from "./terminal-activity.js";
 import { CLIENT_CAPS } from "./client-capabilities.js";
 import { AGENT_LIFECYCLE_STATUSES } from "./agent-lifecycle.js";
@@ -2449,6 +2453,7 @@ export const SessionInboundMessageSchema = z.discriminatedUnion("type", [
   WriteProjectConfigRequestMessageSchema,
   ...ProjectSettingsInboundSchemas,
   ...AccountsInboundSchemas,
+  ...ProjectDiscoveryInboundSchemas,
   CreateAgentRequestMessageSchema,
   ListProviderModelsRequestMessageSchema,
   ListProviderModesRequestMessageSchema,
@@ -5068,6 +5073,7 @@ export const SessionOutboundMessageSchema = z.discriminatedUnion("type", [
   WriteProjectConfigResponseMessageSchema,
   ...ProjectSettingsOutboundSchemas,
   ...AccountsOutboundSchemas,
+  ...ProjectDiscoveryOutboundSchemas,
   SetAgentModeResponseMessageSchema,
   SetAgentModelResponseMessageSchema,
   SetAgentThinkingResponseMessageSchema,

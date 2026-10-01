@@ -4176,6 +4176,13 @@ export class DaemonClient {
     });
   }
 
+  async discoverRepositories(limit?: number, requestId?: string) {
+    return this.sendNamespacedCorrelatedSessionRequest<"project.discover.response">({
+      requestId,
+      message: { type: "project.discover.request", limit },
+    });
+  }
+
   async getDiagnostics(requestId?: string) {
     return this.sendNamespacedCorrelatedSessionRequest<"diagnostics.get.response">({
       requestId,

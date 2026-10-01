@@ -5514,6 +5514,31 @@ test("asks for a setup suggestion and diagnostics", async () => {
   });
 });
 
+test("asks the daemon for the repositories on this machine", async () => {
+  const { client, mock } = await connectedClient();
+
+  const discoverPromise = client.discoverRepositories(5, "req-discover");
+  expect(parseSentFrame(mock.sent[0])).toEqual({
+    type: "project.discover.request",
+    requestId: "req-discover",
+    limit: 5,
+  });
+  const repositories = [
+    { path: "/Users/dev/code/app", name: "app", lastActivityAt: "2026-09-30T12:00:00.000Z" },
+  ];
+  mock.triggerMessage(
+    wrapSessionMessage({
+      type: "project.discover.response",
+      payload: { requestId: "req-discover", repositories, error: null },
+    }),
+  );
+  await expect(discoverPromise).resolves.toEqual({
+    requestId: "req-discover",
+    repositories,
+    error: null,
+  });
+});
+
 test("starts a provider login and delivers the completion event", async () => {
   const { client, mock } = await connectedClient();
   const completed = vi.fn();

@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
 import type { Bridge } from "./bridge";
 import type { DaemonStatus, Unsubscribe } from "./types";
 
@@ -36,4 +37,15 @@ export const tauriBridge: Bridge = {
   setFocusedTask: (taskId) => invoke("set_focus", { taskId }),
   onOpenTask: (callback) =>
     unsubscribe(listen<string>(OPEN_TASK_EVENT, (e) => callback(e.payload))),
+  onDragDrop: (callback) =>
+    unsubscribe(
+      getCurrentWebview().onDragDropEvent(({ payload }) => {
+        if (payload.type === "over") return;
+        callback(
+          payload.type === "leave"
+            ? { phase: "leave" }
+            : { phase: payload.type, paths: payload.paths },
+        );
+      }),
+    ),
 };

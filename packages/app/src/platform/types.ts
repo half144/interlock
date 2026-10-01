@@ -16,4 +16,7 @@ export interface Notice {
   taskId: string;
 }
 
+/** Files or folders dragged from Finder over the window, with the paths they carry. */
+export type DragDrop = { phase: "enter" | "drop"; paths: string[] } | { phase: "leave" };
+
 export type Unsubscribe = () => void;

@@ -1,10 +1,12 @@
 import type { SessionInboundMessage } from "../messages.js";
 import type { AccountsSession } from "./accounts/accounts-session.js";
+import type { ProjectDiscoverySession } from "./project-discovery/project-discovery-session.js";
 import type { ProjectSettingsSession } from "./project-settings/project-settings-session.js";
 
 export interface SettingsAccountsSessions {
   projectSettings: ProjectSettingsSession;
   accounts: AccountsSession;
+  projectDiscovery: ProjectDiscoverySession;
 }
 
 export function dispatchSettingsAndAccountsMessage(
@@ -28,6 +30,9 @@ export function dispatchSettingsAndAccountsMessage(
   }
   if (msg.type === "provider.auth.logout.request") {
     return sessions.accounts.handleLogoutRequest(msg);
+  }
+  if (msg.type === "project.discover.request") {
+    return sessions.projectDiscovery.handleDiscoverRequest(msg);
   }
   return undefined;
 }

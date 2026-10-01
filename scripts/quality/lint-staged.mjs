@@ -26,7 +26,7 @@ function main() {
   const bin = join("node_modules", ".bin", "eslint");
   // Type-aware lint of many workspaces in one process runs out of memory, so each
   // workspace (and every 80 files within it) gets its own process.
-  const env = { ...process.env, NODE_OPTIONS: "--max-old-space-size=6144" };
+  const env = { ...process.env, NODE_OPTIONS: "--max-old-space-size=8192" };
   let failed = false;
   for (const chunk of groupFiles(files)) {
     const result = spawnSync(bin, ["--max-warnings", "0", "--no-warn-ignored", ...chunk], {

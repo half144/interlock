@@ -1,4 +1,11 @@
-import type { Activity, DaemonConnection, DaemonStatus, Notice, Unsubscribe } from "./types";
+import type {
+  Activity,
+  DaemonConnection,
+  DaemonStatus,
+  DragDrop,
+  Notice,
+  Unsubscribe,
+} from "./types";
 
 export interface Bridge {
   getDaemonConnection: () => Promise<DaemonConnection>;
@@ -9,4 +16,5 @@ export interface Bridge {
   setActivity: (activity: Activity) => Promise<void>;
   setFocusedTask: (taskId: string | null) => Promise<void>;
   onOpenTask: (callback: (taskId: string) => void) => Unsubscribe;
+  onDragDrop: (callback: (drag: DragDrop) => void) => Unsubscribe;
 }

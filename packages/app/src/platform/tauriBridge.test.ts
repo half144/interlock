@@ -1,9 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { DaemonStatus } from "./types";
+import type { DaemonStatus, DragDrop } from "./types";
+
+type WebviewDrag =
+  | { type: "enter" | "drop"; paths: string[] }
+  | { type: "over" }
+  | { type: "leave" };
 
 const shell = vi.hoisted(() => {
   const emit: (status: DaemonStatus) => void = () => undefined;
-  return { emit, current: Promise.resolve<DaemonStatus>("ready") };
+  const drag: (event: WebviewDrag) => void = () => undefined;
+  return { emit, drag, current: Promise.resolve<DaemonStatus>("ready") };
 });
 
 vi.mock("@tauri-apps/api/core", () => ({ invoke: () => shell.current }));
@@ -12,6 +18,14 @@ vi.mock("@tauri-apps/api/event", () => ({
     shell.emit = (status) => handler({ payload: status });
     return Promise.resolve(() => undefined);
   },
+}));
+vi.mock("@tauri-apps/api/webview", () => ({
+  getCurrentWebview: () => ({
+    onDragDropEvent: (handler: (e: { payload: WebviewDrag }) => void) => {
+      shell.drag = (event) => handler({ payload: event });
+      return Promise.resolve(() => undefined);
+    },
+  }),
 }));
 
 const { tauriBridge } = await import("./tauriBridge");
@@ -37,5 +51,21 @@ describe("tauri daemon status", () => {
     resolve("ready");
     await shell.current;
     expect(seen).toEqual(["crashed"]);
+  });
+});
+
+describe("tauri drag and drop", () => {
+  it("passes on the paths dragged in and dropped, and drops the hover noise", () => {
+    const seen: DragDrop[] = [];
+    tauriBridge.onDragDrop((drag) => seen.push(drag));
+    shell.drag({ type: "enter", paths: ["/code/app"] });
+    shell.drag({ type: "over" });
+    shell.drag({ type: "leave" });
+    shell.drag({ type: "drop", paths: ["/code/app"] });
+    expect(seen).toEqual([
+      { phase: "enter", paths: ["/code/app"] },
+      { phase: "leave" },
+      { phase: "drop", paths: ["/code/app"] },
+    ]);
   });
 });

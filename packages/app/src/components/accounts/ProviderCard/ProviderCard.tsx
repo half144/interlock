@@ -18,7 +18,7 @@ export function ProviderCard({ tool }: { tool: ToolStatus & { id: AuthProvider }
   return (
     <div className={cn(surface.frame, "flex flex-col gap-3 px-4 py-3.5")}>
       <div className="flex items-center gap-3">
-        <AgentMark kind={tool.id} />
+        <AgentMark kind={tool.id} className="size-6" />
         <div className="min-w-0 flex-1">
           <p className="text-[13.5px] font-medium text-ink">{TOOL_LABELS[tool.id]}</p>
           <p className="truncate text-[12.5px] text-ink-3">{subtitleOf(tool)}</p>

@@ -146,6 +146,7 @@ import { AgentConfigSession } from "./session/agent-config/agent-config-session.
 import { ProjectConfigSession } from "./session/project-config/project-config-session.js";
 import { ProjectSettingsSession } from "./session/project-settings/project-settings-session.js";
 import { AccountsSession } from "./session/accounts/accounts-session.js";
+import { ProjectDiscoverySession } from "./session/project-discovery/project-discovery-session.js";
 import { dispatchSettingsAndAccountsMessage } from "./session/settings-accounts-dispatch.js";
 import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import { applyProjectSettingsToAgentLaunch } from "./project-settings/agent-launch-settings.js";
@@ -596,6 +597,7 @@ export class Session {
   private readonly projectConfigSession: ProjectConfigSession;
   private readonly projectSettingsSession: ProjectSettingsSession;
   private readonly accountsSession: AccountsSession;
+  private readonly projectDiscoverySession: ProjectDiscoverySession;
   private readonly agentRequests: Pick<AgentRequests, "create" | "send">;
   private readonly createAgentLifecycleDispatch: CreateAgentLifecycleDispatch;
 
@@ -792,6 +794,10 @@ export class Session {
       logger: this.sessionLogger,
     });
     this.accountsSession = new AccountsSession({
+      host: { emit: (msg) => this.emit(msg) },
+      logger: this.sessionLogger,
+    });
+    this.projectDiscoverySession = new ProjectDiscoverySession({
       host: { emit: (msg) => this.emit(msg) },
       logger: this.sessionLogger,
     });
@@ -1698,7 +1704,11 @@ export class Session {
       this.dispatchWorkspaceSetupMessage(msg) ??
       this.dispatchWorkspaceAndProjectMessage(msg) ??
       dispatchSettingsAndAccountsMessage(
-        { projectSettings: this.projectSettingsSession, accounts: this.accountsSession },
+        {
+          projectSettings: this.projectSettingsSession,
+          accounts: this.accountsSession,
+          projectDiscovery: this.projectDiscoverySession,
+        },
         msg,
       )
     );

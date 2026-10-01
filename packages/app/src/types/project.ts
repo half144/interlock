@@ -22,3 +22,11 @@ export interface Project {
   defaultBranch: string;
   settings: ProjectSettings;
 }
+
+/** A git repository the daemon found on this machine. */
+export interface DiscoveredRepository {
+  path: string;
+  name: string;
+  /** Epoch milliseconds of the last git activity in it. */
+  lastActivityAt: number;
+}

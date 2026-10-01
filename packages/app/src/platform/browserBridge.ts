@@ -24,4 +24,5 @@ export const browserBridge: Bridge = {
     openTaskListeners.add(callback);
     return () => openTaskListeners.delete(callback);
   },
+  onDragDrop: () => () => undefined,
 };
