@@ -7,7 +7,6 @@ import { useSaveSettings } from "@/features/settings/hooks/useSaveSettings";
 
 export function useGeneral(project: Project) {
   const { status, save } = useSaveSettings(project.id);
-  const setBaseBranch = useStore((s) => s.setBaseBranch);
   const reportError = useStore((s) => s.reportError);
   const [branches, setBranches] = useState<string[]>([]);
 
@@ -18,7 +17,7 @@ export function useGeneral(project: Project) {
   return {
     status,
     branches: withCurrent(branches, project.defaultBranch),
-    pickBranch: (branch: string) => setBaseBranch(project.id, branch),
+    pickBranch: (defaultBranch: string) => void save({ defaultBranch }),
     setArchive: (archiveAfterMerge: boolean) => void save({ archiveAfterMerge }),
   };
 }

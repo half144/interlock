@@ -1,6 +1,5 @@
 import type { Agent, AgentKind, Autonomy, Effort, Hold, Project } from "@/types";
 import { checkedOutBranch, startingBranches } from "./branches";
-import { savedBaseBranch } from "./branchPreference";
 import { loadProjectSettings } from "./projectSettings";
 import { getClient } from "./client";
 import { toPromptAttachments, withPromptAttachments } from "./attachments";
@@ -30,15 +29,18 @@ export async function addProject(path: string): Promise<Project> {
   const client = getClient();
   const result = await client.addProject(path);
   if (result.error || !result.project) throw new Error(addProjectFailure(result));
-  const defaultBranch =
-    savedBaseBranch(result.project.projectRootPath) ??
-    result.git?.defaultBranch ??
-    (await checkedOutBranch(client, result.project.projectRootPath));
+  const detected =
+    result.git?.defaultBranch ?? (await checkedOutBranch(client, result.project.projectRootPath));
   const project = toProject(result.project, {
     remoteUrl: result.git?.remoteUrl ?? null,
-    ...(defaultBranch ? { defaultBranch } : {}),
+    ...(detected ? { defaultBranch: detected } : {}),
   });
-  return { ...project, settings: (await loadProjectSettings(project.id)).settings };
+  const { settings } = await loadProjectSettings(project.id);
+  return {
+    ...project,
+    settings,
+    defaultBranch: settings.defaultBranch ?? project.defaultBranch,
+  };
 }
 
 /** A task is a worktree cut from the base branch plus an agent running in it; the daemon names both from the prompt. */

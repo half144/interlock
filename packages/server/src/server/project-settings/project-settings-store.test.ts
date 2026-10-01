@@ -44,6 +44,16 @@ describe("ProjectSettingsStore", () => {
     expect(onDisk.version).toBe(1);
   });
 
+  it("persists the default branch across store reloads and lets it be cleared", async () => {
+    const store = ProjectSettingsStore.forHome(home);
+
+    await store.update(repoRoot, { defaultBranch: "develop" });
+    expect((await ProjectSettingsStore.forHome(home).get(repoRoot)).defaultBranch).toBe("develop");
+
+    await store.update(repoRoot, { defaultBranch: null });
+    expect((await store.get(repoRoot)).defaultBranch).toBeNull();
+  });
+
   it("applies concurrent updates without losing either one", async () => {
     const store = ProjectSettingsStore.forHome(home);
 

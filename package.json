@@ -22,9 +22,10 @@
     "dup": "jscpd --config .jscpd.json",
     "structure": "node scripts/quality/check-structure.mjs",
     "baseline:freeze": "node scripts/quality/lint.mjs --suppress-all && node scripts/quality/lint.mjs --prune-suppressions",
-    "dev:app": "npm run dev --workspace @interlock/app",
-    "dev:daemon": "npm run dev --workspace @interlock/server",
-    "dev:desktop": "PATH=\"$HOME/.cargo/bin:$PATH\" npm run dev --workspace @interlock/desktop",
+    "build:deps": "npm run build -w @interlock/protocol -w @interlock/highlight && npm run build -w @interlock/client",
+    "dev:app": "npm run build:deps && npm run dev --workspace @interlock/app",
+    "dev:daemon": "npm run build:deps && npm run dev --workspace @interlock/server",
+    "dev:desktop": "npm run build:deps && PATH=\"$HOME/.cargo/bin:$PATH\" npm run dev --workspace @interlock/desktop",
     "build:desktop": "npm run bundle:daemon --workspace @interlock/desktop && PATH=\"$HOME/.cargo/bin:$PATH\" npm run build --workspace @interlock/desktop",
     "prepare": "lefthook install"
   },

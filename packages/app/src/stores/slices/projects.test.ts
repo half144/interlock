@@ -16,6 +16,7 @@ const project = (patch: Partial<Project> = {}): Project => ({
     defaultKind: null,
     defaultModel: null,
     archiveAfterMerge: true,
+    defaultBranch: null,
   },
   ...patch,
 });
@@ -60,6 +61,18 @@ describe("project slice", () => {
       defaultBranch: "develop",
       remoteUrl: "git@github.com:me/repo.git",
     });
+  });
+
+  it("keeps the branch picked in settings over the branch the main checkout sits on", () => {
+    const state = useStore.getState();
+    state.replaceProjects([
+      project({
+        defaultBranch: "release",
+        settings: { ...project().settings, defaultBranch: "release" },
+      }),
+    ]);
+    state.replaceWorkspaces([{ workspace: workspace({}), pr: null }]);
+    expect(useStore.getState().projects["p"]?.defaultBranch).toBe("release");
   });
 
   it("tracks the pull request of a workspace and forgets it with the workspace", () => {

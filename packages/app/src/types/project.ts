@@ -10,6 +10,8 @@ export interface ProjectSettings {
   defaultKind: AgentKind | null;
   defaultModel: string | null;
   archiveAfterMerge: boolean;
+  /** The base branch picked in settings; null follows the detected default branch. */
+  defaultBranch: string | null;
 }
 
 export interface Project {

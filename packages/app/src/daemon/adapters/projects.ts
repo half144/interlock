@@ -12,6 +12,7 @@ const defaultProjectSettings = (): ProjectSettings => ({
   defaultKind: null,
   defaultModel: null,
   archiveAfterMerge: true,
+  defaultBranch: null,
 });
 
 export function toProject(

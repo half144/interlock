@@ -9,7 +9,6 @@ import type { AppState } from "@/stores/types";
 import { toAgent, type AgentContext } from "../adapters/agents";
 import { pullRequestOf, toProject, toWorkspace } from "../adapters/projects";
 import { checkedOutBranch } from "../branches";
-import { savedBaseBranch } from "../branchPreference";
 import { loadProjectSettings } from "../projectSettings";
 
 const PAGE = 200;
@@ -85,11 +84,15 @@ export async function loadDirectory(client: DaemonClient): Promise<void> {
   );
   const loaded = await Promise.all(
     projects.projects.map(async (p) => {
-      const defaultBranch =
-        savedBaseBranch(p.projectRootPath) ?? (await checkedOutBranch(client, p.projectRootPath));
-      const project = toProject(p, defaultBranch ? { defaultBranch } : {});
+      const detected = await checkedOutBranch(client, p.projectRootPath);
+      const project = toProject(p, detected ? { defaultBranch: detected } : {});
       try {
-        return { ...project, settings: (await loadProjectSettings(p.projectId)).settings };
+        const { settings } = await loadProjectSettings(p.projectId);
+        return {
+          ...project,
+          settings,
+          defaultBranch: settings.defaultBranch ?? project.defaultBranch,
+        };
       } catch (error) {
         console.error(`Could not read the settings of ${p.projectRootPath}`, error);
         return project;

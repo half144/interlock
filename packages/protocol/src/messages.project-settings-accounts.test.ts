@@ -14,6 +14,13 @@ describe("project settings schema", () => {
     });
   });
 
+  it("leaves the default branch to the detected one until a name is saved", () => {
+    expect(DEFAULT_PROJECT_SETTINGS.defaultBranch).toBeNull();
+    expect(ProjectSettingsPatchSchema.safeParse({ defaultBranch: "develop" }).success).toBe(true);
+    expect(ProjectSettingsPatchSchema.safeParse({ defaultBranch: null }).success).toBe(true);
+    expect(ProjectSettingsPatchSchema.safeParse({ defaultBranch: "" }).success).toBe(false);
+  });
+
   it("accepts partial patches and rejects unknown autonomy modes and escaping copy paths", () => {
     expect(ProjectSettingsPatchSchema.safeParse({ autonomy: "full-auto" }).success).toBe(true);
     expect(ProjectSettingsPatchSchema.safeParse({ autonomy: "yolo" }).success).toBe(false);

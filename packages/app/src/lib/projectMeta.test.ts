@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 import type { Project, Workspace } from "@/types";
 import { withProjectMeta } from "./projectMeta";
 
-const project = { id: "p", defaultBranch: "main", remoteUrl: null } as Project;
+const project = {
+  id: "p",
+  defaultBranch: "main",
+  remoteUrl: null,
+  settings: { defaultBranch: null },
+} as Project;
 const workspace = (patch: Partial<Workspace>) =>
   ({
     id: "w",
@@ -30,5 +35,11 @@ describe("withProjectMeta", () => {
 
   it("keeps what it has when no workspace says otherwise", () => {
     expect(withProjectMeta({ p: project }, {})["p"]).toEqual(project);
+  });
+
+  it("keeps the branch picked in settings over the main checkout's branch", () => {
+    const picked = { ...project, settings: { defaultBranch: "release" } } as Project;
+    const result = withProjectMeta({ p: picked }, { w: workspace({ branch: "develop" }) });
+    expect(result["p"]?.defaultBranch).toBe("release");
   });
 });

@@ -5430,6 +5430,7 @@ const settingsPayload = {
     defaultProvider: null,
     defaultModel: null,
     archiveAfterMerge: true,
+    defaultBranch: "develop",
   },
   worktreeInclude: [".env*"],
   error: null,
@@ -5450,7 +5451,9 @@ test("reads and updates project settings through the dotted RPCs", async () => {
       payload: { requestId: "req-get", ...settingsPayload },
     }),
   );
-  await expect(getPromise).resolves.toMatchObject({ settings: { archiveAfterMerge: true } });
+  await expect(getPromise).resolves.toMatchObject({
+    settings: { archiveAfterMerge: true, defaultBranch: "develop" },
+  });
 
   const updatePromise = client.updateProjectSettings({
     projectId: "prj_1",

@@ -12,6 +12,7 @@ describe("toProjectSettings", () => {
         defaultProvider: "codex",
         defaultModel: "gpt-5",
         archiveAfterMerge: false,
+        defaultBranch: "develop",
       }),
     ).toEqual({
       setupCommands: ["npm ci"],
@@ -24,6 +25,7 @@ describe("toProjectSettings", () => {
       defaultKind: "codex",
       defaultModel: "gpt-5",
       archiveAfterMerge: false,
+      defaultBranch: "develop",
     });
   });
 
@@ -36,6 +38,7 @@ describe("toProjectSettings", () => {
       defaultProvider: "gemini",
       defaultModel: null,
       archiveAfterMerge: true,
+      defaultBranch: null,
     });
     expect(settings.defaultKind).toBeNull();
   });
@@ -48,6 +51,7 @@ describe("toPatch", () => {
       defaultProvider: null,
       defaultModel: null,
     });
+    expect(toPatch({ defaultBranch: "develop" })).toEqual({ defaultBranch: "develop" });
     expect(toPatch({ env: [["K", "v"]], filesToCopy: [] })).toEqual({
       env: { K: "v" },
       copyFiles: [],

@@ -14,6 +14,7 @@ export function toProjectSettings(settings: DaemonSettings): ProjectSettings {
     defaultKind: settings.defaultProvider ? kindOf(settings.defaultProvider) : null,
     defaultModel: settings.defaultModel,
     archiveAfterMerge: settings.archiveAfterMerge,
+    defaultBranch: settings.defaultBranch,
   };
 }
 
@@ -27,5 +28,6 @@ export function toPatch(change: Partial<ProjectSettings>): ProjectSettingsPatch 
     ...(change.defaultKind !== undefined && { defaultProvider: change.defaultKind }),
     ...(change.defaultModel !== undefined && { defaultModel: change.defaultModel }),
     ...(change.archiveAfterMerge !== undefined && { archiveAfterMerge: change.archiveAfterMerge }),
+    ...(change.defaultBranch !== undefined && { defaultBranch: change.defaultBranch }),
   };
 }

@@ -21,6 +21,8 @@ export const ProjectSettingsSchema = z.object({
   defaultProvider: z.string().min(1).nullable(),
   defaultModel: z.string().min(1).nullable(),
   archiveAfterMerge: z.boolean(),
+  /** Base branch new tasks start from; null means the repo's detected default branch. */
+  defaultBranch: z.string().trim().min(1).nullable(),
 });
 export type ProjectSettings = z.infer<typeof ProjectSettingsSchema>;
 
@@ -35,6 +37,7 @@ export const DEFAULT_PROJECT_SETTINGS: ProjectSettings = {
   defaultProvider: null,
   defaultModel: null,
   archiveAfterMerge: true,
+  defaultBranch: null,
 };
 
 export const PackageManagerSchema = z.enum(["pnpm", "npm", "yarn", "bun"]);
