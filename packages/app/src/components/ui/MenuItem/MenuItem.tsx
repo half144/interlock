@@ -6,18 +6,22 @@ interface MenuItemProps {
   onSelect: () => void;
   active?: boolean;
   hint?: ReactNode;
+  danger?: boolean;
 }
 
 /** One row of a Popover menu: icon, label and an optional right-aligned hint or check. */
-export function MenuItem({ children, onSelect, active, hint }: MenuItemProps) {
+export function MenuItem({ children, onSelect, active, hint, danger }: MenuItemProps) {
   return (
     <button
       type="button"
       role="menuitem"
       onClick={onSelect}
       className={cn(
-        "flex h-8 w-full items-center gap-2 rounded-[5px] px-2 text-left text-[13px] transition-colors duration-100 [&_svg]:size-3.5 [&_svg]:text-ink-3",
-        active ? "bg-selected text-ink" : "text-ink-2 hover:bg-selected hover:text-ink",
+        "flex h-8 w-full items-center gap-2 rounded-[5px] px-2 text-left text-[13px] transition-colors duration-100 [&_svg]:size-3.5",
+        !danger && "[&_svg]:text-ink-3",
+        danger && "text-red hover:bg-red/10",
+        !danger &&
+          (active ? "bg-selected text-ink" : "text-ink-2 hover:bg-selected hover:text-ink"),
       )}
     >
       {children}

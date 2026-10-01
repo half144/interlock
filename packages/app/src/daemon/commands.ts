@@ -119,10 +119,12 @@ export async function setEffort(agentId: string, effort: Effort): Promise<void> 
 export const setModel = (agentId: string, modelId: string): Promise<void> =>
   getClient().setAgentModel(agentId, modelId);
 
-/** Stops the agent and removes its worktree and local branch. */
+/** Removes the task's worktree and local branch. */
 export async function discard(cwd: string): Promise<void> {
   const result = await getClient().discardTask(cwd);
   if (!result.success) {
     throw new Error(result.error?.message ?? "The daemon could not discard the task.");
   }
 }
+
+export const deleteTask = (agentId: string): Promise<void> => getClient().deleteAgent(agentId);

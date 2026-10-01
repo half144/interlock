@@ -25,8 +25,8 @@ export interface TaskSlice {
   resolvePlan: (agentId: string, choice: PlanChoice) => Promise<void>;
   setEffort: (agentId: string, effort: Effort) => Promise<void>;
   setModel: (agentId: string, modelId: string) => Promise<void>;
-  /** Stops the agent, removes its worktree and branch, and leaves the thread. */
-  discard: (agentId: string) => Promise<void>;
+  /** Removes the task: its worktree and branch when it has one, then the agent itself. Leaves the thread if it is open. */
+  deleteTask: (agentId: string) => Promise<void>;
 }
 
 const keyed = <T extends { id: string }>(list: T[]) =>

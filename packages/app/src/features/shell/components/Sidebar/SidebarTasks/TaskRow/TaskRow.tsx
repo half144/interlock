@@ -11,6 +11,7 @@ import {
 import type { Aspect, Thread } from "@/types";
 import { cn } from "@/lib/utils";
 import { spring } from "@/lib/motion";
+import { TaskRowMenu } from "./TaskRowMenu/TaskRowMenu";
 import { useTaskRow } from "./useTaskRow";
 
 const icon: Record<Aspect, { Icon: LucideIcon; className: string }> = {
@@ -31,47 +32,50 @@ export function TaskRow({ thread, active }: { thread: Thread; active: boolean })
   const { Icon, className } = icon[agent.aspect];
 
   return (
-    <button
-      type="button"
-      onClick={open}
-      aria-current={active ? "page" : undefined}
-      className={cn(
-        "relative flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-left transition-colors duration-150",
-        !active && "hover:bg-hover",
-      )}
-    >
-      {active && (
-        <motion.span
-          layoutId="sidebar-task-active"
-          transition={spring}
-          className="absolute inset-0 rounded-lg bg-selected"
-        />
-      )}
-      {/* The icon only animates when the task's state actually changes, e.g. running → ready for review. */}
-      <AnimatePresence initial={false} mode="popLayout">
-        <motion.span
-          key={agent.aspect}
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={spring}
-          className="relative flex shrink-0"
-        >
-          <Icon className={cn("size-4", className)} aria-label={agent.step} />
-        </motion.span>
-      </AnimatePresence>
-      <span
+    <div className="group relative">
+      <button
+        type="button"
+        onClick={open}
+        aria-current={active ? "page" : undefined}
         className={cn(
-          "relative min-w-0 flex-1 truncate text-[14px]",
-          active || agent.unseen > 0 ? "text-ink" : "text-ink-2",
+          "relative flex h-9 w-full items-center gap-2.5 rounded-lg px-2.5 text-left transition-colors duration-150",
+          !active && "hover:bg-hover",
         )}
       >
-        {thread.title}
-      </span>
-      {agent.unseen > 0 && (
-        <span className="relative inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-selected px-1 text-[11px] font-semibold text-ink-2 tabular-nums">
-          {agent.unseen}
+        {active && (
+          <motion.span
+            layoutId="sidebar-task-active"
+            transition={spring}
+            className="absolute inset-0 rounded-lg bg-selected"
+          />
+        )}
+        {/* The icon only animates when the task's state actually changes, e.g. running → ready for review. */}
+        <AnimatePresence initial={false} mode="popLayout">
+          <motion.span
+            key={agent.aspect}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={spring}
+            className="relative flex shrink-0"
+          >
+            <Icon className={cn("size-4", className)} aria-label={agent.step} />
+          </motion.span>
+        </AnimatePresence>
+        <span
+          className={cn(
+            "relative min-w-0 flex-1 truncate text-[14px]",
+            active || agent.unseen > 0 ? "text-ink" : "text-ink-2",
+          )}
+        >
+          {thread.title}
         </span>
-      )}
-    </button>
+        {agent.unseen > 0 && (
+          <span className="relative inline-flex h-[18px] min-w-[18px] group-focus-within:hidden group-hover:hidden shrink-0 items-center justify-center rounded-full bg-selected px-1 text-[11px] font-semibold text-ink-2 tabular-nums">
+            {agent.unseen}
+          </span>
+        )}
+      </button>
+      <TaskRowMenu agentId={agent.id} />
+    </div>
   );
 }

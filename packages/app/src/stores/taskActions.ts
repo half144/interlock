@@ -20,8 +20,18 @@ type Actions = Pick<
   | "startPlanning"
   | "setEffort"
   | "setModel"
-  | "discard"
+  | "deleteTask"
 >;
+
+const removeTask = async (get: Get, agentId: string) => {
+  const agent = get().agents[agentId];
+  if (!agent) return;
+  const workspace = agent.workspaceId ? get().workspaces[agent.workspaceId] : undefined;
+  if (workspace?.isWorktree) await daemon.discard(agent.cwd);
+  await daemon.deleteTask(agentId);
+  const { view, go } = get();
+  if (view.kind === "thread" && view.threadId === agentId) go({ kind: "yard" });
+};
 
 /** The actions that call the daemon. A failure lands in `actionError` instead of being thrown at the view. */
 export function taskActions(set: Set, get: Get): Actions {
@@ -97,12 +107,6 @@ export function taskActions(set: Set, get: Get): Actions {
       }),
     setEffort: (agentId, effort) => attempt(() => changeEffort(agentId, effort)),
     setModel: (agentId, modelId) => attempt(() => daemon.setModel(agentId, modelId)),
-    discard: (agentId) =>
-      attempt(async () => {
-        const agent = get().agents[agentId];
-        if (!agent) return;
-        await daemon.discard(agent.cwd);
-        get().go({ kind: "yard" });
-      }),
+    deleteTask: (agentId) => attempt(() => removeTask(get, agentId)),
   };
 }

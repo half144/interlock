@@ -7,8 +7,8 @@ export function useTaskMenu() {
 
   return {
     confirming,
-    askToDiscard: () => setConfirming(true),
-    cancelDiscard: () => setConfirming(false),
+    askToDelete: () => setConfirming(true),
+    cancelDelete: () => setConfirming(false),
     openTerminal: () => openPanel("terminal"),
   };
 }

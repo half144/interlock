@@ -5,7 +5,7 @@ import { useHome } from "./useHome";
 import { WaitingOnYou } from "./WaitingOnYou/WaitingOnYou";
 
 export function Home() {
-  const { target, choice, setChoice } = useHome();
+  const { target, choice, setChoice, hasProjects } = useHome();
 
   return (
     <div className="flex h-full flex-col">
@@ -16,7 +16,7 @@ export function Home() {
             What should we build?
           </h1>
           <HomeComposer choice={choice} target={target} />
-          <WaitingOnYou />
+          {hasProjects && <WaitingOnYou />}
         </div>
       </div>
     </div>
