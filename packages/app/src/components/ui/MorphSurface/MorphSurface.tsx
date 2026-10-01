@@ -9,6 +9,8 @@ interface MorphSurfaceProps {
   open: boolean;
   /** Where the surface spreads from its trigger, which it covers while open. */
   side: "top" | "bottom";
+  /** Which edge of the trigger the surface stays pinned to; it grows toward the other. */
+  align?: "start" | "end";
   /** Sizes the content (its width), which the surface grows to fit. */
   className?: string;
   children: ReactNode;
@@ -20,7 +22,13 @@ interface MorphSurfaceProps {
  * close. The content is laid out at full size and pinned to the corner the surface grows from, so it stays
  * put while the edges uncover it: nothing moves but the surface's edges.
  */
-export function MorphSurface({ open, side, className, children }: MorphSurfaceProps) {
+export function MorphSurface({
+  open,
+  side,
+  align = "end",
+  className,
+  children,
+}: MorphSurfaceProps) {
   return (
     <AnimatePresence>
       {open && (
@@ -36,7 +44,8 @@ export function MorphSurface({ open, side, className, children }: MorphSurfacePr
           transition={morph}
           className={cn(
             surface.overlay,
-            "absolute right-0 z-40 flex flex-col items-end overflow-clip rounded-2xl",
+            "absolute z-40 flex flex-col overflow-clip rounded-2xl",
+            align === "end" ? "right-0 items-end" : "left-0 items-start",
             side === "top" ? "bottom-0 justify-end" : "top-0 justify-start",
           )}
         >
