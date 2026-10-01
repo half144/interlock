@@ -4,9 +4,10 @@ import { useAttachmentDraft } from "@/hooks/useAttachmentDraft";
 import { effortsOf } from "@/lib/providers";
 import { useStore } from "@/stores/app-store";
 import type { Agent, Thread } from "@/types";
+import { useAgentSkills } from "@/features/thread/hooks/useAgentSkills";
 import { useSlashCommands } from "@/features/thread/hooks/useSlashCommands";
 import { COMPOSER_PREFILL } from "@/features/thread/utils/focusComposer";
-import { commandsFor, parseSlash } from "@/features/thread/utils/slashCommands";
+import { commandsFor, parseSlash, skillCommands } from "@/features/thread/utils/slashCommands";
 
 export function useComposer(thread: Thread, agent: Agent) {
   const sendMessage = useStore((s) => s.sendMessage);
@@ -18,7 +19,8 @@ export function useComposer(thread: Thread, agent: Agent) {
   const [text, setText] = useState("");
   const input = useRef<HTMLTextAreaElement>(null);
   const commands = commandsFor(canPlanFirst(agent.kind));
-  const slash = useSlashCommands(commands, text, setText);
+  const skills = useAgentSkills(agent.id);
+  const slash = useSlashCommands([...commands, ...skillCommands(skills)], text, setText);
   const draft = text.trim();
   const running = agent.aspect === "running";
   const hasContent = draft.length > 0 || attachments.items.length > 0;

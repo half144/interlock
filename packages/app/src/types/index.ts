@@ -5,6 +5,7 @@ export type * from "./project";
 export type * from "./provider";
 export type * from "./review";
 export type * from "./ship";
+export type * from "./skill";
 export type * from "./subagent";
 export type * from "./thread";
 export type * from "./tool";

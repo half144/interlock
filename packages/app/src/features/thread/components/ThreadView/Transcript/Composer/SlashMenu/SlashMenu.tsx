@@ -19,7 +19,7 @@ export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
       animate={{ opacity: 1, y: 0, scale: 1, transition: fadeIn }}
       exit={{ opacity: 0, y: 2, transition: fadeOut }}
       style={{ transformOrigin: "bottom left" }}
-      className={cn(surface.overlay, "absolute bottom-full left-0 z-30 mb-2 w-80 rounded-lg p-1")}
+      className={cn(surface.overlay, "absolute bottom-full left-0 z-30 mb-2 w-96 rounded-lg p-1")}
     >
       {items.map((item, i) => (
         <button
@@ -36,7 +36,7 @@ export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
             i === active ? "bg-selected" : "hover:bg-selected",
           )}
         >
-          <span className="w-24 shrink-0 font-mono text-[12px] text-ink">{item.name}</span>
+          <span className="w-32 shrink-0 truncate font-mono text-[12px] text-ink">{item.name}</span>
           <span className="truncate text-[12.5px] text-ink-3">{item.hint}</span>
         </button>
       ))}
