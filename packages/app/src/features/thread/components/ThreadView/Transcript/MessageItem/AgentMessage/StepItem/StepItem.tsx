@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Collapse } from "@/components/ui/Collapse/Collapse";
 import { StepIcon } from "@/components/ui/StepIcon/StepIcon";
 import { Markdown } from "@/features/thread/components/blocks/Markdown/Markdown";
-import { ToolChips } from "@/features/thread/components/blocks/ToolChips/ToolChips";
+import { ToolCalls } from "@/features/thread/components/blocks/ToolCalls/ToolCalls";
 import { useStepItem } from "./useStepItem";
 
 interface StepItemProps {
@@ -53,7 +53,7 @@ export function StepItem({ text, status, detail, tools }: StepItemProps) {
               <Markdown text={detail} />
             </div>
           )}
-          {tools && tools.length > 0 && <ToolChips chips={tools} className="mt-2" />}
+          {tools && tools.length > 0 && <ToolCalls chips={tools} className="mt-2" />}
         </div>
       </Collapse>
     </div>

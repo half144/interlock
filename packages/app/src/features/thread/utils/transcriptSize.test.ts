@@ -14,9 +14,16 @@ const agent = (text: string): Message => ({
 
 describe("transcriptSize", () => {
   it("grows with the streaming reply and with each new message", () => {
-    expect(transcriptSize([agent("hel")])).toBeLessThan(transcriptSize([agent("hello")]));
-    expect(transcriptSize([agent("hello")])).toBeLessThan(
-      transcriptSize([agent("hello"), { id: "u", role: "user", text: "", at: 0 }]),
+    expect(transcriptSize([agent("hel")], false)).toBeLessThan(
+      transcriptSize([agent("hello")], false),
     );
+    expect(transcriptSize([agent("hello")], false)).toBeLessThan(
+      transcriptSize([agent("hello"), { id: "u", role: "user", text: "", at: 0 }], false),
+    );
+  });
+
+  it("changes when the thinking line comes or goes, even as a block lands in the same update", () => {
+    expect(transcriptSize([agent("hi")], true)).not.toBe(transcriptSize([agent("hi")], false));
+    expect(transcriptSize([agent("hi")], true)).not.toBe(transcriptSize([agent("hi!")], false));
   });
 });

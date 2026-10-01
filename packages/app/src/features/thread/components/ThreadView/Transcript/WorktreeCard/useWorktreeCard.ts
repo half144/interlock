@@ -6,12 +6,12 @@ import { worktreeCardLine } from "@/features/thread/utils/worktreeCard";
 export function useWorktreeCard(agent: Agent, thread: Thread) {
   const openPanel = useStore((s) => s.openPanel);
   const [expanded, setExpanded] = useState(false);
-  const line = worktreeCardLine(agent, thread, expanded);
+  const line = worktreeCardLine(agent, thread);
 
   return {
     ...line,
     expanded,
-    toggle: () => line.steps.length > 0 && setExpanded((e) => !e),
+    toggle: () => setExpanded((e) => !e),
     openWorktree: () => openPanel("terminal"),
   };
 }

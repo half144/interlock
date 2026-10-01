@@ -1780,6 +1780,7 @@ describe("Codex app-server provider", () => {
     });
     expect(capturedThreadStartConfig(capturedRequests)).toEqual({
       model_provider: "codex-iisb",
+      tools: { update_plan: { enabled: true } },
       model_providers: {
         "codex-iisb": {
           name: "Custom Codex",
@@ -1800,6 +1801,7 @@ describe("Codex app-server provider", () => {
 
     expect(capturedThreadStartConfig(capturedRequests)).toEqual({
       model_provider: "codex-custom",
+      tools: { update_plan: { enabled: true } },
       model_providers: {
         "codex-custom": expect.objectContaining({
           base_url: "https://custom-relay.example.com/v1",
@@ -4809,7 +4811,13 @@ describe("Codex app-server provider", () => {
     expect(session.currentThreadId).toBe("archived-thread-id");
     expect(requests).toEqual([
       { method: "thread/loaded/list", params: {} },
-      { method: "thread/resume", params: { threadId: "archived-thread-id" } },
+      {
+        method: "thread/resume",
+        params: {
+          threadId: "archived-thread-id",
+          config: { tools: { update_plan: { enabled: true } } },
+        },
+      },
     ]);
   });
 

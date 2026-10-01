@@ -1,13 +1,21 @@
 import { useStore } from "@/stores/app-store";
 import { useScrollToLatest } from "@/features/thread/hooks/useScrollToLatest";
 import { useThread } from "@/features/thread/hooks/useThread";
+import { turnPlan } from "@/features/thread/utils/planSteps";
+import { thinkingLine, withPendingReply } from "@/features/thread/utils/thinking";
 import { transcriptSize } from "@/features/thread/utils/transcriptSize";
 
 export function useTranscript(threadId: string) {
   const { thread, agent } = useThread(threadId);
   // Docked in the mini-IDE, the status bar and the Agents tab carry the worktree and subagents.
   const docked = useStore((s) => s.reviewMaximized);
-  const messages = thread?.messages ?? [];
-  const { scroller, seen } = useScrollToLatest(messages.length, transcriptSize(messages));
-  return { thread, agent, docked, scroller, seen };
+  const messages = thread && agent ? withPendingReply(thread.messages, agent) : [];
+  const reply = messages.at(-1);
+  const thinking = agent && reply?.role === "agent" ? thinkingLine(agent, reply.blocks) : null;
+  const { scroller, dock, seen } = useScrollToLatest(
+    messages.length,
+    transcriptSize(messages, thinking !== null),
+  );
+  const card = !docked && thread !== undefined && turnPlan(thread).length > 0;
+  return { thread, agent, messages, thinking, card, docked, scroller, dock, seen };
 }

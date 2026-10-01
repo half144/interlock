@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { motion } from "motion/react";
 import type { Block } from "@/types";
 import { Wordmark } from "@/components/ui/Wordmark/Wordmark";
@@ -8,12 +9,13 @@ import { HoldCard } from "@/features/thread/components/ThreadView/Transcript/Mes
 import { Markdown } from "@/features/thread/components/blocks/Markdown/Markdown";
 import { NoticeLine } from "@/features/thread/components/blocks/NoticeLine/NoticeLine";
 import { ReasoningBlock } from "@/features/thread/components/blocks/ReasoningBlock/ReasoningBlock";
-import { ToolChips } from "@/features/thread/components/blocks/ToolChips/ToolChips";
+import { ToolCalls } from "@/features/thread/components/blocks/ToolCalls/ToolCalls";
 import { StepItem } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/StepItem/StepItem";
 import { keyBlocks } from "@/features/thread/utils/blocks";
 import { rise } from "../rise";
 
-export function AgentMessage({ blocks }: { blocks: Block[] }) {
+/** `footer` closes the reply, under its last block: what the agent is doing while the turn runs. */
+export function AgentMessage({ blocks, footer }: { blocks: Block[]; footer?: ReactNode }) {
   return (
     <div>
       <motion.div variants={rise} custom={0}>
@@ -25,6 +27,7 @@ export function AgentMessage({ blocks }: { blocks: Block[] }) {
             {renderBlock(block)}
           </motion.div>
         ))}
+        {footer}
       </div>
     </div>
   );
@@ -37,7 +40,7 @@ function renderBlock(block: Block) {
     case "reasoning":
       return <ReasoningBlock text={block.text} />;
     case "tools":
-      return <ToolChips chips={block.tools} />;
+      return <ToolCalls chips={block.tools} />;
     case "notice":
       return <NoticeLine level={block.level} text={block.text} />;
     case "step":

@@ -4,6 +4,7 @@ import { Outcome } from "@/features/thread/components/ThreadView/Transcript/Outc
 import { isFinished } from "@/lib/agentStatus";
 import { Composer } from "./Composer/Composer";
 import { MessageItem } from "./MessageItem/MessageItem";
+import { ThinkingLine } from "./ThinkingLine/ThinkingLine";
 import { ThreadTray } from "./ThreadTray/ThreadTray";
 import { useTranscript } from "./useTranscript";
 import { WorktreeCard } from "./WorktreeCard/WorktreeCard";
@@ -19,7 +20,8 @@ export function Transcript({
   threadId: string;
   reading: MotionValue<number>;
 }) {
-  const { thread, agent, docked, scroller, seen } = useTranscript(threadId);
+  const { thread, agent, messages, thinking, card, docked, scroller, dock, seen } =
+    useTranscript(threadId);
 
   if (!thread || !agent) return null;
 
@@ -30,16 +32,27 @@ export function Transcript({
           className="mx-auto flex max-w-full flex-1 flex-col gap-7 px-6 pt-6 pb-2"
           style={{ width: reading }}
         >
-          {thread.messages.map((m, i) => (
-            <MessageItem key={m.id} message={m} animate={i >= seen.current} />
+          {messages.map((m, i) => (
+            <MessageItem
+              key={m.id}
+              message={m}
+              animate={i >= seen.current}
+              footer={i === messages.length - 1 && <ThinkingLine text={thinking} />}
+            />
           ))}
           <AnimatePresence initial={false}>
             {isFinished(agent) && <Outcome key="outcome" agent={agent} />}
           </AnimatePresence>
         </motion.div>
         <Dock surface="panel">
-          <motion.div className="mx-auto max-w-full px-6 pb-4" style={{ width: reading }}>
-            {!docked && <WorktreeCard agent={agent} thread={thread} />}
+          <motion.div
+            ref={dock}
+            className="mx-auto max-w-full px-6 pb-4"
+            style={{ width: reading }}
+          >
+            <AnimatePresence initial={false}>
+              {card && <WorktreeCard key="card" agent={agent} thread={thread} />}
+            </AnimatePresence>
             <Composer thread={thread} agent={agent} />
             {!docked && <ThreadTray agent={agent} />}
           </motion.div>

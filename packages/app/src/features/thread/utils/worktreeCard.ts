@@ -1,9 +1,13 @@
-import type { Agent, Aspect, Thread } from "@/types";
-import { finishedLabel, isFinished, statusLine } from "@/lib/agentStatus";
+import type { Agent, Aspect, PlanStatus, Thread } from "@/types";
+import { isFinished, statusLine } from "@/lib/agentStatus";
 import { planProgress } from "./planSteps";
 
-export type CardTone = "shimmer" | "hold" | "muted" | "merge" | "green";
+type CardTone = "shimmer" | "hold" | "muted";
 export type MarkKind = "step" | "review" | "merged";
+export interface CardStatus {
+  text: string;
+  tone: Exclude<CardTone, "muted">;
+}
 
 const STATUS_TONE: Partial<Record<Aspect, CardTone>> = { running: "shimmer", held: "hold" };
 
@@ -12,23 +16,35 @@ function markOf(agent: Agent): MarkKind {
   return isFinished(agent) ? "review" : "step";
 }
 
-/** What the worktree card says: the headline step, the status line under it, and the counter on the right. */
-export function worktreeCardLine(agent: Agent, thread: Thread, expanded: boolean) {
+/**
+ * The line under the step, only when the card is the one saying it: the agent waiting on you, or thinking inside
+ * the step it's on. Between steps the conversation says it is thinking, and the step's own name says the rest.
+ */
+function liveStatus(agent: Agent, step: PlanStatus | undefined): CardStatus | null {
+  if (agent.aspect === "held") return { text: statusLine(agent), tone: "hold" };
+  if (agent.aspect === "running" && step === "in_progress")
+    return { text: "Thinking", tone: "shimmer" };
+  return null;
+}
+
+/**
+ * What the worktree card says: the headline step, the status line under it, and the counter on the right. A
+ * finished plan keeps its count; the outcome itself is said once, in the conversation.
+ */
+export function worktreeCardLine(agent: Agent, thread: Thread) {
   const progress = planProgress(agent, thread);
-  const finished = isFinished(agent);
   const statusText = statusLine(agent);
-  const settled = finished && !expanded;
-  const finishedTone: CardTone = agent.aspect === "merged" ? "merge" : "green";
+  const live = liveStatus(agent, progress.statuses[progress.index]);
 
   return {
     ...progress,
-    finished,
+    finished: isFinished(agent),
+    live,
     statusText,
     statusTone: STATUS_TONE[agent.aspect] ?? "muted",
     headline: progress.headline ?? statusText,
     mark: markOf(agent),
-    rowHeight: finished || !progress.current ? 40 : 56,
-    counter: settled ? finishedLabel(agent) : `${progress.done} / ${progress.steps.length}`,
-    counterTone: settled ? finishedTone : ("muted" as const),
+    rowHeight: live ? 56 : 40,
+    counter: `${progress.done} / ${progress.steps.length}`,
   };
 }

@@ -1,27 +1,17 @@
 import { cn } from "@/lib/utils";
 import { SwapText } from "@/components/ui/SwapText/SwapText";
-import type { CardTone } from "@/features/thread/utils/worktreeCard";
+import type { CardStatus } from "@/features/thread/utils/worktreeCard";
 
-const STATUS: Record<CardTone, string> = {
-  shimmer: "shimmer",
-  hold: "text-hold",
-  muted: "text-ink-3",
-  green: "text-ink-3",
-  merge: "text-ink-3",
-};
+const STATUS: Record<CardStatus["tone"], string> = { shimmer: "shimmer", hold: "text-hold" };
 
 export function CardLine({
   headline,
-  statusText,
-  statusTone,
+  status,
   finished,
-  showStatus,
 }: {
   headline: string;
-  statusText: string;
-  statusTone: CardTone;
+  status: CardStatus | null;
   finished: boolean;
-  showStatus: boolean;
 }) {
   return (
     <span className="min-w-0 flex-1">
@@ -32,9 +22,7 @@ export function CardLine({
           finished ? "text-ink-2" : "text-ink",
         )}
       />
-      {showStatus && (
-        <SwapText text={statusText} className={cn("text-[12px]", STATUS[statusTone])} />
-      )}
+      {status && <SwapText text={status.text} className={cn("text-[12px]", STATUS[status.tone])} />}
     </span>
   );
 }

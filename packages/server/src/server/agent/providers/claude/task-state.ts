@@ -74,6 +74,7 @@ export class ClaudeTaskState {
   private readonly tasks = new Map<string, AgentTaskItem>();
   private readonly calls = new Map<string, PendingTaskTool>();
   private readonly appliedResults = new Set<string>();
+  private readonly settled = new Set<string>();
 
   observe(value: unknown): Extract<AgentTimelineItem, { type: "todo" }> | null {
     const message = record(value);
@@ -102,6 +103,19 @@ export class ClaudeTaskState {
     this.tasks.clear();
     this.calls.clear();
     this.appliedResults.clear();
+    this.settled.clear();
+  }
+
+  /**
+   * Claude's task list lives as long as the session, so a new prompt starts from the work still open: tasks an
+   * earlier turn finished stay in that turn's plan instead of padding the next one.
+   */
+  beginTurn(): void {
+    for (const [id, task] of this.tasks) {
+      if (retainedTaskStatus(task) !== "completed") continue;
+      this.tasks.delete(id);
+      this.settled.add(id);
+    }
   }
 
   private replaceLegacyTodos(value: unknown): Extract<AgentTimelineItem, { type: "todo" }> {
@@ -182,7 +196,7 @@ export class ClaudeTaskState {
     this.tasks.clear();
     for (const taskValue of tasks) {
       const item = toTaskItem(taskValue);
-      if (item?.id) this.tasks.set(item.id, item);
+      if (item?.id && !this.settled.has(item.id)) this.tasks.set(item.id, item);
     }
     return this.snapshot();
   }

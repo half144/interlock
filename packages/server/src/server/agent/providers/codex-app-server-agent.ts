@@ -68,6 +68,7 @@ import {
 import { spawnProcess } from "../../../utils/spawn.js";
 import { extractCodexTerminalSessionId, nonEmptyString } from "./tool-call-mapper-utils.js";
 import { buildCodexFeatures, codexModelSupportsFastMode } from "./codex-feature-definitions.js";
+import { withCodexPlanTool } from "./codex/plan-tool.js";
 import {
   CodexAppServerClient,
   CodexAppServerRpcError,
@@ -5052,7 +5053,7 @@ export class CodexAppServerAgentSession implements AgentSession {
       }
       innerConfig.mcp_servers = mcpServers;
     }
-    const configured = applyCodexToolPolicy(innerConfig, this.config.toolPolicy);
+    const configured = applyCodexToolPolicy(withCodexPlanTool(innerConfig), this.config.toolPolicy);
     return Object.keys(configured).length > 0 ? configured : null;
   }
 

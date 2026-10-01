@@ -22,51 +22,48 @@ const thread = (statuses: ("pending" | "in_progress" | "completed")[]): Thread =
 });
 
 describe("worktreeCardLine", () => {
-  it("counts plan steps while the agent runs and shimmers its status", () => {
+  it("counts plan steps and shimmers while the agent thinks inside the step it's on", () => {
     const line = worktreeCardLine(
       agent("running"),
       thread(["completed", "in_progress", "pending"]),
-      false,
     );
     expect(line).toMatchObject({
       counter: "1 / 3",
-      counterTone: "muted",
-      statusTone: "shimmer",
+      live: { text: "Thinking", tone: "shimmer" },
       mark: "step",
       rowHeight: 56,
       headline: "step 1",
     });
   });
 
-  it("settles into the outcome once the work is ready, until the card is expanded", () => {
-    const done = thread(["completed"]);
-    const collapsed = worktreeCardLine(agent("review"), done, false);
-    expect(collapsed).toMatchObject({
-      counter: "Ready for review",
-      counterTone: "green",
+  it("drops to one line between steps, when the conversation says the agent is thinking", () => {
+    const line = worktreeCardLine(agent("running"), thread(["completed", "pending"]));
+    expect(line).toMatchObject({ live: null, rowHeight: 40, headline: "step 1" });
+  });
+
+  it("keeps the finished plan's count and leaves the outcome to the conversation", () => {
+    expect(worktreeCardLine(agent("review"), thread(["completed", "completed"]))).toMatchObject({
+      counter: "2 / 2",
       mark: "review",
+      live: null,
       rowHeight: 40,
     });
-    expect(worktreeCardLine(agent("review"), done, true)).toMatchObject({
-      counter: "1 / 1",
-      counterTone: "muted",
+    expect(worktreeCardLine(agent("merged", { pr: 7 }), thread(["completed"])).mark).toBe("merged");
+  });
+
+  it("says when the agent is waiting on you", () => {
+    expect(worktreeCardLine(agent("held"), thread(["in_progress"])).live).toEqual({
+      text: "Claude Code is waiting for you",
+      tone: "hold",
     });
   });
 
-  it("marks a merged task with the merge tone and a held one as waiting", () => {
-    expect(
-      worktreeCardLine(agent("merged", { pr: 7 }), thread(["completed"]), false),
-    ).toMatchObject({
-      counter: "Merged as #7",
-      counterTone: "merge",
-      mark: "merged",
-    });
-    expect(worktreeCardLine(agent("held"), thread([]), false).statusTone).toBe("hold");
-  });
-
-  it("falls back to the status line without a plan", () => {
-    const line = worktreeCardLine(agent("running"), thread([]), false);
-    expect(line.headline).toBe("Claude Code is working");
-    expect(line.rowHeight).toBe(40);
+  it("only follows the plan of the turn on screen", () => {
+    const earlier = thread(["completed", "completed"]);
+    const asked = {
+      ...earlier,
+      messages: [...earlier.messages, { id: "u", role: "user" as const, text: "more", at: 1 }],
+    };
+    expect(worktreeCardLine(agent("running"), asked).steps).toEqual([]);
   });
 });

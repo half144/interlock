@@ -280,7 +280,7 @@ Warm neutral graphite with light warm ink; saturated colour appears only where s
 
 - **Run Blue** (#6aa4ff): what is live or new. A running agent's spinner and live-view tile, the focus ring (60% alpha), text selection (30%), the attention dot on an unopened Create PR, visual-edit outlines. Never a button fill.
 - **Hold Amber** (#f2a65a): an agent waiting on a human. Hold card disc, its status line, the pulsing held glyph, sidebar alerts.
-- **Ready Green** (#5cc08f, also `green`): ready for review, answered, passed checks, a finished worktree strip's check and "Ready for review".
+- **Ready Green** (#5cc08f, also `green`): ready for review, answered, passed checks, a finished plan's check on the worktree strip, and the "Ready for review" outcome line.
 - **Merge Violet** (#b293f5): merged tasks and PRs only. It is not an accent and never decorates.
 - **Signal Red** (#f0756b): failed, and destructive actions.
 
@@ -419,7 +419,7 @@ The shared primitives live in `src/components/ui`; class recipes for repeated su
 
 Three stacked pieces that read as one object:
 
-1. **Worktree strip** (behind the composer's top): an Inset strip with 16px top corners, inset 8px from the composer's sides and tucked 16px under it. One line by default: the current step with its status mark, a status line beneath that shimmers while running, `done / total` and a chevron. A small terminal thumbnail (64×44px, 8px corners, Card shadow) pokes up out of its top-left edge and opens the worktree. Expanded, it lists the plan; finished, it drops to a single quieter line with a green check and "Ready for review" (or a violet merge and "Merged as #N").
+1. **Worktree strip** (behind the composer's top): plan progress, and only that. It exists while the turn on screen has a plan (Claude's task list, Codex's `update_plan`); a turn without one has no strip, and an earlier turn's plan never carries over. When the plan arrives it rises out from behind the composer (height and tuck grow together on `spring`, so the composer never moves) and sinks back the same way. An Inset strip with 16px top corners, inset 8px from the composer's sides and tucked 16px under it. One line by default: the current step with its status mark, `done / total` and a chevron. A second line appears only when the strip is the one saying it: a shimmering "Thinking" while the step it shows is in progress, or the amber "… is waiting for you". Never a generic status ("is working", "is idle", "finished"): the conversation says those. A small terminal thumbnail (64×44px, 8px corners, Card shadow) pokes up out of its top-left edge and opens the worktree. Expanded, it lists the plan; finished, it settles to one quieter line with a green check (violet merge once merged), the last step and `n / n`. The outcome ("Ready for review", "Merged as #N") is said once, in the conversation.
 2. **Composer** (`surface.composer`): Raised, 22px corners, Composer shadow, `relative z-10` so it covers both strips' tucked edges. 15px text, 20px side padding, Ink 4 placeholder. Bottom toolbar: round add-files on the left; effort pill, dictate and send on the right.
 3. **Composer tray** (`ComposerTray`, under the composer): a narrower Inset strip (24px inset each side, 16px bottom corners, no top border) tucked 16px under the composer, 12px Ink 3 text. In a thread it holds subagent chips (24px pills; the selected chip's background slides between them) and, on the right, the PR number and branch in 11px mono. On home it says where the task will run: "New worktree from" and the starting branch (a picker: the default branch or a branch another task is still working on, in 11.5px mono), with the project's stack on the right.
 
@@ -441,6 +441,8 @@ Pins a composer to the bottom of its scroll area with the dock fade above it. `s
 ### Agent message and steps
 
 The agent speaks under its 16px serif wordmark, not an avatar bubble. Prose at 15px/1.65 with inline `code` on an 8% white wash. Steps are collapsible plan lines: a 16px status mark (pending Ink 4 ring, running run-blue spinner, done Ink 3 disc with a check that lands with a short scale-in), a 14.5px/500 title, and a body hanging from a 1px Seam rail with detail prose and tool chips. The user's turn is a right-aligned Raised bubble (max 85%, 16px corners, Seam, Button shadow).
+
+**Thinking line.** While a turn runs, the reply ends in a 14px shimmering line (the running-status shimmer on Ink 3): "Claude Code is thinking" (the agent's own name) under an empty reply, which is on screen, wordmark included, from the moment the prompt is sent; "Thinking" once the reply has content. It gives way while a plan step is in progress (the step's spinner and the worktree strip say it), says "… will start soon" while the agent is queued, and is gone when the turn ends or waits on you. It fades up 4px on arrival and leaves by collapsing, taking the 12px block gap with it so the reply doesn't jump.
 
 ### Workspace
 
@@ -473,9 +475,9 @@ What animates, and why:
 
 - **Feedback:** press dips, send ↔ stop swap, toggles, menus growing from their trigger, copy → check.
 - **Continuity:** expand/collapse by height (`Collapse`), sliding selection backgrounds (tabs, chips, tree rows, sidebar rows, effort rows), text swapping in place (`SwapText`), the dock, chat switching as a crossfade of the conversation only (frame and composer stay still).
-- **Hierarchy:** a step's check landing when it completes, the worktree strip settling into its finished state, a new message rising 8px, "Ready for review" arriving when a task finishes while you watch.
+- **Hierarchy:** a step's check landing when it completes, the worktree strip rising from behind the composer when a turn makes a plan and settling into its finished state, a new message rising 8px, "Ready for review" arriving when a task finishes while you watch.
 
-What never animates: anything on the store's 1.4s simulation tick (entrances replay only for genuinely new items), streaming terminal lines, diff rows, the palette and slash-menu highlight (keyboard speed), elapsed timers and counters, and nothing ever loops except live state: the running spinner (1.6s), the shimmer on a running status line (2.2s) and the held glyph pulse (1.8s).
+What never animates: anything on the store's 1.4s simulation tick (entrances replay only for genuinely new items), streaming terminal lines, diff rows, the palette and slash-menu highlight (keyboard speed), elapsed timers and counters, and nothing ever loops except live state: the running spinner (1.6s), the shimmer on a running status line, the thinking line included (2.2s) and the held glyph pulse (1.8s).
 
 **Reduced motion:** `MotionConfig reducedMotion="user"` drops transform and layout animation; the dock widths snap; CSS loops stop (a still spinner still reads as working); colour and opacity changes stay so state remains legible.
 

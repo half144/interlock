@@ -177,9 +177,10 @@ describe("withTrailingBlocks", () => {
 });
 
 describe("currentStep", () => {
-  it("falls back to the last tool chip", () => {
+  it("falls back to the call that is running, in the present", () => {
     const messages = buildMessages([at(bash("c1"))], "a1");
-    expect(currentStep(messages)).toBe("Ran `ls`");
+    expect(currentStep(messages)).toBe("Listing files");
+    expect(currentStep(buildMessages([at(bash("c1", "completed"))], "a1"))).toBeNull();
     expect(currentStep([])).toBeNull();
   });
 });

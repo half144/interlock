@@ -45,10 +45,12 @@ function chipsOf(block: Block): ToolChip[] {
   return [];
 }
 
+/** What the agent is doing now: the plan step it's on, or the call it's running ("Running tests"). */
 export function currentStep(messages: Message[]): string | null {
   const last = messages.findLast((m) => m.role === "agent");
   if (last?.role !== "agent") return null;
   const active = last.blocks.find((b) => b.type === "step" && b.status === "in_progress");
   if (active?.type === "step") return active.activeForm ?? active.text;
-  return last.blocks.flatMap(chipsOf).at(-1)?.label ?? null;
+  const call = last.blocks.flatMap(chipsOf).at(-1);
+  return call?.status === "running" ? call.label : null;
 }

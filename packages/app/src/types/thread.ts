@@ -1,4 +1,4 @@
-import type { ToolName } from "./tool";
+import type { ToolChip } from "./tool";
 
 /**
  * Where a plan item stands, in the words both providers use: Claude's TodoWrite and Codex's update_plan
@@ -6,14 +6,6 @@ import type { ToolName } from "./tool";
  * item counts as in progress.
  */
 export type PlanStatus = "pending" | "in_progress" | "completed";
-
-export interface ToolChip {
-  /** The provider's tool call id, so a later update of the call replaces its chip. */
-  callId?: string;
-  tool: ToolName;
-  label: string;
-  failed?: boolean;
-}
 
 export type Block =
   | { type: "text"; text: string }

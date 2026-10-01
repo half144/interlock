@@ -41,6 +41,46 @@ describe("ClaudeTaskState", () => {
     });
   });
 
+  test("starts a new turn from the tasks still open", () => {
+    const state = new ClaudeTaskState();
+    for (const [id, subject] of [
+      ["1", "Done before"],
+      ["2", "Still open"],
+    ] as const) {
+      state.observe(toolUse(`create-${id}`, "TaskCreate", { subject }));
+      state.observe(toolResult(`create-${id}`, { task: { id, subject } }));
+    }
+    state.observe(toolUse("finish", "TaskUpdate", { taskId: "1", status: "completed" }));
+    state.observe(toolResult("finish", { success: true, taskId: "1" }));
+
+    state.beginTurn();
+    state.observe(toolUse("create-3", "TaskCreate", { subject: "New work" }));
+    expect(
+      state.observe(toolResult("create-3", { task: { id: "3", subject: "New work" } })),
+    ).toEqual({
+      type: "todo",
+      items: [
+        { id: "2", text: "Still open", status: "pending", completed: false },
+        { id: "3", text: "New work", status: "pending", completed: false },
+      ],
+    });
+
+    state.observe(toolUse("list", "TaskList", {}));
+    expect(
+      state.observe(
+        toolResult("list", {
+          tasks: [
+            { id: "1", subject: "Done before", status: "completed" },
+            { id: "3", subject: "New work", status: "in_progress" },
+          ],
+        }),
+      ),
+    ).toEqual({
+      type: "todo",
+      items: [{ id: "3", text: "New work", status: "in_progress", completed: false }],
+    });
+  });
+
   test("removes deleted tasks and ignores replayed results", () => {
     const state = new ClaudeTaskState();
     state.observe(toolUse("create", "TaskCreate", { subject: "Disposable" }));

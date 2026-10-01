@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, type ReactNode } from "react";
 import { motion } from "motion/react";
 import type { Message } from "@/types";
 import { AgentMessage } from "./AgentMessage/AgentMessage";
@@ -13,9 +13,11 @@ import { SentAttachments } from "./SentAttachments/SentAttachments";
 export const MessageItem = memo(function MessageItem({
   message,
   animate,
+  footer,
 }: {
   message: Message;
   animate: boolean;
+  footer?: ReactNode;
 }) {
   return (
     <motion.div initial={animate ? "hidden" : false} animate="shown">
@@ -27,7 +29,7 @@ export const MessageItem = memo(function MessageItem({
           </div>
         </motion.div>
       ) : (
-        <AgentMessage blocks={message.blocks} />
+        <AgentMessage blocks={message.blocks} footer={footer} />
       )}
     </motion.div>
   );

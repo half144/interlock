@@ -1,7 +1,7 @@
 import type { ToolCallTimelineItem } from "@interlock/protocol/agent-types";
 import type { Block, ToolChip } from "@/types";
 import type { PlanStep } from "./plan";
-import { toolChip } from "./tools";
+import { isBookkeeping, toolChip } from "./tools";
 
 type Notice = Extract<Block, { type: "notice" }>;
 
@@ -56,6 +56,7 @@ function addDelegate(blocks: Block[], agentId: string, callId: string): Block[] 
 }
 
 export function applyToolCall(blocks: Block[], item: ToolCallTimelineItem, agentId: string) {
+  if (isBookkeeping(item)) return blocks;
   if (item.detail.type === "sub_agent") return addDelegate(blocks, agentId, item.callId);
   const chip = toolChip(item);
   const known = blocks.some((b) => holdsChip(b, item.callId));

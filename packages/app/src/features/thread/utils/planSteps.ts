@@ -2,19 +2,16 @@ import type { Agent, Block, Thread } from "@/types";
 
 export type Step = Extract<Block, { type: "step" }>;
 
-function latestSteps(thread: Thread): Step[] {
-  for (let i = thread.messages.length - 1; i >= 0; i--) {
-    const m = thread.messages[i];
-    if (m?.role !== "agent") continue;
-    const steps = m.blocks.filter((b): b is Step => b.type === "step");
-    if (steps.length) return steps;
-  }
-  return [];
+/** The plan of the turn on screen. A new prompt starts without one, so an earlier turn's plan never reads as progress. */
+export function turnPlan(thread: Thread): Step[] {
+  const last = thread.messages.at(-1);
+  if (last?.role !== "agent") return [];
+  return last.blocks.filter((b): b is Step => b.type === "step");
 }
 
-/** Where the agent stands in its latest plan: every step's status, how many are done, and the one it's on. */
+/** Where the agent stands in its plan: every step's status, how many are done, and the one it's on. */
 export function planProgress(agent: Agent, thread: Thread) {
-  const steps = latestSteps(thread);
+  const steps = turnPlan(thread);
   const statuses = steps.map((s) => s.status);
   const done = statuses.filter((s) => s === "completed").length;
   const index =

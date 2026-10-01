@@ -1,0 +1,36 @@
+import {
+  FilePen,
+  FileText,
+  FlaskConical,
+  FolderOpen,
+  FolderSearch,
+  GitBranch,
+  MessageCircleQuestion,
+  Globe,
+  Package,
+  Pencil,
+  Plug,
+  Search,
+  SquareTerminal,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
+import type { ToolAction } from "@/types";
+
+export const toolIcons: Record<ToolAction, LucideIcon> = {
+  read: FileText,
+  list: FolderOpen,
+  search: Search,
+  explore: FolderSearch,
+  git: GitBranch,
+  edit: Pencil,
+  write: FilePen,
+  run: SquareTerminal,
+  test: FlaskConical,
+  install: Package,
+  fetch: Globe,
+  web: Globe,
+  mcp: Plug,
+  ask: MessageCircleQuestion,
+  other: Wrench,
+};

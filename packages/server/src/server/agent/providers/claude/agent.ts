@@ -44,6 +44,7 @@ import {
 } from "./model-manifest.js";
 import { parsePartialJsonObject } from "./partial-json.js";
 import { ClaudeSidechainTracker } from "./sidechain-tracker.js";
+import { withClaudePlanTools } from "./plan-tools.js";
 import { ClaudeTaskState } from "./task-state.js";
 import {
   ClaudeTaskProtocolSource,
@@ -2201,6 +2202,7 @@ class ClaudeAgentSession implements AgentSession {
     this.foregroundHasVisibleActivity = false;
     this.activeTurnHasAssistantText = false;
     this.contextUsage.beginTurn();
+    this.taskState.beginTurn();
     this.transitionTurnState("foreground", "foreground turn started");
     this.clearRecentStderr();
 
@@ -3201,7 +3203,7 @@ class ClaudeAgentSession implements AgentSession {
 
   private buildSdkEnv(): NodeJS.ProcessEnv {
     return createProviderEnv({
-      baseEnv: process.env,
+      baseEnv: withClaudePlanTools(process.env),
       runtimeSettings: this.runtimeSettings,
       overlays: [this.launchEnv],
     });
@@ -4954,13 +4956,14 @@ class ClaudeAgentSession implements AgentSession {
       }
       return;
     }
-    const taskSnapshot = this.taskState.observe(entry);
-    const items = [...(taskSnapshot ? [taskSnapshot] : []), ...this.convertHistoryEntry(entry)];
     const isVisibleUserEntry =
       entry.type === "user" &&
       typeof entry.uuid === "string" &&
       !isSyntheticHistoryUserEntry(entry) &&
       !isToolResultUserEntry(entry);
+    if (isVisibleUserEntry) this.taskState.beginTurn();
+    const taskSnapshot = this.taskState.observe(entry);
+    const items = [...(taskSnapshot ? [taskSnapshot] : []), ...this.convertHistoryEntry(entry)];
     if (isVisibleUserEntry && typeof entry.uuid === "string") {
       this.rememberUserMessageId(entry.uuid);
       this.rememberRewindUserAnchor(entry.uuid);

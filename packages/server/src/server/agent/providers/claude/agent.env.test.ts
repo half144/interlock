@@ -90,6 +90,7 @@ describe("Claude SDK env", () => {
       expect(capturedEnv?.INTERLOCK_TEST_FLAG).toBe(launchContext.env?.INTERLOCK_TEST_FLAG);
       expect(capturedEnv?.MCP_TIMEOUT).toBe("claude-startup-timeout");
       expect(capturedEnv?.MCP_TOOL_TIMEOUT).toBe("claude-tool-timeout");
+      expect(capturedEnv?.CLAUDE_CODE_ENABLE_TODO_TOOLS).toBe("1");
     } finally {
       await session.close();
     }
