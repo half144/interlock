@@ -18,6 +18,8 @@ export interface Project {
   id: string;
   name: string;
   rootPath: string;
+  /** False for a plain folder: tasks run in it directly, with no branches, diff or pull requests. */
+  git: boolean;
   remoteUrl: string | null;
   defaultBranch: string;
   settings: ProjectSettings;

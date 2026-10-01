@@ -6,6 +6,7 @@ const project = (patch: Partial<Project> = {}): Project => ({
   id: "p",
   name: "repo",
   rootPath: "/repo",
+  git: true,
   remoteUrl: null,
   defaultBranch: "main",
   settings: {
@@ -29,6 +30,7 @@ const workspace = (patch: Partial<Workspace>): Workspace => ({
   branch: "develop",
   remoteUrl: "git@github.com:me/repo.git",
   isWorktree: false,
+  git: true,
   additions: 0,
   deletions: 0,
   ...patch,
@@ -51,6 +53,14 @@ describe("project slice", () => {
       defaultBranch: "develop",
       settings: { setupCommands: ["npm i"] },
     });
+  });
+
+  it("starts treating a plain folder as git once the daemon sees it became a repository", () => {
+    const { upsertProject } = useStore.getState();
+    upsertProject(project({ git: false }));
+    expect(useStore.getState().projects["p"]?.git).toBe(false);
+    upsertProject(project({ git: true }));
+    expect(useStore.getState().projects["p"]?.git).toBe(true);
   });
 
   it("reads the remote and default branch from the main checkout workspace", () => {
@@ -77,8 +87,14 @@ describe("project slice", () => {
 
   it("tracks the pull request of a workspace and forgets it with the workspace", () => {
     const state = useStore.getState();
-    state.upsertWorkspace(workspace({ isWorktree: true }), { number: 7, merged: false });
-    expect(useStore.getState().pullRequests["w"]).toEqual({ number: 7, merged: false });
+    state.upsertWorkspace(workspace({ isWorktree: true }), {
+      number: 7,
+      merged: false,
+    });
+    expect(useStore.getState().pullRequests["w"]).toEqual({
+      number: 7,
+      merged: false,
+    });
     state.removeWorkspace("w");
     expect(useStore.getState().pullRequests).toEqual({});
   });

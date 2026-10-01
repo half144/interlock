@@ -29,8 +29,9 @@ export async function addProject(path: string): Promise<Project> {
   const client = getClient();
   const result = await client.addProject(path);
   if (result.error || !result.project) throw new Error(addProjectFailure(result));
-  const detected =
-    result.git?.defaultBranch ?? (await checkedOutBranch(client, result.project.projectRootPath));
+  const detected = result.git
+    ? (result.git.defaultBranch ?? (await checkedOutBranch(client, result.project.projectRootPath)))
+    : undefined;
   const project = toProject(result.project, {
     remoteUrl: result.git?.remoteUrl ?? null,
     ...(detected ? { defaultBranch: detected } : {}),
@@ -43,7 +44,10 @@ export async function addProject(path: string): Promise<Project> {
   };
 }
 
-/** A task is a worktree cut from the base branch plus an agent running in it; the daemon names both from the prompt. */
+/**
+ * In a git project a task is a worktree cut from the base branch plus an agent running in it, and the daemon names
+ * both from the prompt. In a plain folder there is nothing to cut from: the agent runs in the folder itself.
+ */
 export async function startTask(input: StartTaskInput): Promise<{ agentId: string }> {
   const client = getClient();
   const modeId = modeFor(input.kind, input.mode, input.autonomy);
@@ -51,7 +55,7 @@ export async function startTask(input: StartTaskInput): Promise<{ agentId: strin
   const agent = await client.createAgent({
     provider: input.kind,
     cwd: input.project.rootPath,
-    worktree: { mode: "branch-off", base: input.base },
+    ...(input.project.git ? { worktree: { mode: "branch-off" as const, base: input.base } } : {}),
     model: input.modelId,
     initialPrompt: input.prompt,
     clientMessageId: crypto.randomUUID(),

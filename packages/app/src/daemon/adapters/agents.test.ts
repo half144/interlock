@@ -39,6 +39,7 @@ const ctx: AgentContext = {
     branch: "amiable-spider",
     remoteUrl: null,
     isWorktree: true,
+    git: true,
     additions: 3,
     deletions: 1,
   },
@@ -112,6 +113,18 @@ describe("toAgent", () => {
       error: "boom",
     });
     expect(toAgent(snapshot({ status: "error", lastError: "boom" }), ctx)?.step).toBe("boom");
+  });
+
+  it("marks an agent in a plain folder as not git", () => {
+    const plain = {
+      ...ctx,
+      workspace: { ...ctx.workspace!, git: false, branch: null },
+    };
+    expect(toAgent(snapshot(), plain)).toMatchObject({
+      git: false,
+      branch: "",
+    });
+    expect(toAgent(snapshot(), ctx)).toMatchObject({ git: true });
   });
 
   it("skips unknown providers and agents without a project", () => {

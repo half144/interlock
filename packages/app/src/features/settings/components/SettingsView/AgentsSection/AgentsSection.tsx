@@ -17,6 +17,9 @@ const AUTONOMY_HINT: Record<Autonomy, string> = {
   "full-auto": "Agents never stop to ask for permission.",
 };
 
+const FOLDER_AUTO_HINT =
+  "Agents edit the files in this folder directly and stop to ask before anything riskier.";
+
 export function AgentsSection({ project }: { project: Project }) {
   const a = useAgentsSection(project);
 
@@ -27,7 +30,10 @@ export function AgentsSection({ project }: { project: Project }) {
       description="Which agent new tasks start with, and how much it may do before stopping for you."
       aside={<SavedMark status={a.status} />}
     >
-      <Row label="Autonomy" hint={AUTONOMY_HINT[a.autonomy]}>
+      <Row
+        label="Autonomy"
+        hint={!project.git && a.autonomy === "auto" ? FOLDER_AUTO_HINT : AUTONOMY_HINT[a.autonomy]}
+      >
         <Tabs value={a.autonomy} onChange={a.setAutonomy} items={AUTONOMY} />
       </Row>
       {a.autonomy === "full-auto" && (
@@ -35,8 +41,10 @@ export function AgentsSection({ project }: { project: Project }) {
           <TriangleAlert className="mt-0.5 size-4 shrink-0 text-red" />
           <p className="[text-wrap:pretty]">
             Full auto lets an agent edit files and run any command, including network calls and
-            deleting files, without asking. The worktree isolates your branches, not your machine.
-            Use it on repositories you trust.
+            deleting files, without asking.{" "}
+            {project.git
+              ? "The worktree isolates your branches, not your machine. Use it on repositories you trust."
+              : "There is no worktree and no git history here, so nothing can undo an edit. Use it on folders you trust."}
           </p>
         </div>
       )}

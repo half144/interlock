@@ -90,7 +90,6 @@ describe("ProjectSettingsSession", () => {
   it.each([
     ["missing", "nope", "project_not_found"],
     ["archived", "gone", "project_not_found"],
-    ["non-git", "plain", "not_a_git_repo"],
   ])("answers a %s project with a typed error", async (_label, projectId, errorCode) => {
     await session.handleGetRequest({
       type: "project.settings.get.request",
@@ -99,6 +98,24 @@ describe("ProjectSettingsSession", () => {
     });
 
     expect(emitted[0]).toMatchObject({ payload: { settings: null, errorCode } });
+  });
+
+  it("serves a plain folder's settings, keyed by its own path", async () => {
+    await session.handleUpdateRequest({
+      type: "project.settings.update.request",
+      requestId: "r6",
+      projectId: "plain",
+      patch: { autonomy: "full-auto" },
+    });
+    await session.handleGetRequest({
+      type: "project.settings.get.request",
+      requestId: "r7",
+      projectId: "plain",
+    });
+
+    expect(emitted[1]).toMatchObject({
+      payload: { settings: { autonomy: "full-auto" }, error: null },
+    });
   });
 
   it("suggests the install command from the lockfile", async () => {

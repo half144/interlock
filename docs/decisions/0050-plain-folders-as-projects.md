@@ -1,0 +1,6 @@
+# 0050 — Plain folders are projects without git features
+
+- **Context:** the spec first accepted only git repositories (no worktree, diff or PR without git). The owner wants any folder as a project: the agent works the same, the git features are absent.
+- **Decision:** `project.add` accepts any directory and reports `git: null` for a non-git one. Paseo already registers it as a `non_git` project and its reconciliation flips the kind when the folder becomes a repository, so `git init` later needs no code. The app reads `projectKind` into `Project.git`, `Workspace.git` and `Agent.git`. A task in a plain folder is created without `worktree`, so the agent runs in the folder itself. Project settings are keyed by the project's own path. The UI hides what needs git (Code and Checks tabs, Create PR, diff stat, branch picker, default branch, archive-after-merge, Environment, Scripts) and says in the composer tray that the agent edits files in place; there is no modal.
+- **Why:** reuses Paseo's directory workspaces instead of a parallel path; the diff is a git comparison, so without git there is nothing honest to show, and hiding it beats an error.
+- **Consequences:** no isolation or undo for these tasks; Full auto warns about it. The Code tab, which only lists changed files, is not offered, so there is no file browser for plain folders in v1 (the terminal is).

@@ -32,7 +32,7 @@ export function Workspace({ agentId, onClose }: WorkspaceProps) {
         maximized && "rounded-none border-transparent shadow-none",
       )}
     >
-      <Toolbar agent={agent} pr={<PrButton agent={agent} />} onClose={onClose} />
+      <Toolbar agent={agent} pr={agent.git && <PrButton agent={agent} />} onClose={onClose} />
 
       <div
         className={cn(

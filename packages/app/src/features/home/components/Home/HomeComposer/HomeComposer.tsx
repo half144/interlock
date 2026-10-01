@@ -12,9 +12,8 @@ import type { ModelChoice } from "@/features/home/types";
 import { ChooseRepositoryPill } from "./ChooseRepositoryPill/ChooseRepositoryPill";
 import { PlanFirstToggle } from "./PlanFirstToggle/PlanFirstToggle";
 import { ProjectPill } from "./ProjectPill/ProjectPill";
-import { ReadyTray } from "./ReadyTray/ReadyTray";
+import { ProjectTray } from "./ProjectTray/ProjectTray";
 import { useHomeComposer } from "./useHomeComposer";
-import { WorktreeTray } from "./WorktreeTray/WorktreeTray";
 
 /** The home composer. Before any project it is already the real one: what you type stays when a repository is added. */
 export function HomeComposer({
@@ -32,7 +31,11 @@ export function HomeComposer({
   return (
     <motion.div
       initial={project ? false : { opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0, transition: { y: spring, opacity: fadeIn, delay: 0.06 } }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        transition: { y: spring, opacity: fadeIn, delay: 0.06 },
+      }}
       className="mt-8"
     >
       <motion.div
@@ -68,7 +71,9 @@ export function HomeComposer({
                 onToggle={() => c.setPlan((p) => !p)}
                 {...(c.planAvailable
                   ? {}
-                  : { disabledReason: "Plan first is not available for this agent" })}
+                  : {
+                      disabledReason: "Plan first is not available for this agent",
+                    })}
               />
               <EffortPicker
                 value={c.effort}
@@ -82,11 +87,7 @@ export function HomeComposer({
         </ComposerFrame>
       </motion.div>
 
-      {project && base ? (
-        <WorktreeTray project={project} base={base} onBase={c.setBase} />
-      ) : (
-        <ReadyTray />
-      )}
+      <ProjectTray project={project} base={base} onBase={c.setBase} />
       {c.setupError && (
         <p role="alert" className="mt-3 px-3 text-[13px] text-red">
           {c.setupError}

@@ -17,6 +17,6 @@ export function useTaskActions(agent: Agent) {
       if (diffOpen) setPanelOpen(false);
       else openPanel("diff");
     },
-    canShip: isFinished(agent) || pr.phase !== "none",
+    canShip: agent.git && (isFinished(agent) || pr.phase !== "none"),
   };
 }

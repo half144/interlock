@@ -40,7 +40,10 @@ export function AddProjectDialog({ initialPath, error, onSubmit, onClose }: AddP
             aria-invalid={error ? true : undefined}
           />
         </Field>
-        <p className="text-[13px] text-ink-3">The folder must be a git repository.</p>
+        <p className="text-[13px] text-ink-3">
+          Any folder works. Without git, tasks run in the folder itself and the agent edits it in
+          place.
+        </p>
         {error && (
           <p role="alert" className="text-[13px] text-red">
             {error}

@@ -77,6 +77,7 @@ export function toAgent(snapshot: AgentSnapshotPayload, ctx: AgentContext): Agen
     ...placementOf(snapshot, ctx),
     threadId: snapshot.id,
     cwd: snapshot.cwd,
+    git: ctx.workspace?.git ?? true,
     title: snapshot.title ?? "Untitled task",
     base: ctx.baseBranch,
     kind,

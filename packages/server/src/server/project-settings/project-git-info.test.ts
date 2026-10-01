@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { inspectGitProject, NotAGitRepoError } from "./project-git-info.js";
+import { inspectGitProject } from "./project-git-info.js";
 
 describe("inspectGitProject", () => {
   it("returns the default branch and the remote of a git repo", async () => {
     const info = await inspectGitProject("/repo", {
-      getCheckout: async () => ({ isGit: true, remoteUrl: "git@github.com:acme/app.git" }),
+      getCheckout: async () => ({
+        isGit: true,
+        remoteUrl: "git@github.com:acme/app.git",
+      }),
       resolveDefaultBranch: async () => "main",
     });
 
@@ -23,16 +26,19 @@ describe("inspectGitProject", () => {
       },
     });
 
-    expect(info).toEqual({ defaultBranch: null, remoteName: null, remoteUrl: null });
+    expect(info).toEqual({
+      defaultBranch: null,
+      remoteName: null,
+      remoteUrl: null,
+    });
   });
 
-  it("rejects a folder that is not a git repository with an actionable message", async () => {
-    const error = await inspectGitProject("/plain", {
+  it("returns null for a folder that is not a git repository", async () => {
+    const info = await inspectGitProject("/plain", {
       getCheckout: async () => ({ isGit: false, remoteUrl: null }),
       resolveDefaultBranch: async () => "main",
-    }).catch((caught: unknown) => caught);
+    });
 
-    expect(error).toBeInstanceOf(NotAGitRepoError);
-    expect((error as Error).message).toContain("git init");
+    expect(info).toBeNull();
   });
 });

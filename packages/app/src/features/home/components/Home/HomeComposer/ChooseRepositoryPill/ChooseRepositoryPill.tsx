@@ -10,7 +10,7 @@ export function ChooseRepositoryPill({ adding, onPick }: { adding: boolean; onPi
       ) : (
         <FolderPlus className="size-3.5 text-ink-2" />
       )}
-      Choose repository
+      Choose folder
     </Pill>
   );
 }

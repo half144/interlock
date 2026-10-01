@@ -63,7 +63,10 @@ async function allPages<T>(
   const found: T[] = [];
   let cursor: string | undefined;
   do {
-    const page = await fetchPage({ limit: PAGE, ...(cursor ? { cursor } : {}) });
+    const page = await fetchPage({
+      limit: PAGE,
+      ...(cursor ? { cursor } : {}),
+    });
     found.push(...page.entries);
     cursor = page.pageInfo.hasMore ? (page.pageInfo.nextCursor ?? undefined) : undefined;
   } while (cursor);
@@ -80,11 +83,15 @@ export async function loadDirectory(client: DaemonClient): Promise<void> {
   const agents = entries.map((e) => e.agent);
   const state = useStore.getState();
   state.replaceWorkspaces(
-    workspaces.map((w) => ({ workspace: toWorkspace(w), pr: pullRequestOf(w) })),
+    workspaces.map((w) => ({
+      workspace: toWorkspace(w),
+      pr: pullRequestOf(w),
+    })),
   );
   const loaded = await Promise.all(
     projects.projects.map(async (p) => {
-      const detected = await checkedOutBranch(client, p.projectRootPath);
+      const detected =
+        p.projectKind === "git" ? await checkedOutBranch(client, p.projectRootPath) : undefined;
       const project = toProject(p, detected ? { defaultBranch: detected } : {});
       try {
         const { settings } = await loadProjectSettings(p.projectId);

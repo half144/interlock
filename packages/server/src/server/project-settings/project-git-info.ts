@@ -5,25 +5,15 @@ export interface ProjectGitInfoDeps {
   resolveDefaultBranch(cwd: string): Promise<string>;
 }
 
-export class NotAGitRepoError extends Error {
-  constructor(readonly directory: string) {
-    super(
-      `${directory} is not a git repository. Run \`git init\` in that folder, or choose the folder that contains your repository.`,
-    );
-    this.name = "NotAGitRepoError";
-  }
-}
-
 const DEFAULT_REMOTE_NAME = "origin";
 
+/** Null for a plain folder: it is a project too, only without git features. */
 export async function inspectGitProject(
   cwd: string,
   deps: ProjectGitInfoDeps,
-): Promise<ProjectGitInfo> {
+): Promise<ProjectGitInfo | null> {
   const checkout = await deps.getCheckout(cwd);
-  if (!checkout.isGit) {
-    throw new NotAGitRepoError(cwd);
-  }
+  if (!checkout.isGit) return null;
   const defaultBranch = await deps.resolveDefaultBranch(cwd).catch(() => null);
   return {
     defaultBranch,

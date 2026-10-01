@@ -1,16 +1,23 @@
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { spring } from "@/lib/motion";
-import { SECTIONS } from "@/features/settings/utils/sections";
 
 /** The sticky list of sections on the left of the settings page. */
-export function SettingsNav({ active, onJump }: { active: string; onJump: (id: string) => void }) {
+export function SettingsNav({
+  sections,
+  active,
+  onJump,
+}: {
+  sections: { id: string; label: string }[];
+  active: string;
+  onJump: (id: string) => void;
+}) {
   return (
     <nav
       aria-label="Settings sections"
       className="sticky top-8 flex w-[180px] shrink-0 flex-col gap-px self-start"
     >
-      {SECTIONS.map((item) => (
+      {sections.map((item) => (
         <button
           key={item.id}
           type="button"

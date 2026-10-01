@@ -14,6 +14,7 @@ import {
 import type { Agent, PanelTab } from "@/types";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
 import { fadeIn, fadeOut } from "@/lib/motion";
+import { hasTab, shownTab } from "@/features/workspace/utils/panelTabs";
 import { WorkspaceTab } from "./WorkspaceTab/WorkspaceTab";
 import { useToolbar } from "./useToolbar";
 
@@ -32,16 +33,23 @@ interface ToolbarProps {
 }
 
 export function Toolbar({ agent, pr, onClose }: ToolbarProps) {
-  const { panelTab, selectTab, subagentCount, maximized, toggleMaximized, openSettings } =
-    useToolbar(agent.id, agent.projectId);
+  const {
+    panelTab: requestedTab,
+    selectTab,
+    subagentCount,
+    maximized,
+    toggleMaximized,
+    openSettings,
+  } = useToolbar(agent.id, agent.projectId);
   const group = useId();
+  const panelTab = shownTab(requestedTab, agent.git);
 
   return (
     <div className="flex h-12 shrink-0 items-center gap-1 border-b border-seam px-2">
       {/* The active tab widens to show its label: the pill slides and the neighbours glide over instead of jumping. */}
       <LayoutGroup id={group}>
         <nav role="tablist" aria-label="Workspace" className="flex items-center gap-0.5">
-          {TABS.map((tab) => (
+          {TABS.filter((tab) => hasTab(tab.value, agent.git)).map((tab) => (
             <WorkspaceTab
               key={tab.value}
               {...tab}

@@ -6,6 +6,7 @@ export interface Workspace {
   branch: string | null;
   remoteUrl: string | null;
   isWorktree: boolean;
+  git: boolean;
   additions: number;
   deletions: number;
 }

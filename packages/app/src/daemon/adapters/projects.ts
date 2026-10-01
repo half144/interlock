@@ -23,6 +23,7 @@ export function toProject(
     id: descriptor.projectId,
     name: descriptor.projectDisplayName,
     rootPath: descriptor.projectRootPath,
+    git: descriptor.projectKind === "git",
     remoteUrl: extras.remoteUrl ?? null,
     defaultBranch: extras.defaultBranch ?? "main",
     settings: defaultProjectSettings(),
@@ -33,9 +34,6 @@ export function addProjectFailure(result: {
   error: string | null;
   errorCode?: string | null | undefined;
 }): string {
-  if (result.errorCode === "not_a_git_repo") {
-    return "This folder is not a git repository. Interlock runs each task in a git worktree, so run `git init` and make a first commit there, or pick a different folder.";
-  }
   if (result.errorCode === "directory_not_found") {
     return "That folder does not exist. Check the path and try again.";
   }
@@ -51,6 +49,7 @@ export function toWorkspace(workspace: WorkspaceDescriptorPayload): Workspace {
     branch: workspace.gitRuntime?.currentBranch ?? null,
     remoteUrl: workspace.gitRuntime?.remoteUrl ?? null,
     isWorktree: workspace.workspaceKind === "worktree",
+    git: workspace.projectKind === "git",
     additions: workspace.diffStat?.additions ?? 0,
     deletions: workspace.diffStat?.deletions ?? 0,
   };

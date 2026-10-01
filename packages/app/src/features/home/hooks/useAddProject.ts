@@ -4,7 +4,7 @@ import { useFolderDrop } from "@/platform/hooks/useFolderDrop";
 import { useStore } from "@/stores/app-store";
 import { folderName } from "@/features/home/utils/repositories";
 
-const PROMPT = "Give Interlock a task, then choose the repository it runs in";
+const PROMPT = "Give Interlock a task, then choose the folder it runs in";
 
 /**
  * Adds the first project from the folder picker, a folder dropped on the window or a repository found on disk.

@@ -11,7 +11,8 @@ export function TerminalView({ agent }: { agent: Agent }) {
   return (
     <div className="flex h-full flex-col bg-inset">
       <div className="flex h-8 shrink-0 items-center gap-1 border-b border-seam px-2">
-        <TerminalPanes pane={pane} onChange={setPane} />
+        {/* Setup runs when a worktree is created; a plain folder has none, so only the shell is left. */}
+        {agent.git && <TerminalPanes pane={pane} onChange={setPane} />}
         <span className="ml-auto min-w-0 truncate pr-2 font-mono text-[11px] text-ink-4">
           {cwd}
         </span>

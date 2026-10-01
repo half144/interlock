@@ -9,6 +9,7 @@ const agent = (patch: Partial<Agent>): Agent => ({
   workspaceId: null,
   threadId: "a1",
   cwd: "/",
+  git: true,
   title: "Fix it",
   branch: "",
   base: "main",

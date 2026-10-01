@@ -150,7 +150,7 @@ import { ProjectDiscoverySession } from "./session/project-discovery/project-dis
 import { dispatchSettingsAndAccountsMessage } from "./session/settings-accounts-dispatch.js";
 import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
 import { applyProjectSettingsToAgentLaunch } from "./project-settings/agent-launch-settings.js";
-import { inspectGitProject, NotAGitRepoError } from "./project-settings/project-git-info.js";
+import { inspectGitProject } from "./project-settings/project-git-info.js";
 import { DownloadTokenStore } from "./file-download/token-store.js";
 import {
   archivePersistedWorkspaceRecord,
@@ -5360,7 +5360,6 @@ export class Session {
     try {
       git = await inspectGitProject(cwd, this.workspaceGitService);
     } catch (error) {
-      const notGit = error instanceof NotAGitRepoError;
       this.sessionLogger.info({ err: error, cwd }, "Add project rejected");
       this.emit({
         type: "project.add.response",
@@ -5368,7 +5367,6 @@ export class Session {
           requestId: request.requestId,
           project: null,
           error: error instanceof Error ? error.message : "Failed to inspect git repository",
-          ...(notGit ? { errorCode: "not_a_git_repo" as const } : {}),
         },
       });
       return;

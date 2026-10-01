@@ -9080,11 +9080,18 @@ test("workspace.create.request reports an archived explicit project", async () =
   });
 });
 
-test("project.add rejects a folder that is not a git repository without registering it", async () => {
+test("project.add registers a plain folder as a project without git info", async () => {
   const emitted: SessionOutboundMessage[] = [];
   const session = createSessionForWorkspaceTests({ onMessage: (message) => emitted.push(message) });
-  const registerProject = vi.fn();
-  session.workspaceProvisioning.findOrCreateProjectForDirectory = registerProject;
+  const project = createPersistedProjectRecord({
+    projectId: "prj_plain",
+    rootPath: REPO_CWD,
+    kind: "non_git",
+    displayName: "repo",
+    createdAt: "2026-03-01T00:00:00.000Z",
+    updatedAt: "2026-03-01T00:00:00.000Z",
+  });
+  session.workspaceProvisioning.findOrCreateProjectForDirectory = async () => project;
 
   await session.handleMessage({
     type: "project.add.request",
@@ -9095,11 +9102,10 @@ test("project.add rejects a folder that is not a git repository without register
   const payload = findByType(emitted, "project.add.response")?.payload;
   expect(payload).toMatchObject({
     requestId: "req-add-plain",
-    project: null,
-    errorCode: "not_a_git_repo",
+    error: null,
+    git: null,
+    project: { projectId: "prj_plain", projectKind: "non_git" },
   });
-  expect(payload?.error).toContain("git init");
-  expect(registerProject).not.toHaveBeenCalled();
 });
 
 test("project.add returns the default branch and remote of a git repository", async () => {

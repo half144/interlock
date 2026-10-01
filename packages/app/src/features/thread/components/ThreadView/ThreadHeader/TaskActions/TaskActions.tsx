@@ -32,19 +32,21 @@ export function TaskActions({ agent, ship, menu }: TaskActionsProps) {
           </motion.span>
         )}
       </AnimatePresence>
-      <button
-        type="button"
-        onClick={toggleDiff}
-        aria-pressed={diffOpen}
-        aria-label={`Changes: ${agent.additions} added, ${agent.deletions} removed`}
-        className={cn(
-          monoText,
-          "mx-1 inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 tabular-nums transition-[background-color,border-color,scale] duration-150 ease-out-quint active:scale-[0.97]",
-          diffOpen ? "border-seam-2 bg-selected" : "border-seam hover:bg-hover",
-        )}
-      >
-        <DiffStat additions={agent.additions} deletions={agent.deletions} />
-      </button>
+      {agent.git && (
+        <button
+          type="button"
+          onClick={toggleDiff}
+          aria-pressed={diffOpen}
+          aria-label={`Changes: ${agent.additions} added, ${agent.deletions} removed`}
+          className={cn(
+            monoText,
+            "mx-1 inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 tabular-nums transition-[background-color,border-color,scale] duration-150 ease-out-quint active:scale-[0.97]",
+            diffOpen ? "border-seam-2 bg-selected" : "border-seam hover:bg-hover",
+          )}
+        >
+          <DiffStat additions={agent.additions} deletions={agent.deletions} />
+        </button>
+      )}
       {menu}
     </div>
   );

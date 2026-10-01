@@ -57,6 +57,8 @@ export interface Agent {
   workspaceId: string | null;
   threadId: string;
   cwd: string;
+  /** False when it runs in a plain folder, where none of the git features exist. */
+  git: boolean;
   title: string;
   branch: string;
   base: string;

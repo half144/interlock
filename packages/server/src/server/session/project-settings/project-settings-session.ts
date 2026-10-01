@@ -130,12 +130,8 @@ export class ProjectSettingsSession {
         `Project ${projectId} was not found. Add it again from the sidebar.`,
       );
     }
-    if (project.kind !== "git") {
-      throw new ProjectSettingsRequestError(
-        "not_a_git_repo",
-        `${project.rootPath} is not a git repository, so it has no project settings.`,
-      );
-    }
+    // A plain folder keys its settings by its own path; only a git project resolves to the main repo root.
+    if (project.kind !== "git") return project.rootPath;
     return this.options.workspaceGitService.resolveRepoRoot(project.rootPath);
   }
 }
