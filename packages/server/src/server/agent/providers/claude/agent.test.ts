@@ -519,9 +519,13 @@ describe("ClaudeAgentClient.fetchCatalog", () => {
 describe("ClaudeAgentClient binary resolution", () => {
   const logger = createTestLogger();
 
-  test("resolves the installed Claude Code version", async () => {
-    await expect(resolveClaudeCodeVersion()).resolves.toMatch(/^\d+\.\d+\.\d+$/);
-  });
+  // CI runners have no Claude CLI to resolve.
+  test.skipIf(process.env["CI"] === "true")(
+    "resolves the installed Claude Code version",
+    async () => {
+      await expect(resolveClaudeCodeVersion()).resolves.toMatch(/^\d+\.\d+\.\d+$/);
+    },
+  );
 
   test("loads user, project, and local Claude settings", async () => {
     const queryReturn = vi.fn();
