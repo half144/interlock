@@ -1,14 +1,9 @@
-import { Box } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut } from "@/lib/motion";
-import {
-  commandLabel,
-  commandSource,
-  slashOptionId,
-  type SlashCommand,
-} from "@/features/thread/utils/slashCommands";
+import type { SlashCommand } from "@/features/thread/utils/slashCommands";
 import { surface } from "@/lib/styles";
+import { SlashMenuItem } from "./SlashMenuItem/SlashMenuItem";
 
 interface SlashMenuProps {
   items: SlashCommand[];
@@ -31,26 +26,13 @@ export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
       )}
     >
       {items.map((item, i) => (
-        <button
+        <SlashMenuItem
           key={item.name}
-          id={slashOptionId(i)}
-          type="button"
-          role="option"
-          aria-selected={i === active}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            onPick(item.name);
-          }}
-          className={cn(
-            "flex h-9 w-full items-center gap-3 rounded-lg px-3 text-left transition-colors duration-100",
-            i === active ? "bg-selected" : "hover:bg-selected",
-          )}
-        >
-          <Box className="size-4 shrink-0 text-ink-3" aria-hidden />
-          <span className="shrink-0 text-[13.5px] text-ink">{commandLabel(item.name)}</span>
-          <span className="min-w-0 flex-1 truncate text-[13px] text-ink-3">{item.hint}</span>
-          <span className="shrink-0 text-[13px] text-ink-4">{commandSource(item.name)}</span>
-        </button>
+          command={item}
+          index={i}
+          active={i === active}
+          onPick={onPick}
+        />
       ))}
     </motion.div>
   );
