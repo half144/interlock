@@ -36,6 +36,10 @@ export function changedSinceBase(base = "origin/main") {
   return lines(git("diff", "--name-only", `${mergeBase}...HEAD`));
 }
 
+// Git exports GIT_DIR and friends to hooks. The server tests run git in temp dirs and, with those set, would act on this repo.
+export const cleanEnv = () =>
+  Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith("GIT_")));
+
 export const nameOf = (dir) => `@interlock/${dir.split("/")[1]}`;
 
 export function runInScope(script, workspaces) {
