@@ -26,14 +26,14 @@ export function SlashMenuItem({ command, index, active, onPick }: SlashMenuItemP
         onPick(command.name);
       }}
       className={cn(
-        "flex h-9 w-full items-center gap-3 rounded-lg px-3 text-left transition-colors duration-100",
+        "flex h-7 w-full items-center gap-2.5 rounded-md px-2.5 text-left transition-colors duration-100",
         active ? "bg-selected" : "hover:bg-selected",
       )}
     >
-      <Box className="size-4 shrink-0 text-ink-3" aria-hidden />
-      <span className="shrink-0 text-[13.5px] text-ink">{commandLabel(command.name)}</span>
-      <span className="min-w-0 flex-1 truncate text-[13px] text-ink-3">{command.hint}</span>
-      <span className="shrink-0 text-[13px] text-ink-4">{commandSource(command.name)}</span>
+      <Box className="size-3.5 shrink-0 text-ink-3" strokeWidth={1.5} aria-hidden />
+      <span className="shrink-0 text-[12.5px] text-ink">{commandLabel(command.name)}</span>
+      <span className="min-w-0 flex-1 truncate text-[12px] text-ink-3">{command.hint}</span>
+      <span className="shrink-0 text-[12px] text-ink-4">{commandSource(command.name)}</span>
     </button>
   );
 }
