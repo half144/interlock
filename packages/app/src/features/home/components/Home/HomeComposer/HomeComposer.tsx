@@ -13,7 +13,6 @@ import { ChooseRepositoryPill } from "./ChooseRepositoryPill/ChooseRepositoryPil
 import { PlanFirstToggle } from "./PlanFirstToggle/PlanFirstToggle";
 import { ProjectPill } from "./ProjectPill/ProjectPill";
 import { ProjectTray } from "./ProjectTray/ProjectTray";
-import { SkillPills } from "./SkillPills/SkillPills";
 import { useHomeComposer } from "./useHomeComposer";
 
 /** The home composer. Before any project it is already the real one: what you type stays when a repository is added. */
@@ -89,7 +88,6 @@ export function HomeComposer({
       </motion.div>
 
       <ProjectTray project={project} base={base} onBase={c.setBase} />
-      <SkillPills skills={c.skills} onPick={c.pickSkill} />
       {c.setupError && (
         <p role="alert" className="mt-3 px-3 text-[13px] text-red">
           {c.setupError}

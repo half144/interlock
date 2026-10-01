@@ -2,14 +2,10 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useStore } from "@/stores/app-store";
 import { canPlanFirst } from "@/daemon/adapters/modes";
 import { useAttachmentDraft } from "@/hooks/useAttachmentDraft";
-import { useDraftSkills } from "@/features/home/hooks/useDraftSkills";
-import { withSkill } from "@/features/home/utils/skillPrompt";
 import { useEffortChoice } from "@/features/home/hooks/useEffortChoice";
 import type { ProjectSetup } from "@/features/home/hooks/useAddProject";
 import type { ProjectChoice } from "@/features/home/hooks/useProjectChoice";
 import type { ModelChoice } from "@/features/home/types";
-
-const MAX_SKILL_PILLS = 8;
 
 export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setup: ProjectSetup) {
   const startTask = useStore((s) => s.startTask);
@@ -20,7 +16,6 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setu
   const [text, setText] = useState("");
   const [starting, setStarting] = useState(false);
   const input = useRef<HTMLTextAreaElement>(null);
-  const skills = useDraftSkills(choice.kind, project?.rootPath, choice.model);
 
   const planAvailable = canPlanFirst(choice.kind);
   const plan = planWanted && planAvailable;
@@ -42,17 +37,6 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setu
       effort: efforts.length > 0 ? effort : null,
       files: attachments.files,
     }).finally(() => setStarting(false));
-  };
-
-  const pickSkill = (name: string) => {
-    setText((current) =>
-      withSkill(
-        current,
-        name,
-        skills.map((s) => s.name),
-      ),
-    );
-    input.current?.focus();
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -78,8 +62,6 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setu
     efforts,
     effort,
     setEffort,
-    skills: skills.slice(0, MAX_SKILL_PILLS),
-    pickSkill,
     text,
     setText,
     attachments,
