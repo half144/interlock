@@ -9,8 +9,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# The jobs run side by side, so the slowest one sets the time, not their sum.
+# Together they cover everything `npm run check` runs locally.
 jobs:
-  check:
+  static:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +21,41 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run check
+      - run: npm run build:deps
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run structure
+      - run: npm run knip
+      - run: npm run dup
+      - run: node --test "scripts/quality/**/*.test.mjs"
+
+  typecheck:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:deps
+      - run: npm run typecheck
+
+  test:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace: [app, client, highlight, protocol, server]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:deps
+      - run: npm run test --workspace @interlock/${{ matrix.workspace }}
 
   rust:
     runs-on: macos-latest
