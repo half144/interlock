@@ -1,0 +1,42 @@
+{
+  "name": "@interlock/protocol",
+  "version": "0.1.0",
+  "description": "Interlock shared protocol schemas and wire types",
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "tsc -p tsconfig.json --incremental false",
+    "build:clean": "npm run clean && npm run build",
+    "prepack": "npm run build:clean",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "generate:validators": "node scripts/generate-validation-aot.mjs",
+    "prebuild": "npm run generate:validators",
+    "pretypecheck": "npm run generate:validators",
+    "pretest": "npm run generate:validators",
+    "prepare": "npm run generate:validators"
+  },
+  "dependencies": {
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "typescript": "^5.9.3",
+    "vitest": "4.0.18",
+    "zod-aot": "0.20.4"
+  }
+}
