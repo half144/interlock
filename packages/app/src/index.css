@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter Variable", "Segoe UI", ui-sans-serif,
+    sans-serif;
+  --font-serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --font-placard: var(--font-sans);
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", monospace;
+
+  /* Soft graphite surfaces (Manus dark): darker rail, mid-gray page, lighter cards */
+  --color-ground: #1d1d1c;
+  --color-inset: #2c2c2b;
+  --color-panel: #262625;
+  --color-raised: #313130;
+  --color-raised-2: #383837;
+  --color-overlay: #333332;
+  --color-seam: rgb(255 255 255 / 0.08);
+  --color-seam-2: rgb(255 255 255 / 0.13);
+  --color-hover: rgb(255 255 255 / 0.05);
+  --color-selected: rgb(255 255 255 / 0.09);
+
+  --color-ink: #ececeb;
+  --color-ink-2: #c4c3bf;
+  --color-ink-3: #9c9b96;
+  --color-ink-4: #6f6e6a;
+
+  /* Status */
+  --color-run: #6aa4ff;
+  --color-hold: #f2a65a;
+  --color-ready: #5cc08f;
+  --color-merge: #b293f5;
+  --color-red: #f0756b;
+  --color-green: #5cc08f;
+
+  /* Diff and code (GitHub dark), inside code surfaces only */
+  --color-add: #3fb950;
+  --color-del: #f85149;
+  --color-syn-keyword: #ff7b72;
+  --color-syn-string: #a5d6ff;
+  --color-syn-number: #79c0ff;
+  --color-syn-comment: #8b949e;
+  --color-syn-fn: #d2a8ff;
+  --color-syn-type: #ffa657;
+  --color-syn-tag: #7ee787;
+  /* Editor chrome in the review: git decorations and file-type marks, as VS Code users read them */
+  --color-mod: #e2c08d;
+  --color-lang-ts: #6aa0d6;
+  --color-lang-sql: #d790b8;
+  --color-lang-json: #d4b961;
+  --color-lang-md: #8ea6c6;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -10px rgb(0 0 0 / 0.45);
+  --shadow-composer: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.55);
+  --shadow-overlay:
+    0 0 0 1px rgb(255 255 255 / 0.06), 0 16px 40px -10px rgb(0 0 0 / 0.65),
+    0 2px 6px rgb(0 0 0 / 0.3);
+  --shadow-button: 0 1px 2px rgb(0 0 0 / 0.3);
+
+  --animate-lamp-hold: lamp-hold 1.8s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-spin-slow: spin 1.6s linear infinite;
+
+  @keyframes lamp-hold {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--color-panel);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    caret-color: var(--color-ink);
+    overflow: hidden;
+  }
+
+  ::selection {
+    background: rgb(106 164 255 / 0.3);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(106 164 255 / 0.6);
+    outline-offset: 1px;
+    border-radius: 8px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.14) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(255 255 255 / 0.12);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  code,
+  kbd,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .placard {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-3);
+  }
+
+  .shimmer {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-ink-3) 0%,
+      var(--color-ink-3) 40%,
+      var(--color-ink) 50%,
+      var(--color-ink-3) 60%,
+      var(--color-ink-3) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-shimmer);
+  }
+
+  .prose-agent p + p {
+    margin-top: 0.625rem;
+  }
+  .prose-agent code {
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--color-ink);
+  }
+}
+
+/* Reduced motion: loops stop (a still spinner still reads as "working"); color and opacity changes stay. */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    background: none;
+    color: var(--color-ink-3);
+  }
+  .animate-spin-slow,
+  .animate-lamp-hold {
+    animation: none;
+  }
+}

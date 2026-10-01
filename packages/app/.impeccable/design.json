@@ -1,0 +1,753 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-01T03:15:21.576388+00:00",
+  "title": "Design System: Interlock",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground Rail",
+        "canonical": "oklch(23.0% 0.002 106.5)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Graphite Page",
+        "canonical": "oklch(26.8% 0.002 106.5)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "inset": {
+        "role": "neutral",
+        "displayName": "Inset Well",
+        "canonical": "oklch(29.3% 0.002 106.5)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "Raised Card",
+        "canonical": "oklch(31.3% 0.002 106.5)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "overlay": {
+        "role": "neutral",
+        "displayName": "Overlay",
+        "canonical": "oklch(32.1% 0.002 106.5)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "raised-2": {
+        "role": "neutral",
+        "displayName": "Raised Hover",
+        "canonical": "oklch(34.0% 0.002 106.5)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "seam": {
+        "role": "neutral",
+        "displayName": "Seam",
+        "tonalRamp": [
+          "rgb(255 255 255 / 0.05)",
+          "rgb(255 255 255 / 0.06)",
+          "rgb(255 255 255 / 0.08)",
+          "rgb(255 255 255 / 0.09)",
+          "rgb(255 255 255 / 0.12)",
+          "rgb(255 255 255 / 0.13)",
+          "rgb(255 255 255 / 0.14)",
+          "rgb(255 255 255 / 0.15)"
+        ]
+      },
+      "seam-2": {
+        "role": "neutral",
+        "displayName": "Seam 2",
+        "tonalRamp": [
+          "rgb(255 255 255 / 0.05)",
+          "rgb(255 255 255 / 0.06)",
+          "rgb(255 255 255 / 0.08)",
+          "rgb(255 255 255 / 0.09)",
+          "rgb(255 255 255 / 0.12)",
+          "rgb(255 255 255 / 0.13)",
+          "rgb(255 255 255 / 0.14)",
+          "rgb(255 255 255 / 0.15)"
+        ]
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "Hover Wash",
+        "tonalRamp": [
+          "rgb(255 255 255 / 0.05)",
+          "rgb(255 255 255 / 0.06)",
+          "rgb(255 255 255 / 0.08)",
+          "rgb(255 255 255 / 0.09)",
+          "rgb(255 255 255 / 0.12)",
+          "rgb(255 255 255 / 0.13)",
+          "rgb(255 255 255 / 0.14)",
+          "rgb(255 255 255 / 0.15)"
+        ]
+      },
+      "selected": {
+        "role": "neutral",
+        "displayName": "Selected Wash",
+        "tonalRamp": [
+          "rgb(255 255 255 / 0.05)",
+          "rgb(255 255 255 / 0.06)",
+          "rgb(255 255 255 / 0.08)",
+          "rgb(255 255 255 / 0.09)",
+          "rgb(255 255 255 / 0.12)",
+          "rgb(255 255 255 / 0.13)",
+          "rgb(255 255 255 / 0.14)",
+          "rgb(255 255 255 / 0.15)"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Light Ink",
+        "canonical": "oklch(94.3% 0.001 106.4)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "oklch(81.7% 0.006 95.1)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "oklch(68.9% 0.007 97.4)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "ink-4": {
+        "role": "neutral",
+        "displayName": "Ink 4",
+        "canonical": "oklch(53.8% 0.006 95.2)",
+        "tonalRamp": [
+          "#1d1d1c",
+          "#262625",
+          "#2c2c2b",
+          "#313130",
+          "#6f6e6a",
+          "#9c9b96",
+          "#c4c3bf",
+          "#ececeb"
+        ]
+      },
+      "run": {
+        "role": "secondary",
+        "displayName": "Run Blue",
+        "canonical": "oklch(71.9% 0.147 259.1)",
+        "tonalRamp": [
+          "#000924",
+          "#002156",
+          "#013c8e",
+          "#285fb3",
+          "#4a82da",
+          "#6ea6ff",
+          "#acccfe",
+          "#e6effe"
+        ]
+      },
+      "hold": {
+        "role": "secondary",
+        "displayName": "Hold Amber",
+        "canonical": "oklch(78.5% 0.129 63.9)",
+        "tonalRamp": [
+          "#150800",
+          "#391e01",
+          "#613702",
+          "#8c5203",
+          "#b8701b",
+          "#de9346",
+          "#febb7a",
+          "#ffead8"
+        ]
+      },
+      "ready": {
+        "role": "secondary",
+        "displayName": "Ready Green",
+        "canonical": "oklch(73.4% 0.119 160.0)",
+        "tonalRamp": [
+          "#000f07",
+          "#012e1b",
+          "#015032",
+          "#02744b",
+          "#30996a",
+          "#59bd8c",
+          "#7fe3b0",
+          "#c3ffdd"
+        ]
+      },
+      "merge": {
+        "role": "secondary",
+        "displayName": "Merge Violet",
+        "canonical": "oklch(73.0% 0.141 297.3)",
+        "tonalRamp": [
+          "#110028",
+          "#30015f",
+          "#4d2a82",
+          "#6c4ca7",
+          "#8d6ecd",
+          "#b091f3",
+          "#d1bffe",
+          "#f0ebfe"
+        ]
+      },
+      "red": {
+        "role": "secondary",
+        "displayName": "Signal Red",
+        "canonical": "oklch(70.4% 0.153 26.4)",
+        "tonalRamp": [
+          "#1f0001",
+          "#4d0004",
+          "#81020c",
+          "#a8332f",
+          "#cf584f",
+          "#f77c71",
+          "#ffb5ac",
+          "#fee9e6"
+        ]
+      },
+      "green": {
+        "role": "secondary",
+        "displayName": "Ready Green",
+        "canonical": "oklch(73.4% 0.119 160.0)",
+        "tonalRamp": [
+          "#000f07",
+          "#012e1b",
+          "#015032",
+          "#02744b",
+          "#30996a",
+          "#59bd8c",
+          "#7fe3b0",
+          "#c3ffdd"
+        ]
+      },
+      "add": {
+        "role": "tertiary",
+        "displayName": "Diff Add",
+        "canonical": "oklch(69.5% 0.181 145.6)",
+        "tonalRamp": [
+          "#001001",
+          "#012f08",
+          "#015114",
+          "#007721",
+          "#179e34",
+          "#4ac359",
+          "#73e97e",
+          "#caffcc"
+        ]
+      },
+      "del": {
+        "role": "tertiary",
+        "displayName": "Diff Delete",
+        "canonical": "oklch(66.5% 0.205 27.0)",
+        "tonalRamp": [
+          "#1f0000",
+          "#4d0104",
+          "#81000a",
+          "#b90313",
+          "#e43d38",
+          "#fe766a",
+          "#feb5ac",
+          "#ffe9e6"
+        ]
+      },
+      "syn-keyword": {
+        "role": "tertiary",
+        "displayName": "Syntax Keyword",
+        "canonical": "oklch(73.4% 0.163 25.8)",
+        "tonalRamp": [
+          "#1f0001",
+          "#4d0105",
+          "#81020f",
+          "#ab2d2c",
+          "#d3534d",
+          "#fc786f",
+          "#feb5ad",
+          "#ffe9e6"
+        ]
+      },
+      "syn-string": {
+        "role": "tertiary",
+        "displayName": "Syntax String",
+        "canonical": "oklch(85.6% 0.077 244.1)",
+        "tonalRamp": [
+          "#000c19",
+          "#012842",
+          "#174668",
+          "#39668a",
+          "#5a88ae",
+          "#7cacd3",
+          "#a0d1fa",
+          "#e1f1fe"
+        ]
+      },
+      "syn-number": {
+        "role": "tertiary",
+        "displayName": "Syntax Number",
+        "canonical": "oklch(78.6% 0.115 246.7)",
+        "tonalRamp": [
+          "#000c1b",
+          "#002745",
+          "#004574",
+          "#1b669f",
+          "#4289c4",
+          "#66adea",
+          "#9ed0fe",
+          "#e2f0fe"
+        ]
+      },
+      "syn-comment": {
+        "role": "tertiary",
+        "displayName": "Syntax Comment",
+        "canonical": "oklch(66.2% 0.018 250.9)",
+        "tonalRamp": [
+          "#060c13",
+          "#1f262e",
+          "#3b434c",
+          "#5a636c",
+          "#7b848e",
+          "#9ea7b1",
+          "#c2ccd6",
+          "#e6f0fb"
+        ]
+      },
+      "syn-fn": {
+        "role": "tertiary",
+        "displayName": "Syntax Function",
+        "canonical": "oklch(80.1% 0.127 305.9)",
+        "tonalRamp": [
+          "#130024",
+          "#350654",
+          "#532b77",
+          "#744b9a",
+          "#966dbf",
+          "#ba90e5",
+          "#dabafe",
+          "#f3eaff"
+        ]
+      },
+      "syn-type": {
+        "role": "tertiary",
+        "displayName": "Syntax Type",
+        "canonical": "oklch(79.9% 0.141 60.1)",
+        "tonalRamp": [
+          "#160700",
+          "#3a1d01",
+          "#643500",
+          "#904f02",
+          "#bf6b06",
+          "#e68f3d",
+          "#feba82",
+          "#ffeada"
+        ]
+      },
+      "syn-tag": {
+        "role": "tertiary",
+        "displayName": "Syntax Tag",
+        "canonical": "oklch(84.2% 0.164 145.8)",
+        "tonalRamp": [
+          "#001001",
+          "#012f09",
+          "#015115",
+          "#007722",
+          "#2e9c3f",
+          "#57c163",
+          "#7de686",
+          "#caffcc"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The home question \"What should we build?\", centered. Libre Baskerville."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page titles (Automations, Project settings). Libre Baskerville."
+      },
+      "title": {
+        "displayName": "Decision Title",
+        "purpose": "The decision a hold card asks for, bold and balanced. The PR-opened dialog title is the one other serif title, at 18px, 400."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "\"interlock\" beside the two-ring mark; 17px in the sidebar, 16px above agent messages."
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "Top-bar model picker."
+      },
+      "body-large": {
+        "displayName": "Body Large",
+        "purpose": "Chat prose, user bubble, composers, palette search; settings section and empty-state titles at 500."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default UI text: sidebar rows, follow-ups, hold detail, popover titles; 14.5px medium for step, worktree and checkpoint titles."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Sidebar group labels in ink-3, sentence case."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Status lines, hints, composer pills and small buttons in ink-3; 12.5px for denser meta."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Branches, commands, preview paths, PR links, settings paths."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Diff rows on a 20px line; the code tab file path."
+      },
+      "id": {
+        "displayName": "Agent ID",
+        "purpose": "Describer IDs, quiet like an issue key."
+      }
+    },
+    "shadows": [
+      {
+        "name": "button",
+        "value": "0 1px 2px rgb(0 0 0 / 0.3)",
+        "purpose": "Primary and secondary buttons, the user bubble."
+      },
+      {
+        "name": "card",
+        "value": "0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -10px rgb(0 0 0 / 0.45)",
+        "purpose": "Cards the agent hands you, the workspace shell, the worktree thumbnail."
+      },
+      {
+        "name": "composer",
+        "value": "0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.55)",
+        "purpose": "Every composer at rest; focus-within adds a 12% white ring and deepens."
+      },
+      {
+        "name": "overlay",
+        "value": "0 0 0 1px rgb(255 255 255 / 0.06), 0 16px 40px -10px rgb(0 0 0 / 0.65), 0 2px 6px rgb(0 0 0 / 0.3)",
+        "purpose": "Menus, the effort menu, palette, toasts, PR popover and dialog."
+      },
+      {
+        "name": "segment",
+        "value": "0 0 0 1px rgb(255 255 255 / 0.08), 0 1px 2px rgb(0 0 0 / 0.3)",
+        "purpose": "The selected segment of a segmented control."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Arrivals: quick start, long soft landing. Also --ease-out-quint in CSS."
+      },
+      {
+        "name": "ease-in",
+        "value": "cubic-bezier(0.4, 0, 1, 1)",
+        "purpose": "Departures."
+      },
+      {
+        "name": "fade-in",
+        "value": "180ms ease-out",
+        "purpose": "Opacity entrances."
+      },
+      {
+        "name": "fade-out",
+        "value": "110ms ease-in",
+        "purpose": "Opacity exits; always faster than entrances."
+      },
+      {
+        "name": "spring",
+        "value": "spring, visualDuration 0.26s, bounce 0",
+        "purpose": "State changes, sliding highlights, toggles, small swaps."
+      },
+      {
+        "name": "spring-slow",
+        "value": "spring, visualDuration 0.36s, bounce 0",
+        "purpose": "Bigger surfaces."
+      },
+      {
+        "name": "dock",
+        "value": "spring, visualDuration 0.44s, bounce 0",
+        "purpose": "Sidebar, chat column and workspace edge, one spring, same frame."
+      },
+      {
+        "name": "morph",
+        "value": "spring, visualDuration 0.34s, bounce 0.12",
+        "purpose": "A control becoming its own surface (the effort pill). The only spring with give."
+      },
+      {
+        "name": "press",
+        "value": "150ms colour/background/border/shadow/scale, ease-out-quint; scale 0.97 labelled, 0.92 icon and round",
+        "purpose": "Every pressable control (styles.ts `pressable`)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Light ink action with Ground text, one per region: the chosen hold answer, Create PR, Open pull request, New automation.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"18\" cy=\"18\" r=\"3\"/><circle cx=\"6\" cy=\"6\" r=\"3\"/><path d=\"M13 6h3a2 2 0 0 1 2 2v7\"/><line x1=\"6\" x2=\"6\" y1=\"9\" y2=\"21\"/></svg>Create PR</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 8px; font: 500 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; border: 0; background: var(--color-ink, #ececeb); color: var(--color-ground, #1d1d1c); box-shadow: var(--shadow-button, 0 1px 2px rgb(0 0 0 / 0.3)); transition: background-color 150ms; } .ds-btn-primary:hover { background: #fff; } .ds-btn-primary:active { background: var(--color-ink-2, #c4c3bf); } .ds-btn-primary:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; } .ds-btn-primary:disabled { background: rgb(236 236 235 / 0.25); box-shadow: none; cursor: not-allowed; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Raised button with a Seam 2 border for alternatives beside a primary.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">View checks</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 8px; font: 500 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; border: 1px solid var(--color-seam-2, rgb(255 255 255 / 0.13)); background: var(--color-raised, #313130); color: var(--color-ink, #ececeb); box-shadow: var(--shadow-button, 0 1px 2px rgb(0 0 0 / 0.3)); transition: background-color 150ms; } .ds-btn-secondary:hover { background: var(--color-raised-2, #383837); } .ds-btn-secondary:active { background: var(--color-inset, #2c2c2b); } .ds-btn-secondary:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet text action for headers and low-emphasis choices; gains the Selected wash on hover.",
+      "html": "<button class=\"ds-btn-ghost\" type=\"button\">Clear</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 8px; font: 500 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; border: 0; background: transparent; color: var(--color-ink-2, #c4c3bf); transition: background-color 150ms, color 150ms; } .ds-btn-ghost:hover { background: var(--color-selected, rgb(255 255 255 / 0.09)); color: var(--color-ink, #ececeb); } .ds-btn-ghost:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; }"
+    },
+    {
+      "name": "Composer",
+      "kind": "input",
+      "refersTo": "composer",
+      "description": "The signature input: a raised 22px-corner card with the project pill, Plan first, the effort pill and an ink send circle; the starting branch lives in the tray under it.",
+      "html": "<div class=\"ds-composer\"><textarea class=\"ds-composer-text\" rows=\"2\" placeholder=\"Give Interlock a task in ledger-api\"></textarea><div class=\"ds-composer-bar\"><button class=\"ds-round ds-round-outline\" type=\"button\" aria-label=\"Add files\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></button><button class=\"ds-pill\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z\"/></svg>ledger-api<svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button><button class=\"ds-pill\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><line x1=\"6\" x2=\"6\" y1=\"3\" y2=\"15\"/><circle cx=\"18\" cy=\"6\" r=\"3\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><path d=\"M18 9a9 9 0 0 1-9 9\"/></svg><span class=\"ds-mono\">main</span></button><span class=\"ds-composer-end\"><button class=\"ds-plan\" type=\"button\" aria-pressed=\"false\">Plan first</button><button class=\"ds-round\" type=\"button\" aria-label=\"Dictate\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z\"/><path d=\"M19 10v2a7 7 0 0 1-14 0v-2\"/><line x1=\"12\" x2=\"12\" y1=\"19\" y2=\"22\"/></svg></button><button class=\"ds-send\" type=\"button\" aria-label=\"Start task\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2.4\" aria-hidden=\"true\"><path d=\"m5 12 7-7 7 7\"/><path d=\"M12 19V5\"/></svg></button></span></div></div>",
+      "css": ".ds-composer { max-width: 672px; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-radius: 22px; background: var(--color-raised, #313130); box-shadow: var(--shadow-composer, 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.55)); transition: box-shadow 150ms; } .ds-composer:focus-within { box-shadow: 0 0 0 1px rgb(255 255 255 / 0.12), 0 12px 32px -12px rgb(0 0 0 / 0.6); } .ds-composer-text { display: block; width: 100%; box-sizing: border-box; resize: none; border: 0; outline: none; background: transparent; padding: 16px 20px 4px; color: var(--color-ink, #ececeb); font: 400 15px/1.625 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); } .ds-composer-text::placeholder { color: var(--color-ink-4, #6f6e6a); } .ds-composer-bar { display: flex; align-items: center; gap: 6px; padding: 0 12px 12px; } .ds-composer-end { margin-left: auto; display: flex; align-items: center; gap: 6px; } .ds-round { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 0; border-radius: 9999px; background: transparent; color: var(--color-ink-2, #c4c3bf); cursor: pointer; } .ds-round-outline { border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); } .ds-round:hover { background: var(--color-hover, rgb(255 255 255 / 0.05)); } .ds-pill { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-radius: 9999px; background: transparent; color: var(--color-ink, #ececeb); font: 400 13px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; transition: background-color 150ms; } .ds-pill svg { color: var(--color-ink-2, #c4c3bf); } .ds-pill:hover { background: var(--color-hover, rgb(255 255 255 / 0.05)); } .ds-mono { font: 400 12px/1 var(--font-mono, 'Geist Mono Variable', ui-monospace, 'SF Mono', monospace); } .ds-intent { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 6px 0 12px; border-radius: 9999px; background: rgb(106 164 255 / 0.1); color: var(--color-run, #6aa4ff); font: 500 13px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); } .ds-intent-x { display: inline-flex; padding: 2px; border: 0; border-radius: 9999px; background: transparent; color: inherit; cursor: pointer; } .ds-intent-x:hover { background: rgb(106 164 255 / 0.15); } .ds-plan { height: 32px; padding: 0 12px; border: 0; border-radius: 9999px; background: transparent; color: var(--color-ink-3, #9c9b96); font: 400 13px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-plan:hover { background: var(--color-hover, rgb(255 255 255 / 0.05)); color: var(--color-ink-2, #c4c3bf); } .ds-plan[aria-pressed=\"true\"] { background: var(--color-selected, rgb(255 255 255 / 0.09)); color: var(--color-ink, #ececeb); } .ds-send { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 0; border-radius: 9999px; background: var(--color-ink, #ececeb); color: var(--color-ground, #1d1d1c); cursor: pointer; transition: background-color 150ms; } .ds-send:hover { background: #fff; } .ds-round:focus-visible, .ds-pill:focus-visible, .ds-plan:focus-visible, .ds-intent-x:focus-visible, .ds-send:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; }"
+    },
+    {
+      "name": "Sidebar Navigation",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Ground sidebar with the serif wordmark, 36px nav rows, a sentence-case group label and task rows with status icons.",
+      "html": "<nav class=\"ds-side\"><div class=\"ds-side-head\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" aria-hidden=\"true\"><circle cx=\"7.4\" cy=\"10\" r=\"4.6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"/><circle cx=\"12.6\" cy=\"10\" r=\"4.6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"/></svg><span class=\"ds-wordmark\">interlock</span></div><button class=\"ds-nav ds-nav-active\" type=\"button\" aria-current=\"page\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"/><path d=\"M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z\"/></svg>New task</button><button class=\"ds-nav\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"8\" height=\"8\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M7 11v4a2 2 0 0 0 2 2h4\"/><rect width=\"8\" height=\"8\" x=\"13\" y=\"13\" rx=\"2\"/></svg>Automations</button><button class=\"ds-nav\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>Search</button><div class=\"ds-group\">All tasks</div><button class=\"ds-nav ds-task\" type=\"button\"><span class=\"ds-spin\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 12a9 9 0 1 1-6.219-8.56\"/></svg></span><span class=\"ds-task-title\">Retry webhook deliveries</span></button><button class=\"ds-nav ds-task\" type=\"button\"><span class=\"ds-hold\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" x2=\"12\" y1=\"8\" y2=\"12\"/><line x1=\"12\" x2=\"12.01\" y1=\"16\" y2=\"16\"/></svg></span><span class=\"ds-task-title\">Migrate ledger schema</span><span class=\"ds-unread\">2</span></button><button class=\"ds-nav ds-task\" type=\"button\"><span class=\"ds-ready\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg></span><span class=\"ds-task-title ds-seen\">Fix flaky checkout test</span></button></nav>",
+      "css": ".ds-side { display: flex; flex-direction: column; gap: 2px; width: 264px; padding: 0 8px 12px; box-sizing: border-box; background: var(--color-ground, #1d1d1c); font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); } .ds-side-head { display: flex; align-items: center; gap: 6px; height: 52px; padding-left: 8px; color: var(--color-ink, #ececeb); } .ds-wordmark { font: 400 17px/1 var(--font-serif, 'Libre Baskerville', Georgia, serif); letter-spacing: -0.01em; } .ds-nav { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: var(--color-ink, #ececeb); font: 400 14px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); text-align: left; cursor: pointer; transition: background-color 150ms; } .ds-nav > svg { color: var(--color-ink-2, #c4c3bf); } .ds-nav:hover { background: var(--color-hover, rgb(255 255 255 / 0.05)); } .ds-nav-active, .ds-nav-active:hover { background: var(--color-selected, rgb(255 255 255 / 0.09)); } .ds-nav:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; } .ds-group { display: flex; align-items: center; height: 32px; margin-top: 18px; padding-left: 8px; font-size: 13px; font-weight: 500; color: var(--color-ink-3, #9c9b96); } .ds-task-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-seen { color: var(--color-ink-2, #c4c3bf); } .ds-spin { display: inline-flex; color: var(--color-ink-3, #9c9b96); animation: ds-rot 1.6s linear infinite; } .ds-hold { display: inline-flex; color: var(--color-hold, #f2a65a); } .ds-ready { display: inline-flex; color: var(--color-ready, #5cc08f); } .ds-unread { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 9999px; background: var(--color-selected, rgb(255 255 255 / 0.09)); color: var(--color-ink-2, #c4c3bf); font-size: 11px; font-weight: 600; } @keyframes ds-rot { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .ds-spin { animation: none; } }"
+    },
+    {
+      "name": "Workspace Toolbar",
+      "kind": "nav",
+      "refersTo": "workspace-tab",
+      "description": "The top of the agent's workspace: icon tabs where only the active one shows its label, Share, and the PR control with its attention dot.",
+      "html": "<div class=\"ds-ws\"><div class=\"ds-ws-bar\" role=\"tablist\" aria-label=\"Workspace\"><button class=\"ds-ws-tab\" role=\"tab\" aria-selected=\"false\" aria-label=\"Preview\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"20\" height=\"14\" x=\"2\" y=\"3\" rx=\"2\"/><line x1=\"8\" x2=\"16\" y1=\"21\" y2=\"21\"/><line x1=\"12\" x2=\"12\" y1=\"17\" y2=\"21\"/></svg></button><button class=\"ds-ws-tab\" role=\"tab\" aria-selected=\"true\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m18 16 4-4-4-4\"/><path d=\"m6 8-4 4 4 4\"/><path d=\"m14.5 4-5 16\"/></svg>Code</button><button class=\"ds-ws-tab\" role=\"tab\" aria-selected=\"false\" aria-label=\"Terminal\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m7 11 2-2-2-2\"/><path d=\"M11 13h4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" ry=\"2\"/></svg></button><button class=\"ds-ws-tab\" role=\"tab\" aria-selected=\"false\" aria-label=\"Checks\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m3 17 2 2 4-4\"/><path d=\"m3 7 2 2 4-4\"/><path d=\"M13 6h8\"/><path d=\"M13 12h8\"/><path d=\"M13 18h8\"/></svg></button><span class=\"ds-ws-div\" aria-hidden=\"true\"></span><span class=\"ds-ws-end\"><button class=\"ds-ws-share\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"18\" cy=\"5\" r=\"3\"/><circle cx=\"6\" cy=\"12\" r=\"3\"/><circle cx=\"18\" cy=\"19\" r=\"3\"/><line x1=\"8.59\" x2=\"15.42\" y1=\"13.51\" y2=\"17.49\"/><line x1=\"15.41\" x2=\"8.59\" y1=\"6.51\" y2=\"10.49\"/></svg>Share</button><span class=\"ds-ws-pr\"><button class=\"ds-ws-prbtn\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"18\" cy=\"18\" r=\"3\"/><circle cx=\"6\" cy=\"6\" r=\"3\"/><path d=\"M13 6h3a2 2 0 0 1 2 2v7\"/><line x1=\"6\" x2=\"6\" y1=\"9\" y2=\"21\"/></svg>Create PR</button><span class=\"ds-ws-dot\" aria-hidden=\"true\"></span></span></span></div><div class=\"ds-ws-body\"><div class=\"ds-ws-frame\"></div></div></div>",
+      "css": ".ds-ws { max-width: 640px; overflow: hidden; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-radius: 16px; background: var(--color-raised, #313130); box-shadow: var(--shadow-card, 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -10px rgb(0 0 0 / 0.45)); font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); } .ds-ws-bar { display: flex; align-items: center; gap: 2px; height: 48px; padding: 0 8px; border-bottom: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); } .ds-ws-tab { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 32px; height: 32px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--color-ink-2, #c4c3bf); font: 400 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-ws-tab:hover { background: var(--color-hover, rgb(255 255 255 / 0.05)); color: var(--color-ink, #ececeb); } .ds-ws-tab[aria-selected=\"true\"] { padding: 0 10px; background: var(--color-selected, rgb(255 255 255 / 0.09)); color: var(--color-ink, #ececeb); font-weight: 500; } .ds-ws-div { width: 1px; height: 16px; margin: 0 4px; background: var(--color-seam, rgb(255 255 255 / 0.08)); } .ds-ws-end { margin-left: auto; display: flex; align-items: center; gap: 4px; } .ds-ws-share { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: var(--color-ink, #ececeb); font: 400 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; } .ds-ws-share:hover { background: var(--color-hover, rgb(255 255 255 / 0.05)); } .ds-ws-pr { position: relative; } .ds-ws-prbtn { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--color-ink, #ececeb); color: var(--color-ground, #1d1d1c); font: 500 13px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); box-shadow: var(--shadow-button, 0 1px 2px rgb(0 0 0 / 0.3)); cursor: pointer; transition: background-color 150ms; } .ds-ws-prbtn:hover { background: #fff; } .ds-ws-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; border-radius: 9999px; background: var(--color-run, #6aa4ff); box-shadow: 0 0 0 2px var(--color-raised, #313130); } .ds-ws-body { height: 120px; padding: 8px; background: var(--color-panel, #262625); } .ds-ws-frame { height: 100%; box-sizing: border-box; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-radius: 12px; background: var(--color-raised, #313130); } .ds-ws-tab:focus-visible, .ds-ws-share:focus-visible, .ds-ws-prbtn:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; }"
+    },
+    {
+      "name": "Hold Card",
+      "kind": "card",
+      "refersTo": "hold-card",
+      "description": "The agent paused for a person: amber status line, the decision as a bold serif title, inset secondary answers and one ink primary.",
+      "html": "<div class=\"ds-hold-card\"><div class=\"ds-hold-top\"><span class=\"ds-hold-disc\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3\"/><path d=\"M12 17h.01\"/></svg></span><div><p class=\"ds-hold-kind\">Needs your decision</p><h3 class=\"ds-hold-title\">Keep the old ledger columns during the migration?</h3><p class=\"ds-hold-detail\">Dropping them now is simpler, but the nightly export still reads two of them.</p></div></div><div class=\"ds-hold-actions\"><button class=\"ds-hold-alt\" type=\"button\">Drop them</button><button class=\"ds-hold-primary\" type=\"button\">Keep for one release</button></div></div>",
+      "css": ".ds-hold-card { max-width: 652px; padding: 20px; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-radius: 16px; background: var(--color-raised, #313130); box-shadow: var(--shadow-card, 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -10px rgb(0 0 0 / 0.45)); font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); } .ds-hold-top { display: flex; align-items: flex-start; gap: 12px; } .ds-hold-disc { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 32px; height: 32px; margin-top: 2px; border-radius: 9999px; background: rgb(242 166 90 / 0.1); color: var(--color-hold, #f2a65a); } .ds-hold-kind { margin: 0; font-size: 12.5px; font-weight: 500; color: var(--color-hold, #f2a65a); } .ds-hold-title { margin: 4px 0 0; font: 700 17px/1.375 var(--font-serif, 'Libre Baskerville', Georgia, serif); color: var(--color-ink, #ececeb); text-wrap: balance; } .ds-hold-detail { margin: 6px 0 0; font-size: 14px; line-height: 1.6; color: var(--color-ink-2, #c4c3bf); text-wrap: pretty; } .ds-hold-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; } .ds-hold-alt { height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--color-inset, #2c2c2b); color: var(--color-ink, #ececeb); font: 500 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); cursor: pointer; transition: background-color 150ms; } .ds-hold-alt:hover { background: var(--color-selected, rgb(255 255 255 / 0.09)); } .ds-hold-primary { height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--color-ink, #ececeb); color: var(--color-ground, #1d1d1c); font: 500 13.5px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); box-shadow: var(--shadow-button, 0 1px 2px rgb(0 0 0 / 0.3)); cursor: pointer; transition: background-color 150ms; } .ds-hold-primary:hover { background: #fff; } .ds-hold-alt:focus-visible, .ds-hold-primary:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; }"
+    },
+    {
+      "name": "Step Item",
+      "kind": "custom",
+      "refersTo": "tool-chip",
+      "description": "One step of the agent's plan: status icon and title, opening onto a seam rail with detail prose and inset tool chips.",
+      "html": "<div class=\"ds-steps\"><div class=\"ds-step\"><span class=\"ds-step-done\"><svg width=\"10\" height=\"10\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"3.5\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><span class=\"ds-step-title\">Read the webhook retry worker</span></div><div class=\"ds-step\"><span class=\"ds-step-active\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 12a9 9 0 1 1-6.219-8.56\"/></svg></span><span class=\"ds-step-title\">Add exponential backoff</span><span class=\"ds-step-chev\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m18 15-6-6-6 6\"/></svg></span></div><div class=\"ds-step-body\"><p class=\"ds-step-detail\">Wrapping <code>deliver()</code> in a retry with jitter, capped at five attempts.</p><span class=\"ds-tool\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"M16 13H8\"/><path d=\"M16 17H8\"/></svg>src/webhooks/retry.ts</span><span class=\"ds-tool\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m7 11 2-2-2-2\"/><path d=\"M11 13h4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\" ry=\"2\"/></svg>pnpm test webhooks</span></div><div class=\"ds-step\"><span class=\"ds-step-pending\"></span><span class=\"ds-step-title ds-step-title-pending\">Open a pull request</span></div></div>",
+      "css": ".ds-steps { font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); color: var(--color-ink, #ececeb); } .ds-step { display: flex; align-items: center; gap: 10px; padding: 6px 0; } .ds-step-title { font-size: 14.5px; font-weight: 500; } .ds-step-title-pending { color: var(--color-ink-3, #9c9b96); } .ds-step-chev { display: inline-flex; color: var(--color-ink-3, #9c9b96); } .ds-step-done { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 9999px; background: var(--color-ink-3, #9c9b96); color: var(--color-panel, #262625); } .ds-step-active { display: inline-flex; color: var(--color-run, #6aa4ff); animation: ds-rot 1.6s linear infinite; } .ds-step-pending { width: 16px; height: 16px; box-sizing: border-box; border: 1.5px solid var(--color-ink-4, #6f6e6a); border-radius: 9999px; } .ds-step-body { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-left: 7px; padding: 2px 0 8px 18px; border-left: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); } .ds-step-detail { margin: 0 0 2px; font-size: 14px; line-height: 1.65; color: var(--color-ink-2, #c4c3bf); } .ds-step-detail code { padding: 0.1em 0.35em; border-radius: 5px; background: rgb(255 255 255 / 0.08); color: var(--color-ink, #ececeb); font: 0.82em var(--font-mono, 'Geist Mono Variable', ui-monospace, 'SF Mono', monospace); } .ds-tool { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border-radius: 9999px; background: var(--color-inset, #2c2c2b); color: var(--color-ink-2, #c4c3bf); font-size: 13px; } .ds-tool svg { color: var(--color-ink-3, #9c9b96); } @keyframes ds-rot { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .ds-step-active { animation: none; } }"
+    },
+    {
+      "name": "Checkpoint Card",
+      "kind": "card",
+      "refersTo": "checkpoint-card",
+      "description": "A saved checkpoint of the agent's work: run-blue preview tile, title and diff meta, Create PR with its attention dot, and a live preview strip.",
+      "html": "<div class=\"ds-cp\"><div class=\"ds-cp-head\"><span class=\"ds-cp-tile\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20\"/><path d=\"M2 12h20\"/></svg></span><div class=\"ds-cp-text\"><p class=\"ds-cp-title\">Fix session refresh race</p><p class=\"ds-cp-meta\">PR not opened <span>·</span> 3 files <span class=\"ds-cp-diff\"><span class=\"ds-add\">+86</span> <span class=\"ds-del\">−31</span></span> <span>·</span> 4m ago</p></div><span class=\"ds-cp-pr\"><button class=\"ds-cp-btn\" type=\"button\">Create PR</button><span class=\"ds-cp-dot\" aria-hidden=\"true\"></span></span></div><button class=\"ds-cp-strip\" type=\"button\" aria-label=\"Open preview\"><span class=\"ds-cp-sheet\"></span></button></div>",
+      "css": ".ds-cp { max-width: 652px; overflow: hidden; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-radius: 16px; background: var(--color-raised, #313130); box-shadow: var(--shadow-card, 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -10px rgb(0 0 0 / 0.45)); font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); } .ds-cp-head { display: flex; align-items: center; gap: 12px; padding: 14px; } .ds-cp-tile { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: var(--color-run, #6aa4ff); color: #fff; } .ds-cp-text { flex: 1; min-width: 0; } .ds-cp-title { margin: 0; font-size: 14.5px; font-weight: 500; color: var(--color-ink, #ececeb); } .ds-cp-meta { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12.5px; color: var(--color-ink-3, #9c9b96); } .ds-cp-diff { font-family: var(--font-mono, 'Geist Mono Variable', ui-monospace, 'SF Mono', monospace); font-variant-numeric: tabular-nums; } .ds-add { color: var(--color-add, #3fb950); } .ds-del { color: var(--color-del, #f85149); } .ds-cp-pr { position: relative; } .ds-cp-btn { height: 28px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--color-ink, #ececeb); color: var(--color-ground, #1d1d1c); font: 500 13px/1 var(--font-sans, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter Variable', 'Segoe UI', sans-serif); box-shadow: var(--shadow-button, 0 1px 2px rgb(0 0 0 / 0.3)); cursor: pointer; transition: background-color 150ms; } .ds-cp-btn:hover { background: #fff; } .ds-cp-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; box-sizing: border-box; border: 2px solid var(--color-raised, #313130); border-radius: 9999px; background: var(--color-run, #6aa4ff); } .ds-cp-strip { display: block; width: 100%; padding: 14px 14px 0; border: 0; border-top: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); background: var(--color-inset, #2c2c2b); cursor: pointer; } .ds-cp-sheet { display: block; height: 96px; border: 1px solid var(--color-seam, rgb(255 255 255 / 0.08)); border-bottom: 0; border-radius: 8px 8px 0 0; background: #fff; box-shadow: var(--shadow-card, 0 1px 2px rgb(0 0 0 / 0.25), 0 8px 24px -10px rgb(0 0 0 / 0.45)); transition: transform 200ms; } .ds-cp-strip:hover .ds-cp-sheet { transform: translateY(-2px); } .ds-cp-btn:focus-visible, .ds-cp-strip:focus-visible { outline: 2px solid rgb(106 164 255 / 0.6); outline-offset: 1px; }"
+    },
+    {
+      "name": "Send Button",
+      "kind": "button",
+      "refersTo": "round-button-solid",
+      "description": "Every composer's send: a solid ink circle, disabled until there is text.",
+      "html": "<button class=\"ds-send\" aria-label=\"Send\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m5 12 7-7 7 7\"/><path d=\"M12 19V5\"/></svg></button><button class=\"ds-send\" aria-label=\"Send\" disabled><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m5 12 7-7 7 7\"/><path d=\"M12 19V5\"/></svg></button>",
+      "css": ".ds-send{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;margin-right:8px;border:0;border-radius:9999px;background:var(--color-ink,#ececeb);color:var(--color-ground,#1d1d1c);cursor:pointer;transition:background-color 150ms cubic-bezier(.23,1,.32,1),scale 150ms cubic-bezier(.23,1,.32,1)}.ds-send:hover{background:#fff}.ds-send:active:not(:disabled){scale:.92}.ds-send:disabled{background:rgb(255 255 255 / .09);color:var(--color-ink-4,#6f6e6a);cursor:not-allowed}.ds-send:focus-visible{outline:2px solid rgb(106 164 255 / .6);outline-offset:1px}"
+    },
+    {
+      "name": "Composer Stack",
+      "kind": "custom",
+      "refersTo": "composer",
+      "description": "The signature: the worktree strip tucked behind the composer's top, the composer, and the inset tray tucked under it.",
+      "html": "<div class=\"ds-stack\"><div class=\"ds-strip\"><span class=\"ds-thumb\"></span><span class=\"ds-strip-line\"><span class=\"ds-strip-title\">Adding the refund_keys table</span><span class=\"ds-strip-status\">Claude Code is writing migration 0142</span></span><span class=\"ds-strip-count\">1 / 4</span></div><div class=\"ds-composer\"><div class=\"ds-placeholder\">Send message to Interlock</div><div class=\"ds-bar\"><span class=\"ds-plus\">+</span><span class=\"ds-pill\"><i></i><i></i><b></b><b></b>Medium</span></div></div><div class=\"ds-tray\"><span>Explorer</span><span class=\"ds-chip\">Migration checker</span><span class=\"ds-branch\">agent/led-112-refund-keys</span></div></div>",
+      "css": ".ds-stack{width:560px;font:14px -apple-system,BlinkMacSystemFont,sans-serif}.ds-strip{position:relative;display:flex;align-items:center;gap:10px;margin:0 8px -16px;padding:10px 14px 26px 88px;border:1px solid rgb(255 255 255 / .08);border-bottom:0;border-radius:16px 16px 0 0;background:#2c2c2b}.ds-thumb{position:absolute;left:12px;top:-12px;width:64px;height:44px;border-radius:8px;border:1px solid rgb(255 255 255 / .13);background:#22211f;box-shadow:0 1px 2px rgb(0 0 0 / .25),0 8px 24px -10px rgb(0 0 0 / .45)}.ds-strip-line{display:flex;flex-direction:column;flex:1;min-width:0}.ds-strip-title{color:#ececeb;font-size:13.5px}.ds-strip-status{color:#9c9b96;font-size:12px}.ds-strip-count{color:#9c9b96;font-size:13px;font-variant-numeric:tabular-nums}.ds-composer{position:relative;z-index:1;border:1px solid rgb(255 255 255 / .08);border-radius:22px;background:#313130;box-shadow:0 1px 2px rgb(0 0 0 / .3),0 12px 32px -12px rgb(0 0 0 / .55)}.ds-composer:focus-within{box-shadow:0 0 0 1px rgb(255 255 255 / .12),0 12px 32px -12px rgb(0 0 0 / .6)}.ds-placeholder{padding:16px 20px 4px;color:#6f6e6a;font-size:15px}.ds-bar{display:flex;align-items:center;gap:6px;padding:0 12px 12px}.ds-plus{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid rgb(255 255 255 / .08);border-radius:9999px;color:#c4c3bf}.ds-pill{margin-left:auto;display:inline-flex;align-items:center;gap:3px;height:32px;padding:0 12px;border-radius:9999px;background:rgb(255 255 255 / .06);color:#c4c3bf;font-size:13px}.ds-pill i,.ds-pill b{width:4px;height:4px;border-radius:9999px;background:currentColor}.ds-pill b{opacity:.25;margin-right:0}.ds-pill b:last-of-type{margin-right:5px}.ds-tray{display:flex;align-items:center;gap:8px;margin:-16px 24px 0;padding:19px 6px 4px 12px;border:1px solid rgb(255 255 255 / .08);border-top:0;border-radius:0 0 16px 16px;background:#2c2c2b;color:#9c9b96;font-size:12px}.ds-chip{padding:3px 6px;border-radius:9999px;background:rgb(255 255 255 / .09);color:#ececeb}.ds-branch{margin-left:auto;font:11px \"Geist Mono\",ui-monospace,monospace}"
+    },
+    {
+      "name": "Effort Pill",
+      "kind": "chip",
+      "refersTo": "effort-pill",
+      "description": "Reasoning effort next to Send: four dots filled to the level. Pressed, the pill stretches up into its own menu and folds back on pick.",
+      "html": "<button class=\"ds-effort\"><span class=\"ds-dots\"><i></i><i></i><b></b><b></b></span>Medium</button>",
+      "css": ".ds-effort{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border:0;border-radius:9999px;background:rgb(255 255 255 / .06);color:#c4c3bf;font:13px -apple-system,BlinkMacSystemFont,sans-serif;cursor:pointer;transition:color 150ms}.ds-effort:hover{color:#ececeb}.ds-effort:focus-visible{outline:2px solid rgb(106 164 255 / .6);outline-offset:1px}.ds-dots{display:flex;gap:3px}.ds-dots i,.ds-dots b{width:4px;height:4px;border-radius:9999px;background:currentColor}.ds-dots b{opacity:.25;transform:scale(.8)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Calm Handoff",
+    "overview": "Interlock hands a coding task to an agent the way you would hand it to a capable colleague: a quiet page, one question, then a readable account of what it did and a window into its machine. The system is dark only (`color-scheme: dark`): warm soft graphite in a few close steps, light warm ink for text and for the one action that matters, colour only where state lives, and a single serif voice for the moments that address a person. Everything else is the platform's own UI sans; anything a machine named is Geist Mono.\n\nThe lineage is pinned and should be read as four bounded jobs, never averaged together:\n\nConfirmed rejections from this project's history: the themed railway concept, the dense near-black dashboard, multi-agent arenas (best-of-N, compare), a floating status pill above the composer, and the \"AI-slop\" equaliser-with-glow effort dial.",
+    "keyCharacteristics": [
+      "Soft graphite ladder: Ground sidebar, Panel page, Raised cards and composer, Overlay for floating layers, Inset wells.",
+      "Light Ink is the action colour; there is no blue primary.",
+      "Libre Baskerville in named seats only; UI sans everywhere else; Geist Mono for machine text.",
+      "The composer is the centre of gravity, with a strip behind it and a tray under it.",
+      "One reading width (700px) alone; a 40/60 split when the workspace opens, docked on one spring.",
+      "Motion explains state, continuity or feedback, or it doesn't exist."
+    ],
+    "rules": [
+      {
+        "name": "The Ink Not Accent Rule",
+        "body": "Action is light ink on graphite. A primary button, send and stop are ink with Ground glyphs; buttons are never blue, violet or tinted.",
+        "section": "colors"
+      },
+      {
+        "name": "The Colour Means State Rule",
+        "body": "Chrome stays ink on graphite. Colour appears only for agent status, diff, syntax, focus, selection, run blue for what is live, and the agent tint inside its mark. Navigation and selection are white alpha washes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Syntax Stays Home Rule",
+        "body": "`syn-*`, `add` and `del` live inside code and diff surfaces. They never signal app state, and status colours never appear inside code.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Glow Rule",
+        "body": "No coloured shadow, bloom, neon, gradient fill or blurred colour blob anywhere. The only blur in the system is the dock's progressive backdrop blur, which is neutral.",
+        "section": "colors"
+      },
+      {
+        "name": "The Named Seats Rule",
+        "body": "Libre Baskerville appears only in: the home display line, page headlines, hold-card decisions, the PR-opened dialog title, the wordmark, and the sidebar tracker card title. Buttons, labels, body, nav and data are never serif, and no headline swaps a single word into serif, italic or colour for \"taste\".",
+        "section": "typography"
+      },
+      {
+        "name": "The Machine Text Rule",
+        "body": "If a machine named it (agent ID, branch, path, command, diff count, cron, PR link, model id), set it in Geist Mono; prose stays in the UI sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "body": "Labels are sentence case with no added letter-spacing. No uppercase, no tracked-out eyebrows.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lighter Means Nearer Rule",
+        "body": "A surface comes forward by getting lighter, with a Seam outline and the Card shadow. Nothing comes forward by glowing.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Wells Go Down Rule",
+        "body": "Inside a card, secondary content recedes into Inset wells instead of adding another raised layer. Cards are never nested in cards.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Motion Reports State Rule",
+        "body": "Nothing moves for decoration. A loop means an agent is working or waiting; an entrance means something just arrived; a slide means the same thing moved.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** build every surface from the graphite ladder: Ground for the sidebar and rail, Panel for the page, Raised for cards and composers, Overlay for floating layers, Inset for wells and composer strips.",
+      "**Do** make the one decisive action per region an ink Button or an ink round button; everything else is secondary, ghost or a pill.",
+      "**Do** reach for `components/ui` and `styles.ts` (`surface.*`, `pressable`, `segment`) before writing a surface or a pressable again.",
+      "**Do** put task context (worktree, branch, PR, subagents) in the composer tray or the worktree strip, tucked behind the composer, never floating above it.",
+      "**Do** keep status cards near the composer collapsed to one line by default and expandable on demand.",
+      "**Do** keep the chat at its 700px reading width alone, and narrow it to the 40/60 split only while the workspace is open, on the shared `dock` spring.",
+      "**Do** use the motion tokens; exits faster than entrances; animate only feedback, continuity or hierarchy.",
+      "**Do** keep Libre Baskerville to its named seats and machine text in Geist Mono.",
+      "**Do** give every icon-only control a `label`.",
+      "**Do** keep one agent per task: one worktree strip, one workspace, one status line."
+    ],
+    "donts": [
+      "**Don't** add equalisers, waveforms, glows, neon, colour blobs, gradient fills or \"AI energy\" effects; delight is continuity of shape and position.",
+      "**Don't** use indigo or violet as an accent; violet is `merge` and means merged.",
+      "**Don't** add a blue (or any coloured) primary button.",
+      "**Don't** wrap things in cards by default, and never nest a card in a card.",
+      "**Don't** use emoji as icons; icons are Lucide at one stroke weight.",
+      "**Don't** float status pills or badges above the composer.",
+      "**Don't** introduce themed metaphors, ironic copy or invented worlds; the product is a calm tool.",
+      "**Don't** build dense dashboards, stat tiles, columns of agents or multi-agent arenas (best-of-N, side-by-side compare).",
+      "**Don't** swap one word of a headline into serif, italic or colour for \"taste\".",
+      "**Don't** give everything the same fade-and-rise entrance, stagger whole lists, add bounce outside `morph`, or animate on the simulation tick.",
+      "**Don't** use syntax or diff colours for app state, or status colours inside code.",
+      "**Don't** use colour for navigation, selection or emphasis; those are white alpha washes.",
+      "**Don't** set reading text in Ink 4, use uppercase or letter-spaced labels, or draw vendor logos for agents."
+    ]
+  }
+}
