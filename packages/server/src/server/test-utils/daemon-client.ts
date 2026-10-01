@@ -1,0 +1,36 @@
+import { WebSocket } from "ws";
+import {
+  DaemonClient as SharedDaemonClient,
+  type DaemonClientConfig as SharedDaemonClientConfig,
+  type CreateAgentRequestOptions,
+  type DaemonEvent,
+  type WebSocketLike,
+} from "@interlock/client/internal/daemon-client";
+
+export type DaemonClientConfig = Omit<
+  SharedDaemonClientConfig,
+  "webSocketFactory" | "transportFactory" | "clientId"
+> & { clientId?: string };
+export type CreateAgentOptions = CreateAgentRequestOptions;
+export { type DaemonEvent };
+
+let testClientCounter = 0;
+
+function nextTestClientId(): string {
+  testClientCounter += 1;
+  return `clid_test_client_${testClientCounter}`;
+}
+
+export class DaemonClient extends SharedDaemonClient {
+  constructor(config: DaemonClientConfig) {
+    const clientId = config.clientId ?? nextTestClientId();
+    super({
+      ...config,
+      clientId,
+      webSocketFactory: (url, options) =>
+        new WebSocket(url, options?.protocols, {
+          headers: options?.headers,
+        }) as unknown as WebSocketLike,
+    });
+  }
+}

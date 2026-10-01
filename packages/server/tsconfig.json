@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.legacy.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "lib": ["ES2023", "DOM"],
+    "types": ["node"],
+    "paths": { "@server/*": ["./src/*"] }
+  },
+  "include": ["src", "scripts", "vitest.config.ts"]
+}
