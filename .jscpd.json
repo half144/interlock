@@ -1,0 +1,21 @@
+{
+  "threshold": 3,
+  "minLines": 10,
+  "minTokens": 90,
+  "reporters": ["console"],
+  "gitignore": true,
+  "pattern": "{packages,apps}/*/src/**/*.{ts,tsx,js,jsx}",
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/__tests__/**",
+    "**/__mocks__/**",
+    "**/mocks/**",
+    "**/fixtures/**",
+    "**/testing/**",
+    "**/test-utils/**",
+    "**/*.gen.*"
+  ]
+}

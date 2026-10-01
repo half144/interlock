@@ -1,0 +1,3810 @@
+{
+  "packages/app/scripts/restructure.mjs": {
+    "no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/app/src/app/useHotkeys.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/app/src/components/effort/EffortPicker/EffortMenu/EffortMenu.tsx": {
+    "jsx-a11y/click-events-have-key-events": {
+      "count": 1
+    },
+    "jsx-a11y/interactive-supports-focus": {
+      "count": 1
+    }
+  },
+  "packages/app/src/components/preview/api/ApiMock/ApiBlock/ApiBlock.tsx": {
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/components/ui/CodeText/CodeText.tsx": {
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/components/ui/ScaledFrame/ScaledFrame.tsx": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 6
+    }
+  },
+  "packages/app/src/features/automations/components/AutomationsView/AutomationsView.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    },
+    "react/no-unescaped-entities": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/automations/utils/cron.ts": {
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/home/components/Home/HomeComposer/ProjectPill/ProjectPill.tsx": {
+    "@typescript-eslint/no-confusing-void-expression": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/home/components/Home/HomeComposer/WorktreeTray/WorktreeTray.tsx": {
+    "@typescript-eslint/no-confusing-void-expression": {
+      "count": 1
+    },
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/home/components/Home/ModelPicker/ModelPicker.tsx": {
+    "@typescript-eslint/no-confusing-void-expression": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/home/components/Home/WaitingOnYou/WaitingOnYou.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/palette/components/CommandPalette/CommandPalette.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/palette/components/CommandPalette/PaletteDialog/PaletteDialog.tsx": {
+    "jsx-a11y/no-autofocus": {
+      "count": 1
+    },
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/settings/components/SettingsView/Budget/Budget.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/settings/components/SettingsView/SettingsView.tsx": {
+    "react/jsx-max-depth": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/Sidebar.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/SidebarFooter/SidebarFooter.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/SidebarHeader/SidebarHeader.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/SidebarProjects/SidebarProjects.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/SidebarTasks/SidebarTasks.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/SidebarTasks/TaskRow/TaskRow.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Toaster/ToastCard/ToastCard.tsx": {
+    "no-restricted-imports": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/shell/components/Toaster/Toaster.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/AgentTree/AgentTree.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/AgentTree/MainAgentRow/MainAgentRow.tsx": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/AgentTree/SubagentRow/SubagentRow.tsx": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/AgentsTab.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/MainOverview/MainOverview.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/SubagentChat/ChatHeader/ChatHeader.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/SubagentChat/SubagentComposer/SubagentComposer.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/SubagentChat/SubagentTranscript/CallGroup/CallGroup.tsx": {
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/AgentsTab/SubagentChat/SubagentTranscript/SubagentTranscript.tsx": {
+    "no-nested-ternary": {
+      "count": 1
+    },
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/chat/ToolBody/ToolBody.tsx": {
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/subagents/components/chat/ToolBody/ToolLine/ToolLine.tsx": {
+    "@typescript-eslint/prefer-includes": {
+      "count": 1
+    },
+    "no-nested-ternary": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/ThreadHeader/ChatSwitcher/ChatSwitcher.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/ThreadHeader/TaskActions/TaskActions.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/ThreadHeader/TaskActions/TaskMenu/TaskMenu.tsx": {
+    "@typescript-eslint/no-confusing-void-expression": {
+      "count": 2
+    },
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/ThreadView.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    },
+    "react/jsx-max-depth": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/Composer/Composer.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/AgentMessage.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    },
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/CheckpointCard/CheckpointCard.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    },
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/DelegateCard/DelegateCard.tsx": {
+    "no-nested-ternary": {
+      "count": 1
+    },
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/HoldCard/HoldCard.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/HoldCard/HoldQuestion/HoldQuestion.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/StepItem/StepItem.tsx": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/ThreadTray/ThreadTray.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/Transcript.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/WorktreeCard/WorktreeCard.tsx": {
+    "complexity": {
+      "count": 1
+    },
+    "no-nested-ternary": {
+      "count": 3
+    },
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/blocks/Prose/Prose.tsx": {
+    "react/no-array-index-key": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/thread/hooks/useScrollToLatest.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/thread/hooks/useSplit.ts": {
+    "@typescript-eslint/consistent-type-definitions": {
+      "count": 1
+    },
+    "react-hooks/exhaustive-deps": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/utils/focusComposer.ts": {
+    "@typescript-eslint/unbound-method": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/utils/planSteps.ts": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/utils/rise.ts": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/ChecksView/ChecksView.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/CodeTab/Breadcrumbs/Breadcrumbs.tsx": {
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/CodeTab/CodeTab.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/CodeTab/DiffFile/DiffHunk/LineAnnotations/CommentComposer/CommentComposer.tsx": {
+    "jsx-a11y/no-autofocus": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/CodeTab/EditorTabs/EditorTabs.tsx": {
+    "no-restricted-imports": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/PreviewFrame/PreviewCanvas/PreviewCanvas.tsx": {
+    "no-nested-ternary": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/PreviewFrame/PreviewCanvas/VisualEdit/DescribePanel/DescribePanel.tsx": {
+    "jsx-a11y/no-autofocus": {
+      "count": 1
+    },
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/PreviewFrame/PreviewCanvas/VisualEdit/VisualEdit.tsx": {
+    "jsx-a11y/click-events-have-key-events": {
+      "count": 1
+    },
+    "jsx-a11y/no-static-element-interactions": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/TerminalView/TerminalOutput/TerminalOutput.tsx": {
+    "react/no-array-index-key": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/Toolbar/PrButton/PrPanel/PrPanel.tsx": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/Toolbar/Toolbar.tsx": {
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": {
+      "count": 1
+    },
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/Workspace.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/editor/StatusBar/StatusBar.tsx": {
+    "no-nested-ternary": {
+      "count": 2
+    }
+  },
+  "packages/app/src/features/workspace/hooks/useTerminal.ts": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/utils/checks.ts": {
+    "complexity": {
+      "count": 1
+    },
+    "no-nested-ternary": {
+      "count": 6
+    }
+  },
+  "packages/app/src/features/workspace/utils/diff.ts": {
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/utils/fileTree.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 8
+    }
+  },
+  "packages/app/src/features/workspace/utils/hotspots.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/app/src/hooks/useCopy.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/app/src/hooks/useFocusTrap.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/app/src/hooks/useRail.ts": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/lib/agentStatus.ts": {
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    }
+  },
+  "packages/app/src/lib/highlight.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/lib/motion.ts": {
+    "no-restricted-imports": {
+      "count": 1
+    }
+  },
+  "packages/app/src/lib/parseDiff.ts": {
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    }
+  },
+  "packages/app/src/main.tsx": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "packages/app/src/mocks/agents.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/app/src/mocks/diffs.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/app/src/mocks/subagents.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/app/src/mocks/threads.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/app/src/stores/slices/editor.ts": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  },
+  "packages/app/src/stores/slices/subagents.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/client/examples/quickstart.ts": {
+    "no-console": {
+      "count": 1
+    }
+  },
+  "packages/client/src/compat/normalize-provider-models.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "packages/client/src/connection.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 20
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "packages/client/src/connection/index.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/unbound-method": {
+      "count": 5
+    }
+  },
+  "packages/client/src/daemon-client-runtime-metrics.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/client/src/daemon-client-transport-utils.ts": {
+    "@typescript-eslint/no-base-to-string": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    }
+  },
+  "packages/client/src/daemon-client-websocket-transport.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    }
+  },
+  "packages/client/src/daemon-client.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 6
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 21
+    }
+  },
+  "packages/client/src/daemon-client.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-generic-constructors": {
+      "count": 6
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 8
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "@typescript-eslint/unified-signatures": {
+      "count": 2
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 9
+    },
+    "import/no-duplicates": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    },
+    "max-params": {
+      "count": 1
+    },
+    "no-console": {
+      "count": 1
+    }
+  },
+  "packages/client/src/index.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/client/src/index.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 4
+    }
+  },
+  "packages/client/src/terminals/index.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/__tests__/dependency-closure.test.ts": {
+    "max-depth": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/astro/parser.ts": {
+    "@typescript-eslint/class-literal-property-style": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/csharp/tokens.ts": {
+    "complexity": {
+      "count": 1
+    },
+    "no-case-declarations": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/highlighter.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-for-of": {
+      "count": 1
+    },
+    "max-depth": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/nix/tokens.ts": {
+    "prefer-const": {
+      "count": 2
+    }
+  },
+  "packages/highlight/src/svelte/nesting.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    }
+  },
+  "packages/highlight/src/svelte/parser.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/svelte/tokens.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 5
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/syntax-roles.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/highlight/src/themes.ts": {
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/agent-attention-notification.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/agent-types.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/consistent-indexed-object-style": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/generated/validation/ws-outbound.aot.ts": {
+    "@typescript-eslint/ban-ts-comment": {
+      "count": 1
+    },
+    "@typescript-eslint/dot-notation": {
+      "count": 24207
+    },
+    "@typescript-eslint/no-explicit-any": {
+      "count": 189
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 84
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 255
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 9293
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 23669
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 41
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 57
+    },
+    "@typescript-eslint/prefer-for-of": {
+      "count": 585
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-depth": {
+      "count": 187
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    },
+    "no-empty": {
+      "count": 164
+    },
+    "no-var": {
+      "count": 3354
+    }
+  },
+  "packages/protocol/src/git-remote.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/messages.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 17
+    },
+    "@typescript-eslint/no-unnecessary-type-arguments": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/paseo-config-schema.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 7
+    }
+  },
+  "packages/protocol/src/provider-config.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 6
+    }
+  },
+  "packages/protocol/src/provider-snapshot-codec.test.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/provider-snapshot-codec.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/search/text-match.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/terminal-input-mode.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    }
+  },
+  "packages/protocol/src/terminal-key-input.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 5
+    },
+    "complexity": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/terminal-profiles.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/protocol/src/terminal-snapshot.ts": {
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    }
+  },
+  "packages/protocol/src/tool-call-display.ts": {
+    "@typescript-eslint/no-base-to-string": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/scripts/supervisor-entrypoint.ts": {
+    "@typescript-eslint/unbound-method": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    }
+  },
+  "packages/server/scripts/supervisor.ts": {
+    "@typescript-eslint/no-floating-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/agent/activity-curator.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-archive.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/agent-loading.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-manager-stream-coalescing.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 4
+    }
+  },
+  "packages/server/src/server/agent/agent-manager.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 6
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 6
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 30
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 46
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 21
+    },
+    "complexity": {
+      "count": 1
+    },
+    "no-empty": {
+      "count": 9
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-manager.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-generic-constructors": {
+      "count": 1
+    },
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 24
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/only-throw-error": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 3
+    },
+    "@typescript-eslint/return-await": {
+      "count": 1
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 2
+    },
+    "@typescript-eslint/unbound-method": {
+      "count": 2
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 7
+    },
+    "complexity": {
+      "count": 19
+    },
+    "max-depth": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 7
+    },
+    "max-params": {
+      "count": 3
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-projections.test.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/agent-projections.ts": {
+    "@typescript-eslint/consistent-indexed-object-style": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-prompt.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-prompt.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    },
+    "max-params": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/agent-response-loop.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    }
+  },
+  "packages/server/src/server/agent/agent-response-loop.ts": {
+    "@typescript-eslint/prefer-function-type": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-run-state.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-sdk-types.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/consistent-indexed-object-style": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-storage.test.ts": {
+    "complexity": {
+      "count": 1
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/agent-storage.ts": {
+    "@typescript-eslint/consistent-generic-constructors": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-stream-coalescer.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-stream-coalescer.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/agent-timeline-store.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/create-agent-lifecycle-dispatch.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/create-agent-mode.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/create-agent/create.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/agent/create-agent/create.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-redundant-type-constituents": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 3
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/create-agent/intent.ts": {
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/lifecycle-command.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/lifecycle-command.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/mutable-provider-config-owner.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/agent/mutable-provider-config-owner.ts": {
+    "@typescript-eslint/unbound-method": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/permission-response.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/permission-response.ts": {
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/prompt-attachments.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/provider-launch-config.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/provider-options.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/provider-refresh-deadline.ts": {
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/provider-registry-wrap.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 5
+    }
+  },
+  "packages/server/src/server/agent/provider-registry.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/provider-registry.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    },
+    "@typescript-eslint/unbound-method": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    },
+    "max-params": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/provider-snapshot-manager.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    },
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 5
+    }
+  },
+  "packages/server/src/server/agent/provider-snapshot-manager.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-confusing-void-expression": {
+      "count": 1
+    },
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 11
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 18
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/provider-subagents/store.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/agent.interrupt-restart-regression.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/agent.redesign.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/agent.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/agent.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 5
+    },
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
+    "@typescript-eslint/dot-notation": {
+      "count": 4
+    },
+    "@typescript-eslint/no-deprecated": {
+      "count": 2
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 26
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 4
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 5
+    },
+    "@typescript-eslint/require-await": {
+      "count": 13
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 2
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 30
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 8
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/hooks.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/model-manifest.ts": {
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 6
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/models.test.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/models.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/partial-json.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 6
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/sidechain-tracker.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/subagents/live-source.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 4
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/subagents/observation.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/subagents/presentation.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/subagents/replay-source.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/subagents/workflow-replay-source.ts": {
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/task-notification-tool-call.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/task-state.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/test-rewind-claude-sdk.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/tool-call-detail-parser.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 5
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/claude/tool-call-mapper.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 1
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex-app-server-agent.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 15
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 1
+    },
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex-app-server-agent.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 8
+    },
+    "@typescript-eslint/consistent-indexed-object-style": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/dot-notation": {
+      "count": 4
+    },
+    "@typescript-eslint/no-base-to-string": {
+      "count": 1
+    },
+    "@typescript-eslint/no-deprecated": {
+      "count": 43
+    },
+    "@typescript-eslint/no-inferrable-types": {
+      "count": 3
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 5
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 33
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 8
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 4
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 9
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 4
+    },
+    "complexity": {
+      "count": 27
+    },
+    "max-depth": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 3
+    },
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex/app-server-transport.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 1
+    },
+    "@typescript-eslint/restrict-plus-operands": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex/async-questions.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex/test-utils/fake-app-server.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex/tool-call-detail-parser.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/codex/tool-call-mapper.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 7
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-return": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 6
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 5
+    },
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/diagnostic-utils.ts": {
+    "@typescript-eslint/dot-notation": {
+      "count": 5
+    },
+    "max-depth": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/jsonl-frame-decoder.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/jsonl-rpc-process.ts": {
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-call": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    },
+    "@typescript-eslint/restrict-plus-operands": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/mock-load-test-agent.ts": {
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 17
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 19
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/mock-slow-provider.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 5
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/providers/provider-image-output.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/provider-runner.test.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/providers/test-utils/session-stream-adapter.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/tool-call-detail-primitives.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-deprecated": {
+      "count": 54
+    },
+    "@typescript-eslint/no-unnecessary-type-arguments": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/providers/tool-call-mapper-utils.ts": {
+    "@typescript-eslint/no-inferrable-types": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/requests/index.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/requests/index.ts": {
+    "@typescript-eslint/require-await": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/rewind/rewind.test.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/agent/rewind/test-rewind-session.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 9
+    }
+  },
+  "packages/server/src/server/agent/structured-generation-providers.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/structured-generation-providers.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/system-prompt.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/agent/timeline-projection.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 10
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 2
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/auto-archive-on-merge/archive-if-safe.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/auto-archive-on-merge/index.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/auto-archive-on-merge/index.ts": {
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/bootstrap-managed-processes.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/bootstrap.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/bootstrap.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/checkout-diff-manager.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 9
+    }
+  },
+  "packages/server/src/server/checkout-diff-manager.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/checkout/status-projection.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/config.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-client.e2e.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-config-store.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 3
+    },
+    "@typescript-eslint/dot-notation": {
+      "count": 4
+    },
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 5
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-e2e/agent-refresh-rehydrates-timeline.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-e2e/claude-live-usage.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-e2e/empty-project-persists.e2e.test.ts": {
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-e2e/git-operations.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-e2e/live-preferences.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/daemon-e2e/open-project-missing-directory.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-e2e/terminal.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 4
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/daemon-worker.ts": {
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/directory-sync/internal/versioned-collection.ts": {
+    "@typescript-eslint/unbound-method": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/file-explorer/observer.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-explorer/observer.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-type-conversion": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-explorer/service.test.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/file-explorer/service.ts": {
+    "@typescript-eslint/prefer-for-of": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 3
+    },
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-observer/index.ts": {
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-observer/internal/contracts.ts": {
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-observer/internal/linux.ts": {
+    "@typescript-eslint/no-unnecessary-type-conversion": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-observer/internal/native-recursive.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-conversion": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/file-upload/index.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/git-metadata-event-rules.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/hostnames.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/lifecycle-reasons.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/logger.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/managed-processes/managed-processes.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/managed-processes/managed-processes.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/migrations/backfill-workspace-id.migration.test.ts": {
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/package-version.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/paseo-env.ts": {
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-argument": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/paseo-worktree-service.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 10
+    }
+  },
+  "packages/server/src/server/paseo-worktree-service.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/persisted-config.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/persistence-hooks.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/pid-lock.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-object-type": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/project-key.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/resolve-worktree-creation-intent.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/resolve-worktree-creation-intent.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 6
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/server-id.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session.create-agent-worktree-autoarchive.e2e.test.ts": {
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 7
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 9
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 1
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session.ts": {
+    "@eslint-community/eslint-comments/require-description": {
+      "count": 1
+    },
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 4
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 14
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/non-nullable-type-assertion-style": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 4
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 3
+    },
+    "@typescript-eslint/require-await": {
+      "count": 6
+    },
+    "@typescript-eslint/return-await": {
+      "count": 1
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 13
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 7
+    },
+    "complexity": {
+      "count": 22
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 10
+    },
+    "max-params": {
+      "count": 2
+    },
+    "prefer-const": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session.workspace-git-watch.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 8
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 11
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session.workspace-resolution-invariants.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 13
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session.workspaces.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 6
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 214
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 6
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session/agent-config/agent-config-session.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    }
+  },
+  "packages/server/src/server/session/agent-updates/agent-updates-service.test.ts": {
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/agent-updates/agent-updates-service.ts": {
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    },
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/checkout/checkout-session.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 11
+    }
+  },
+  "packages/server/src/server/session/checkout/checkout-session.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 5
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session/checkout/git-metadata-generator.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session/checkout/git-metadata-generator.ts": {
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/files/workspace-files-session.ts": {
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/git-mutation/git-mutation-service.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session/provider/provider-catalog-session.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session/provider/provider-catalog-session.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/workspace-git-observer/workspace-git-observer-service.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/session/workspace-git-observer/workspace-git-observer-service.ts": {
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/workspace-provisioning/workspace-provisioning-service.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/workspace-provisioning/workspace-provisioning-service.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/session/workspace-recovery/workspace-recovery-service.ts": {
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/snapshot-mutation-ownership.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 11
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/test-utils/class-mocks.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/test-utils/fake-agent-client.ts": {
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 4
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/test-utils/session-stubs.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/test-utils/workspace-git-service-stub.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 8
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/utils/diff-highlighter.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 4
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/watcher-liveness-canary.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/websocket-server.notifications.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 5
+    }
+  },
+  "packages/server/src/server/websocket-server.terminal-notifications.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 5
+    }
+  },
+  "packages/server/src/server/websocket-server.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/consistent-generic-constructors": {
+      "count": 4
+    },
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-base-to-string": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 16
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-includes": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 24
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 3
+    },
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/websocket/physical-socket.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/websocket/physical-socket.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/websocket/runtime-metrics.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 10
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/wire-compat.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 10
+    },
+    "import/no-duplicates": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-archive-record-scoped.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-archive-service.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-archive-service.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-auto-name.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-auto-name.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-automation-gate.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-create-git-fanout.local.e2e.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-directory.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-directory.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 5
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-git-fetch.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-git-fetch.ts": {
+    "@typescript-eslint/no-redundant-type-constituents": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-git-metadata.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-git-noop-fetch.local.e2e.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 3
+    }
+  },
+  "packages/server/src/server/workspace-git-service.observation.integration.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-git-service.observation.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 3
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 8
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 11
+    }
+  },
+  "packages/server/src/server/workspace-git-service.primitive.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-git-service.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 7
+    },
+    "@typescript-eslint/no-invalid-void-type": {
+      "count": 5
+    },
+    "prefer-const": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-git-service.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-misused-promises": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 18
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 13
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-reconciliation-observation.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-reconciliation-service.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/workspace-reconciliation-service.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-function-type": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-registry-bootstrap.ts": {
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-registry-model.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-registry.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-registry.ts": {
+    "@typescript-eslint/await-thenable": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-arguments": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/workspace-same-cwd-isolation.e2e.test.ts": {
+    "@typescript-eslint/no-unused-vars": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/worktree-bootstrap.posix.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 11
+    }
+  },
+  "packages/server/src/server/worktree-bootstrap.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 10
+    }
+  },
+  "packages/server/src/server/worktree-bootstrap.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 5
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/server/worktree-core.posix.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/worktree-core.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/server/worktree-session.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 5
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 60
+    }
+  },
+  "packages/server/src/server/worktree-session.ts": {
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-depth": {
+      "count": 2
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 4
+    },
+    "max-params": {
+      "count": 1
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/forge-cli-command.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/forge-registry.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/forge-registry.ts": {
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/forge-resolver.ts": {
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/forge-service.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/github-service.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 14
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 1
+    },
+    "prefer-const": {
+      "count": 7
+    }
+  },
+  "packages/server/src/services/github-service.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 8
+    },
+    "@typescript-eslint/no-unused-vars": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 6
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 8
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 4
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/quota-fetcher/providers/claude.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/dot-notation": {
+      "count": 2
+    },
+    "@typescript-eslint/no-redundant-type-constituents": {
+      "count": 3
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 5
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/quota-fetcher/providers/codex.ts": {
+    "@typescript-eslint/dot-notation": {
+      "count": 3
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    }
+  },
+  "packages/server/src/services/quota-fetcher/service.test.ts": {
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 2
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/services/quota-fetcher/usage.ts": {
+    "@typescript-eslint/no-deprecated": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/activity/terminal-activity-tracker.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal-manager.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 6
+    },
+    "import/no-duplicates": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal-manager.ts": {
+    "@typescript-eslint/require-await": {
+      "count": 5
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal-output-coalescer.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal-session-controller.resize.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 5
+    }
+  },
+  "packages/server/src/terminal/terminal-session-controller.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/require-await": {
+      "count": 3
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal-ts-loader.mjs": {
+    "no-undef": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal-worker-process.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal.posix.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 11
+    }
+  },
+  "packages/server/src/terminal/terminal.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 10
+    },
+    "max-depth": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/terminal.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 6
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 2
+    },
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/worker-terminal-manager.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 5
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/terminal/worker-terminal-manager.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 2
+    },
+    "@typescript-eslint/require-await": {
+      "count": 1
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 2
+    }
+  },
+  "packages/server/src/utils/checkout-git-batching.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/checkout-git.commits.test.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/checkout-git.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/checkout-git.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 7
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 6
+    },
+    "@typescript-eslint/switch-exhaustiveness-check": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 13
+    },
+    "max-depth": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 3
+    },
+    "max-params": {
+      "count": 3
+    }
+  },
+  "packages/server/src/utils/directory-suggestions.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "complexity": {
+      "count": 5
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/git-command-runtime-metrics.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 6
+    }
+  },
+  "packages/server/src/utils/git-process-scheduler.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 4
+    }
+  },
+  "packages/server/src/utils/git-process-scheduler.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 1
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/path.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-nullish-coalescing": {
+      "count": 2
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 2
+    }
+  },
+  "packages/server/src/utils/project-custom-icon.test.ts": {
+    "@typescript-eslint/array-type": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/project-custom-icon.ts": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/project-icon.ts": {
+    "@typescript-eslint/no-inferrable-types": {
+      "count": 4
+    },
+    "complexity": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-params": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/run-git-command.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/run-git-command.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-promise-reject-errors": {
+      "count": 3
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 3
+    },
+    "prefer-const": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/spawn.launch-regression.test.ts": {
+    "@typescript-eslint/no-dynamic-delete": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/spawn.test.ts": {
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/spawn.ts": {
+    "@typescript-eslint/no-unnecessary-type-assertion": {
+      "count": 3
+    },
+    "complexity": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/ssh-hostname.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 2
+    }
+  },
+  "packages/server/src/utils/tool-call-parsers.ts": {
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/tree-kill.ts": {
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/worktree-metadata.ts": {
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-optional-chain": {
+      "count": 1
+    },
+    "@typescript-eslint/prefer-regexp-exec": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/worktree-shell-selection.test.ts": {
+    "@typescript-eslint/consistent-type-imports": {
+      "count": 2
+    },
+    "@typescript-eslint/no-empty-function": {
+      "count": 1
+    }
+  },
+  "packages/server/src/utils/worktree.ts": {
+    "@typescript-eslint/no-base-to-string": {
+      "count": 1
+    },
+    "@typescript-eslint/no-non-null-assertion": {
+      "count": 1
+    },
+    "@typescript-eslint/no-unnecessary-condition": {
+      "count": 4
+    },
+    "@typescript-eslint/no-unsafe-assignment": {
+      "count": 2
+    },
+    "@typescript-eslint/no-unsafe-member-access": {
+      "count": 2
+    },
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": {
+      "count": 1
+    },
+    "complexity": {
+      "count": 5
+    },
+    "max-depth": {
+      "count": 1
+    },
+    "max-lines": {
+      "count": 1
+    },
+    "max-lines-per-function": {
+      "count": 3
+    }
+  },
+  "scripts/quality/structure/components.mjs": {
+    "max-depth": {
+      "count": 1
+    }
+  },
+  "scripts/quality/structure/imports.mjs": {
+    "no-nested-ternary": {
+      "count": 1
+    }
+  }
+}

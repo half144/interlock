@@ -11,10 +11,10 @@ A macOS desktop app that orchestrates real **Claude Code** and **Codex** agents 
 
 ```
 apps/desktop/          Tauri shell (Rust): window, menu bar, notifications, folder picker,
-                       microphone, sidecar supervision, login-shell PATH
+                       sidecar supervision, login-shell PATH
 packages/app/          the UI (React 19, Vite, Tailwind v4, zustand, motion)
 packages/server/       the daemon (Paseo fork): Claude/Codex providers, worktrees, git/diff,
-                       terminal, usage limits, dictation, uploads, persistence
+                       terminal, usage limits, uploads, persistence
 packages/protocol/     zod schemas and types shared by UI and daemon
 packages/client/       typed WebSocket client
 docs/                  spec-v1.md, decisions/ (ADRs), upstream-sync.md
@@ -31,15 +31,15 @@ Dependency rules (enforced by quality-kit's architecture check):
 
 These scripts are created in M0. Quality is enforced by [quality-kit](https://github.com/half144/quality-kit) in team mode; its ruleset lives in `.quality/`.
 
-| Command | What it does |
-|---|---|
-| `quality-kit gate` | The checks on what changed: types, ESLint, architecture, tests, dead code, duplication, debt, rule integrity |
-| `quality-kit verify --changed` | Opens the affected screens (desktop and phone) and records the proof |
-| `quality-kit evidence still <route>` | Screenshots for the PR |
-| `npm run check` | The full gate plus build and the Rust checks (`cargo fmt`, `clippy`) |
-| `npm run dev:desktop` | The Tauri app with the daemon sidecar |
-| `npm run dev:app` | UI only in the browser, against a running daemon |
-| `npm run test` / `npm run lint` / `npm run typecheck` / `npm run format` | The individual gates |
+| Command                                                                  | What it does                                                                                                 |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `quality-kit gate`                                                       | The checks on what changed: types, ESLint, architecture, tests, dead code, duplication, debt, rule integrity |
+| `quality-kit verify --changed`                                           | Opens the affected screens (desktop and phone) and records the proof                                         |
+| `quality-kit evidence still <route>`                                     | Screenshots for the PR                                                                                       |
+| `npm run check`                                                          | The full gate plus build and the Rust checks (`cargo fmt`, `clippy`)                                         |
+| `npm run dev:desktop`                                                    | The Tauri app with the daemon sidecar                                                                        |
+| `npm run dev:app`                                                        | UI only in the browser, against a running daemon                                                             |
+| `npm run test` / `npm run lint` / `npm run typecheck` / `npm run format` | The individual gates                                                                                         |
 
 ## How to work
 
@@ -47,7 +47,7 @@ These scripts are created in M0. Quality is enforced by [quality-kit](https://gi
    - All work goes on one branch (`v1`), in milestone order, as green commits.
    - One PR at the end, opened with `gh`, carrying the evidence and the list of decisions you took along the way.
 1. **Stay in scope.** Build only what the spec marks as in scope for the current milestone (spec §4, §10). Never build what §5 lists as out of scope, even when the prototype or Paseo has it. Hide it instead.
-2. **Look at Paseo first.** Before solving anything non-trivial, check how Paseo solves it in `~/Documents/personal/paseo`, and prefer its approach. Examples: spawning processes, PATH, worktree edge cases, Claude/Codex protocol quirks, terminals, diffs, login, usage limits, dictation.
+2. **Look at Paseo first.** Before solving anything non-trivial, check how Paseo solves it in `~/Documents/personal/paseo`, and prefer its approach. Examples: spawning processes, PATH, worktree edge cases, Claude/Codex protocol quirks, terminals, diffs, login, usage limits.
    - Start with its `CLAUDE.md`, then `docs/architecture.md`, `docs/agent-lifecycle.md`, `docs/data-model.md`, `docs/timeline-sync.md` and `docs/providers.md`.
    - Then the code: `packages/server/src/server/agent/providers/{claude,codex}`, `packages/server/src/utils/worktree.ts`, `packages/server/src/services/quota-fetcher` and `packages/desktop/src`.
    - Diverging is fine; record why.
@@ -96,17 +96,17 @@ features/thread/components/
 - **When to create the hook:** as soon as the component needs the store, an effect, more than one state, non-trivial derivation, or a handler doing more than one call. Don't create empty hooks.
 - **Placement:**
 
-| It is… | It goes in |
-|---|---|
-| A component used by one feature | `features/<feature>/components/X/` |
-| A piece used by one component only | inside that component's folder |
-| A component used by 2+ features | `components/<group>/X/` |
-| A domain-free primitive (button, modal, field) | `components/ui/X/` |
-| A hook reused within a feature | `features/<feature>/hooks/` |
-| A hook used by 2+ features | `hooks/` |
-| Pure logic of one feature / shared pure logic | `features/<feature>/utils/` / `lib/` |
-| Protocol → store translation | `daemon/adapters/` (the only place that knows protocol shapes) |
-| Global state / domain types | `stores/slices/` / `types/` |
+| It is…                                         | It goes in                                                     |
+| ---------------------------------------------- | -------------------------------------------------------------- |
+| A component used by one feature                | `features/<feature>/components/X/`                             |
+| A piece used by one component only             | inside that component's folder                                 |
+| A component used by 2+ features                | `components/<group>/X/`                                        |
+| A domain-free primitive (button, modal, field) | `components/ui/X/`                                             |
+| A hook reused within a feature                 | `features/<feature>/hooks/`                                    |
+| A hook used by 2+ features                     | `hooks/`                                                       |
+| Pure logic of one feature / shared pure logic  | `features/<feature>/utils/` / `lib/`                           |
+| Protocol → store translation                   | `daemon/adapters/` (the only place that knows protocol shapes) |
+| Global state / domain types                    | `stores/slices/` / `types/`                                    |
 
 - A paired hook (`useX`) is used only by `X`. When another component needs it, promote it to `hooks/` under a generic name.
 

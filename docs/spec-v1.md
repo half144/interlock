@@ -11,30 +11,30 @@ Usável = você consegue trabalhar nos seus projetos de verdade pelo Interlock, 
 
 ## 2. Decisões
 
-| # | Tema | Decisão | Por quê |
-|---|---|---|---|
-| 1 | Motor | Backend próprio a partir de um **fork do servidor do Paseo** (Apache-2.0), mantido por nós daqui em diante | Os adaptadores de Claude e Codex têm ~10k linhas cada, com retomada, interrupção, permissões e subagents já resolvidos |
-| 2 | Shell | **Tauri** com o daemon TypeScript como **sidecar** | App leve; o Claude só tem SDK oficial em TS/Python, então o daemon continua Node |
-| 3 | Código | **Monorepo novo `interlock`** em `~/Documents/personal/interlock` (o testing-ui fica congelado como protótipo) | Produto separado do protótipo; remote `upstream` do Paseo só para consulta |
-| 4 | PR e checks | **Create PR + Checks via `gh`** | O fim natural da tarefa; usa o login que você já tem |
-| 5 | Autonomia | **Auto por padrão**: Claude `auto`, Codex `on-request` + sandbox `workspace-write`. "Full auto" opcional por projeto | Edita livre na worktree e só te chama para o arriscado |
-| 6 | Add project | **Seletor de pasta nativo, só repositórios git** | Sem git não há worktree, diff nem PR |
-| 7 | Uso restante | **Dois anéis (Claude, Codex) + popover** com as janelas de 5h, semanal e por modelo/code review | Substitui o pill de $, que era inventado |
-| 8 | Ao fechar | **Fica no menu bar**; o ⌘Q pergunta se para os agentes | Os agentes seguem sem você |
-| 9 | Avisos | **Notificação do macOS** só para precisa de você / falhou / pronto para review, mais o badge | Sem ruído |
-| 10 | Setup | **Nas configurações do projeto** (script, env, arquivos a copiar, lendo `.worktreeinclude`), com sugestão pelo lockfile | A tela já existe; não suja o repo |
-| 11 | Nomes | Começa na hora com o prompt; **IA rápida renomeia título e branch** antes do 1º commit | Nomes bons sem atrasar o início |
-| 12 | Limpeza | **Arquiva ao mergear** (toggle) + **Discard** manual com confirmação | O disco não enche sozinho |
-| 13 | Comentários no diff | **Acumulam e vão num lote** ("Send 3 comments to agent") | Uma rodada de correção, como um review |
-| 14 | Modelos | **Listas reais de cada provedor** e níveis de esforço por modelo; Gemini sai | Honesto e sempre atualizado |
-| 15 | Plataforma | **Só macOS (Apple Silicon)** | É onde você usa; um build só |
-| 16 | Distribuição | **Build local só para você** agora; **open source depois** (atribuição Apache-2.0 e `NOTICE` desde o dia 1) | Validar antes de publicar |
-| 17 | Subagents | **Igual ao Claude Code**: card ao vivo na conversa, árvore com status, histórico de cada um; stop individual onde o provedor permitir; mensagens ao subagent vão via agente principal | É a melhor experiência que existe hoje |
-| 18 | Entrega | **Fatia vertical com Claude e Codex juntos** (M1), depois M2 e M3 | Você começa a usar cedo |
-| 19 | Anexos e ditado | **Já na v1**: anexar arquivos e imagens em todo composer, e ditado por voz **local e offline** | Faz parte de usar no dia a dia; o Paseo já tem os dois (`file-upload`, `prompt-attachments`, `dictation` com sherpa-onnx) |
-| 20 | Login nos provedores | **Funciona direto** com o login que você já tem nos CLIs (como o Paseo); se faltar login, **Entrar no Claude/Codex dentro do app**, sem abrir terminal | Instalar e já usar; o app e o CLI compartilham a mesma credencial |
-| 21 | Ambiente estrito | **quality-kit em modo time** (`.quality/` no repo): gate no fim do turno (inclusive dos subagentes), regras protegidas e prova em tela. **Sem plano por tarefa** (`requirePlan: false`) **e sem o fluxo `task`/`ship`**: a spec é o plano. As regras do projeto (arquitetura, componentes, composição) entram nele. Lint em **ESLint flat config + typescript-eslint** (o quality-kit exige; o oxlint sai) | Faz o agente não conseguir entregar código ruim, em vez de só pedir. Modo time porque o repo vai ser open source |
-| 22 | Design antes de regra | Mudanças de arquitetura ou de padrão são **conversadas antes** (uma pergunta por vez, com recomendação), registradas na spec ou num ADR, e só então viram regra no quality-kit | O quality-kit garante as regras, mas não as decide; é a parte que fizemos nesta sessão |
+| #   | Tema                  | Decisão                                                                                                                                                                                                                                                                                                                                                                                                    | Por quê                                                                                                                |
+| --- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 1   | Motor                 | Backend próprio a partir de um **fork do servidor do Paseo** (Apache-2.0), mantido por nós daqui em diante                                                                                                                                                                                                                                                                                                 | Os adaptadores de Claude e Codex têm ~10k linhas cada, com retomada, interrupção, permissões e subagents já resolvidos |
+| 2   | Shell                 | **Tauri** com o daemon TypeScript como **sidecar**                                                                                                                                                                                                                                                                                                                                                         | App leve; o Claude só tem SDK oficial em TS/Python, então o daemon continua Node                                       |
+| 3   | Código                | **Monorepo novo `interlock`** em `~/Documents/personal/interlock` (o testing-ui fica congelado como protótipo)                                                                                                                                                                                                                                                                                             | Produto separado do protótipo; remote `upstream` do Paseo só para consulta                                             |
+| 4   | PR e checks           | **Create PR + Checks via `gh`**                                                                                                                                                                                                                                                                                                                                                                            | O fim natural da tarefa; usa o login que você já tem                                                                   |
+| 5   | Autonomia             | **Auto por padrão**: Claude `auto`, Codex `on-request` + sandbox `workspace-write`. "Full auto" opcional por projeto                                                                                                                                                                                                                                                                                       | Edita livre na worktree e só te chama para o arriscado                                                                 |
+| 6   | Add project           | **Seletor de pasta nativo, só repositórios git**                                                                                                                                                                                                                                                                                                                                                           | Sem git não há worktree, diff nem PR                                                                                   |
+| 7   | Uso restante          | **Dois anéis (Claude, Codex) + popover** com as janelas de 5h, semanal e por modelo/code review                                                                                                                                                                                                                                                                                                            | Substitui o pill de $, que era inventado                                                                               |
+| 8   | Ao fechar             | **Fica no menu bar**; o ⌘Q pergunta se para os agentes                                                                                                                                                                                                                                                                                                                                                     | Os agentes seguem sem você                                                                                             |
+| 9   | Avisos                | **Notificação do macOS** só para precisa de você / falhou / pronto para review, mais o badge                                                                                                                                                                                                                                                                                                               | Sem ruído                                                                                                              |
+| 10  | Setup                 | **Nas configurações do projeto** (script, env, arquivos a copiar, lendo `.worktreeinclude`), com sugestão pelo lockfile                                                                                                                                                                                                                                                                                    | A tela já existe; não suja o repo                                                                                      |
+| 11  | Nomes                 | Começa na hora com o prompt; **IA rápida renomeia título e branch** antes do 1º commit                                                                                                                                                                                                                                                                                                                     | Nomes bons sem atrasar o início                                                                                        |
+| 12  | Limpeza               | **Arquiva ao mergear** (toggle) + **Discard** manual com confirmação                                                                                                                                                                                                                                                                                                                                       | O disco não enche sozinho                                                                                              |
+| 13  | Comentários no diff   | **Acumulam e vão num lote** ("Send 3 comments to agent")                                                                                                                                                                                                                                                                                                                                                   | Uma rodada de correção, como um review                                                                                 |
+| 14  | Modelos               | **Listas reais de cada provedor** e níveis de esforço por modelo; Gemini sai                                                                                                                                                                                                                                                                                                                               | Honesto e sempre atualizado                                                                                            |
+| 15  | Plataforma            | **Só macOS (Apple Silicon)**                                                                                                                                                                                                                                                                                                                                                                               | É onde você usa; um build só                                                                                           |
+| 16  | Distribuição          | **Build local só para você** agora; **open source depois** (atribuição Apache-2.0 e `NOTICE` desde o dia 1)                                                                                                                                                                                                                                                                                                | Validar antes de publicar                                                                                              |
+| 17  | Subagents             | **Igual ao Claude Code**: card ao vivo na conversa, árvore com status, histórico de cada um; stop individual onde o provedor permitir; mensagens ao subagent vão via agente principal                                                                                                                                                                                                                      | É a melhor experiência que existe hoje                                                                                 |
+| 18  | Entrega               | **Fatia vertical com Claude e Codex juntos** (M1), depois M2 e M3                                                                                                                                                                                                                                                                                                                                          | Você começa a usar cedo                                                                                                |
+| 19  | Anexos                | **Já na v1**: anexar arquivos e imagens em todo composer. **Sem ditado por voz**                                                                                                                                                                                                                                                                                                                           | Faz parte de usar no dia a dia; o Paseo já tem (`file-upload`, `prompt-attachments`)                                   |
+| 20  | Login nos provedores  | **Funciona direto** com o login que você já tem nos CLIs (como o Paseo); se faltar login, **Entrar no Claude/Codex dentro do app**, sem abrir terminal                                                                                                                                                                                                                                                     | Instalar e já usar; o app e o CLI compartilham a mesma credencial                                                      |
+| 21  | Ambiente estrito      | **quality-kit em modo time** (`.quality/` no repo): gate no fim do turno (inclusive dos subagentes), regras protegidas e prova em tela. **Sem plano por tarefa** (`requirePlan: false`) **e sem o fluxo `task`/`ship`**: a spec é o plano. As regras do projeto (arquitetura, componentes, composição) entram nele. Lint em **ESLint flat config + typescript-eslint** (o quality-kit exige; o oxlint sai) | Faz o agente não conseguir entregar código ruim, em vez de só pedir. Modo time porque o repo vai ser open source       |
+| 22  | Design antes de regra | Mudanças de arquitetura ou de padrão são **conversadas antes** (uma pergunta por vez, com recomendação), registradas na spec ou num ADR, e só então viram regra no quality-kit                                                                                                                                                                                                                             | O quality-kit garante as regras, mas não as decide; é a parte que fizemos nesta sessão                                 |
 
 ## 3. Arquitetura
 
@@ -66,13 +66,14 @@ Usável = você consegue trabalhar nos seus projetos de verdade pelo Interlock, 
 
 ### O que cortar do fork
 
-Relay/E2EE, hub, app mobile e Expo, modo de voz por conversa falada (o **ditado** fica), plugins, schedules (automações), labels, browser embutido, providers além de Claude e Codex, website, CLI pública (fica só o necessário para dev).
+Relay/E2EE, hub, app mobile e Expo, toda a parte de voz (ditado e conversa falada), plugins, schedules (automações), labels, browser embutido, providers além de Claude e Codex, website, CLI pública (fica só o necessário para dev).
 
 ## 4. Escopo
 
-**Entra na v1:** projetos; nova tarefa (home); anexos de arquivos e imagens e ditado por voz em todo composer; conversa ao vivo com plano, ferramentas, aprovações, perguntas, follow-up e stop; subagents; aba Code com diff e mini-IDE; comentários em lote; Terminal; Checks; Create PR; sidebar com tarefas reais; "Waiting on you"; ⌘K; uso restante; menu bar; notificações; configurações do projeto (setup, env, arquivos, autonomia, modelo padrão).
+**Entra na v1:** projetos; nova tarefa (home); anexos de arquivos e imagens em todo composer; conversa ao vivo com plano, ferramentas, aprovações, perguntas, follow-up e stop; subagents; aba Code com diff e mini-IDE; comentários em lote; Terminal; Checks; Create PR; sidebar com tarefas reais; "Waiting on you"; ⌘K; uso restante; menu bar; notificações; configurações do projeto (setup, env, arquivos, autonomia, modelo padrão).
 
 **Sai da interface na v1 (código fica, escondido):**
+
 - Automations: item da sidebar, atalho G A, entrada no ⌘K, view.
 - Library.
 - Share: no cabeçalho da thread, no TaskActions e no Toolbar; também Collaborate e Task files.
@@ -88,42 +89,42 @@ O que **não** entra na v1, mesmo que exista no protótipo ou no Paseo. Cortar i
 
 ### Funcionalidades
 
-| Fora | Por quê | Volta quando |
-|---|---|---|
-| Automações (agendamentos e gatilhos: issue label, alerta, PR) | Decisão sua: não agora. O `schedules` do Paseo é cortado do fork | Depois da v1 estabilizar, como versão própria |
-| Library | Não precisamos | Sem previsão |
-| Aba Preview, visual edit, dev server, run script, portas | Complexo (processos de serviço, proxy, portas por worktree) e leva tempo | Versão dedicada depois da v1 |
-| Share, Collaborate e "Task files" no chat e no workspace | Produto local de uma pessoa só; não há para quem compartilhar | Só se virar multiusuário |
-| Avaliação por estrelas ("How was this result?") | Não é produto vendido, não há para quem mandar feedback | Não volta |
-| Orçamento em dólar (Budget, pill de $) | O custo real não é confiável nos planos por assinatura; o uso restante substitui | Não volta (o uso restante cobre) |
-| Merge pelo app | O merge continua no GitHub; o Interlock só detecta e arquiva | Talvez junto com o review de PR |
-| Trazer reviews e comentários do PR do GitHub para a tarefa | Exige sincronizar com a API do GitHub; na v1 o review acontece na aba Code | Depois de Create PR + Checks estarem sólidos |
-| Mais de um agente principal por tarefa e `/handoff` entre agentes | Uma tarefa = um agente na v1 | Quando houver um caso real de troca de agente |
-| `/checkpoint`, rewind e fork da conversa | O Paseo suporta, mas não é essencial para usar | Fácil de trazer do fork depois |
-| `/btw` e outros slash commands sem destino | Não mapeiam para nada nos provedores | Só se ganharem função |
-| Modo de voz (conversa falada com o agente, respostas em áudio) | Na v1 a voz é só ditado para texto | Sem previsão |
-| Mensagem direta para um subagent | Os provedores não oferecem; a mensagem vai pelo agente principal | Se Claude ou Codex expuserem isso |
-| Importar sessões do Claude/Codex iniciadas fora do Interlock | Não é preciso para começar | Depois da v1 (o Paseo tem `thread/list`) |
+| Fora                                                              | Por quê                                                                          | Volta quando                                  |
+| ----------------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------- |
+| Automações (agendamentos e gatilhos: issue label, alerta, PR)     | Decisão sua: não agora. O `schedules` do Paseo é cortado do fork                 | Depois da v1 estabilizar, como versão própria |
+| Library                                                           | Não precisamos                                                                   | Sem previsão                                  |
+| Aba Preview, visual edit, dev server, run script, portas          | Complexo (processos de serviço, proxy, portas por worktree) e leva tempo         | Versão dedicada depois da v1                  |
+| Share, Collaborate e "Task files" no chat e no workspace          | Produto local de uma pessoa só; não há para quem compartilhar                    | Só se virar multiusuário                      |
+| Avaliação por estrelas ("How was this result?")                   | Não é produto vendido, não há para quem mandar feedback                          | Não volta                                     |
+| Orçamento em dólar (Budget, pill de $)                            | O custo real não é confiável nos planos por assinatura; o uso restante substitui | Não volta (o uso restante cobre)              |
+| Merge pelo app                                                    | O merge continua no GitHub; o Interlock só detecta e arquiva                     | Talvez junto com o review de PR               |
+| Trazer reviews e comentários do PR do GitHub para a tarefa        | Exige sincronizar com a API do GitHub; na v1 o review acontece na aba Code       | Depois de Create PR + Checks estarem sólidos  |
+| Mais de um agente principal por tarefa e `/handoff` entre agentes | Uma tarefa = um agente na v1                                                     | Quando houver um caso real de troca de agente |
+| `/checkpoint`, rewind e fork da conversa                          | O Paseo suporta, mas não é essencial para usar                                   | Fácil de trazer do fork depois                |
+| `/btw` e outros slash commands sem destino                        | Não mapeiam para nada nos provedores                                             | Só se ganharem função                         |
+| Voz: ditado e conversa falada com o agente                        | Decisão sua: o Interlock não terá voz                                            | Sem previsão                                  |
+| Mensagem direta para um subagent                                  | Os provedores não oferecem; a mensagem vai pelo agente principal                 | Se Claude ou Codex expuserem isso             |
+| Importar sessões do Claude/Codex iniciadas fora do Interlock      | Não é preciso para começar                                                       | Depois da v1 (o Paseo tem `thread/list`)      |
 
 ### Integrações e provedores
 
-| Fora | Por quê | Volta quando |
-|---|---|---|
-| Gemini, Copilot, OpenCode, Cursor e outros agentes | A v1 é só Claude Code e Codex | Um provedor por vez, pelo mesmo adaptador |
-| Conectores (Linear, Sentry, "Connect your tracker", importar issues) | Não existem no Interlock; o card e os atalhos saem | Junto com as automações |
-| Adicionar projeto clonando do GitHub ou criando pasta nova | A v1 só aceita uma pasta git que já existe | Logo depois da v1 (o Paseo já tem o fluxo) |
-| Pastas sem git | Sem git não há worktree, diff nem PR | Não está previsto |
+| Fora                                                                 | Por quê                                            | Volta quando                               |
+| -------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------ |
+| Gemini, Copilot, OpenCode, Cursor e outros agentes                   | A v1 é só Claude Code e Codex                      | Um provedor por vez, pelo mesmo adaptador  |
+| Conectores (Linear, Sentry, "Connect your tracker", importar issues) | Não existem no Interlock; o card e os atalhos saem | Junto com as automações                    |
+| Adicionar projeto clonando do GitHub ou criando pasta nova           | A v1 só aceita uma pasta git que já existe         | Logo depois da v1 (o Paseo já tem o fluxo) |
+| Pastas sem git                                                       | Sem git não há worktree, diff nem PR               | Não está previsto                          |
 
 ### Plataforma e distribuição
 
-| Fora | Por quê | Volta quando |
-|---|---|---|
-| Linux e Windows | Só macOS (Apple Silicon) na v1 | Quando for open source |
-| Assinatura, notarização, DMG e auto-update | Build local só para você validar | Na publicação open source |
-| Release pública e docs para terceiros | Primeiro validar com uso real | Depois da v1 |
-| Acesso remoto, app mobile, relay, várias máquinas | Tudo local, numa máquina | Sem previsão (cortado do fork) |
-| Contas, times, sincronização na nuvem | Sem servidor nosso; só os logins dos CLIs | Sem previsão |
-| Telemetria e analytics | App local e pessoal | Sem previsão |
+| Fora                                              | Por quê                                   | Volta quando                   |
+| ------------------------------------------------- | ----------------------------------------- | ------------------------------ |
+| Linux e Windows                                   | Só macOS (Apple Silicon) na v1            | Quando for open source         |
+| Assinatura, notarização, DMG e auto-update        | Build local só para você validar          | Na publicação open source      |
+| Release pública e docs para terceiros             | Primeiro validar com uso real             | Depois da v1                   |
+| Acesso remoto, app mobile, relay, várias máquinas | Tudo local, numa máquina                  | Sem previsão (cortado do fork) |
+| Contas, times, sincronização na nuvem             | Sem servidor nosso; só os logins dos CLIs | Sem previsão                   |
+| Telemetria e analytics                            | App local e pessoal                       | Sem previsão                   |
 
 ## 6. Fluxos
 
@@ -149,11 +150,10 @@ O que **não** entra na v1, mesmo que exista no protótipo ou no Paseo. Cortar i
    - Plan mode termina num card de aprovação do plano.
    - Mensagem durante um turno entra no turno (steer).
    - **Stop interrompe de verdade** (hoje chama discard).
-5. **Anexos e ditado (em todo composer: home, conversa e subagent):**
+5. **Anexos (em todo composer: home, conversa e subagent):**
    - O "+" abre o seletor de arquivos. Também dá para arrastar e soltar e colar imagem (⌘V). Os anexos aparecem como chips acima do campo, com miniatura nas imagens e um "×" para remover.
    - **Imagens** vão como entrada nativa do modelo (bloco de imagem no Claude, `localImage` no Codex).
    - **Outros arquivos** (logs, PDFs, CSVs…) são copiados para `~/.interlock/uploads/<tarefa>/` e o prompt leva o caminho, para o agente ler, como o Paseo faz.
-   - O **microfone** grava enquanto está ativo e transcreve localmente (modelo sherpa-onnx, baixado no primeiro uso). O texto entra no campo para você revisar antes de enviar. O áudio não sai do computador.
 6. **Review:** aba Code com o diff real contra o merge-base, atualizado quando arquivos mudam. Mini-IDE. Comentários em lote viram um follow-up.
 7. **PR:** Create PR faz push e `gh pr create` (título e corpo do agente) → número e link → aba Checks via `gh pr checks` a cada ~30s → mergear no GitHub → o Interlock detecta, marca "Merged" e arquiva a worktree.
 8. **Discard:** para o agente e remove a worktree e a branch local, com confirmação.
@@ -172,7 +172,7 @@ O que **não** entra na v1, mesmo que exista no protótipo ou no Paseo. Cortar i
   - `taskClock` usa tempo real.
   - O cartão de aprovação usa o comando real em vez de interpretar `hold.title`.
 - **Rotas:** as telas viram URLs (`/`, `/thread/:id`, `/project/:id/settings`…). A prova em tela do quality-kit abre cada rota, e a notificação do macOS abre direto a tarefa.
-- **Composer:** o "+" (Add files) e o microfone (Dictate) ganham função em todo composer (home, conversa, subagent): seletor de arquivos, arrastar e soltar, colar imagem, chips de anexos; gravação com estado visível (tempo e cancelar) e transcrição entrando no campo.
+- **Composer:** o "+" (Add files) ganha função em todo composer (home, conversa, subagent): seletor de arquivos, arrastar e soltar, colar imagem, chips de anexos. O botão de microfone (Dictate) sai.
 - **Terminal:** passa a ser xterm.js de verdade. Painéis: **setup** (saída do setup) e **shell** (interativo na worktree). O painel "agent" sai (os comandos do agente aparecem na conversa), e "dev server" sai junto com o Preview.
 - **Status bar do mini-IDE:** "Spaces/UTF-8/LF" sai ou é detectado do arquivo.
 
@@ -202,13 +202,13 @@ interlock/
 └─ NOTICE, LICENSE
 ```
 
-| Pasta | O que vai nela |
-|---|---|
-| `apps/desktop` | Janela, menu bar, notificações, seletor de pasta, microfone, supervisão do sidecar, PATH do login shell |
-| `packages/app` | Toda a interface: telas, componentes, hooks, store |
-| `packages/server` | Agentes (Claude, Codex), worktrees, git e diff, terminal, uso restante, ditado, uploads, persistência |
-| `packages/protocol` | Schemas zod e tipos das mensagens entre UI e daemon |
-| `packages/client` | Cliente WebSocket tipado, usado pela UI e pelos testes |
+| Pasta               | O que vai nela                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| `apps/desktop`      | Janela, menu bar, notificações, seletor de pasta, supervisão do sidecar, PATH do login shell  |
+| `packages/app`      | Toda a interface: telas, componentes, hooks, store                                            |
+| `packages/server`   | Agentes (Claude, Codex), worktrees, git e diff, terminal, uso restante, uploads, persistência |
+| `packages/protocol` | Schemas zod e tipos das mensagens entre UI e daemon                                           |
+| `packages/client`   | Cliente WebSocket tipado, usado pela UI e pelos testes                                        |
 
 **Dentro do `packages/app/src` (onde ficam os componentes):**
 
@@ -258,20 +258,20 @@ src/
 
 **Onde colocar cada coisa:**
 
-| Se é… | Vai em |
-|---|---|
-| Componente usado só numa feature | `features/<feature>/components/X/` |
-| Peça usada só por um componente | Dentro da pasta dele: `X/Peca/` |
-| Componente usado por 2+ features | `components/<grupo>/` |
-| Primitiva visual sem domínio (botão, modal, campo) | `components/ui/` |
-| Hook com a lógica de um componente | Na pasta do componente: `X/X.tsx` + `X/useX.ts` |
-| Hook reusado dentro de uma feature | `features/<feature>/hooks/` |
-| Hook usado por 2+ features | `hooks/` |
-| Função pura de uma feature | `features/<feature>/utils/` |
-| Função pura compartilhada | `lib/` |
-| Tradução do protocolo para o store | `daemon/adapters/` |
-| Estado global | `stores/slices/` |
-| Tipo de domínio | `types/` |
+| Se é…                                              | Vai em                                          |
+| -------------------------------------------------- | ----------------------------------------------- |
+| Componente usado só numa feature                   | `features/<feature>/components/X/`              |
+| Peça usada só por um componente                    | Dentro da pasta dele: `X/Peca/`                 |
+| Componente usado por 2+ features                   | `components/<grupo>/`                           |
+| Primitiva visual sem domínio (botão, modal, campo) | `components/ui/`                                |
+| Hook com a lógica de um componente                 | Na pasta do componente: `X/X.tsx` + `X/useX.ts` |
+| Hook reusado dentro de uma feature                 | `features/<feature>/hooks/`                     |
+| Hook usado por 2+ features                         | `hooks/`                                        |
+| Função pura de uma feature                         | `features/<feature>/utils/`                     |
+| Função pura compartilhada                          | `lib/`                                          |
+| Tradução do protocolo para o store                 | `daemon/adapters/`                              |
+| Estado global                                      | `stores/slices/`                                |
+| Tipo de domínio                                    | `types/`                                        |
 
 - **Uma pasta por componente, sempre:** `Composer/` guarda tudo do Composer (`Composer.tsx`, `useComposer.ts`, teste, peças só dele). Nada de arquivos soltos em `components/`, mesmo para componentes só de props.
 - **Os arquivos repetem o nome do componente** (`Composer/Composer.tsx`, não `Composer/index.tsx`), para as abas do editor e a busca mostrarem o nome certo. Sem `index.ts` de barril; o import fica `…/Composer/Composer`.
@@ -303,19 +303,20 @@ features/home/
 ```tsx
 // WaitingOnYou.tsx
 export function WaitingOnYou() {
-  const { waiting, working, open } = useWaitingOnYou()
-  return <section>{/* só marcação, sem regra de negócio */}</section>
+  const { waiting, working, open } = useWaitingOnYou();
+  return <section>{/* só marcação, sem regra de negócio */}</section>;
 }
 
 // useWaitingOnYou.ts
 export function useWaitingOnYou() {
-  const agents = useStore((s) => s.agents)
-  const openThread = useStore((s) => s.openThread)
-  return { waiting: waitingOn(agents), working: countWorking(agents), open: openThread }
+  const agents = useStore((s) => s.agents);
+  const openThread = useStore((s) => s.openThread);
+  return { waiting: waitingOn(agents), working: countWorking(agents), open: openThread };
 }
 ```
 
 **Regras:**
+
 1. **Três camadas, numa direção:** `Componente.tsx → useComponente.ts → utils/*.ts`. O hook nunca importa o componente, e `utils` nunca importa React.
 2. **O `.tsx` não tem lógica.**
    - Ele não acessa o store, o cliente do daemon nem `useEffect`/`useLayoutEffect`/`useReducer`.
@@ -330,6 +331,7 @@ export function useWaitingOnYou() {
 7. **Testes:** a lógica difícil fica em `utils/` e ganha teste unitário. O hook só ganha teste (`renderHook`) quando orquestra algo complexo. O `.tsx` não precisa de teste de lógica, porque não tem.
 
 **Como é garantido (no ambiente estrito):**
+
 - O lint proíbe, nos `.tsx` de `features/**/components`:
   - importar o store e o cliente do daemon;
   - importar `useEffect`, `useLayoutEffect` e `useReducer`.
@@ -359,6 +361,7 @@ export function useWaitingOnYou() {
 ```
 
 **Regras:**
+
 1. **Uma responsabilidade por componente.** Se o nome precisa de "e" para descrever o que faz, são dois componentes. O orquestrador de uma tela fica enxuto (~120–170 linhas) e só junta peças.
 2. **Conteúdo entra por slots:** props que recebem elementos (`header={<TaskHeader />}`, `actions={…}`, `footer={…}`, tipadas como `ReactNode`) e `children` para o conteúdo principal, não como uma fileira de flags booleanas. Variações visuais usam **uma** prop `variant`, não `isCompact + isGhost + hasBorder`.
 3. **Sem componentes com ponto** (`TaskCard.Header`, `Modal.Footer`): cada parte é um componente próprio, importado normalmente, e entra no pai por slot. O pai só define onde cada slot aparece.
@@ -369,6 +372,7 @@ export function useWaitingOnYou() {
 8. **Reuso antes de criar:** antes de um novo botão, card ou campo, usar ou estender as primitivas de `components/ui` e as receitas de `styles.ts`.
 
 **Como é garantido (no ambiente estrito):**
+
 - O lint limita:
   - a profundidade de JSX (`react/jsx-max-depth`);
   - as linhas por arquivo e por função;
@@ -417,7 +421,7 @@ export function useWaitingOnYou() {
 
 ## 9. Como o agente trabalha
 
-- **Na dúvida de como resolver algo, olhe primeiro como o Paseo resolve.** O código está em `~/Documents/personal/paseo`. Antes de inventar uma solução para qualquer problema não trivial, procure a dele e prefira reaproveitar; divergir é permitido, com motivo registrado. Exemplos: subir processos, PATH no app, casos de borda de worktree, peculiaridades dos protocolos do Claude/Codex, terminal, diff, login, uso restante, ditado.
+- **Na dúvida de como resolver algo, olhe primeiro como o Paseo resolve.** O código está em `~/Documents/personal/paseo`. Antes de inventar uma solução para qualquer problema não trivial, procure a dele e prefira reaproveitar; divergir é permitido, com motivo registrado. Exemplos: subir processos, PATH no app, casos de borda de worktree, peculiaridades dos protocolos do Claude/Codex, terminal, diff, login, uso restante.
   - Comece por: `CLAUDE.md`, `docs/architecture.md`, `docs/agent-lifecycle.md`, `docs/data-model.md`, `docs/timeline-sync.md`, `docs/providers.md`.
   - Depois: `packages/server/src/server/agent/providers/{claude,codex}`, `packages/server/src/utils/worktree.ts`, `packages/desktop/src`, `packages/server/src/services/quota-fetcher`.
 - **Execução direta pela spec:** sem plano curto nem aprovação por tarefa, e sem o fluxo `task`/`ship` do quality-kit, porque a spec já é o plano. O gate continua obrigatório. O trabalho fica numa branch `v1`, em ordem de marco, com commits verdes, e o PR no final é aberto com `gh`, levando as evidências e a lista de decisões tomadas no caminho.
@@ -429,6 +433,7 @@ export function useWaitingOnYou() {
 ## 10. Marcos
 
 **M0 — Fundação ()**
+
 - [ ] Monorepo `interlock` com git, workspaces, `NOTICE` e atribuição ao Paseo
 - [ ] Fork de `server`/`protocol`/`client` enxugado, compilando e com testes do fork passando
 - [ ] Tauri sobe o sidecar com o PATH do login shell; a UI conecta no WebSocket
@@ -438,6 +443,7 @@ export function useWaitingOnYou() {
 - [ ] Limpeza de comentários na UI migrada: sair tudo que só repete o nome ou narra o código, e ficar só o que for de fato necessário (regra do `CLAUDE.md`)
 
 **M1 — Usável no dia a dia ()**
+
 - [ ] Primeiro uso: detectar Claude/Codex/gh instalados e logados, e **Entrar** no Claude e no Codex dentro do app
 - [ ] Adicionar projeto pelo seletor de pasta; projetos persistem
 - [ ] Nova tarefa com Claude **e** Codex numa worktree nova
@@ -446,10 +452,11 @@ export function useWaitingOnYou() {
 - [ ] Aba Code com o diff real e mini-IDE
 - [ ] Modelos e esforço reais por provedor
 - [ ] Pill de uso restante (Claude + Codex)
-- [ ] Anexos (arquivos e imagens) e ditado por voz local em todo composer
+- [ ] Anexos (arquivos e imagens) em todo composer
 - [ ] Itens fora de escopo escondidos
 
 **M2 — Autonomia ()**
+
 - [ ] Subagents no padrão do Claude Code (Claude e Codex)
 - [ ] Terminal real (setup + shell)
 - [ ] Comentários em lote para o agente
@@ -457,22 +464,22 @@ export function useWaitingOnYou() {
 - [ ] Menu bar, notificações do macOS e badge
 
 **M3 — Fechamento do ciclo ()**
+
 - [ ] Create PR + Checks via `gh`
 - [ ] Detectar merge → arquivar a worktree; Discard com limpeza
 - [ ] Títulos e branches por IA
 
 ## 11. Riscos
 
-| Risco | Mitigação |
-|---|---|
-| `node-pty` (módulo nativo) dentro do sidecar | Empacotar runtime Node + `.node` pré-compilado; validar no M0 antes de tudo |
-| WebKit renderiza diferente do Chromium (blur, container queries, motion) | Validar a UI no Tauri no M0; corrigir com prefixos e fallbacks |
-| APIs de uso (`/api/oauth/usage`, `wham/usage`) não são oficiais e podem mudar | Falha silenciosa: o anel some e o popover diz "indisponível"; nunca bloqueia o app |
-| Protocolo do CLI do Claude e do `codex app-server` mudam por versão | Fixar versões mínimas, checar `--version` no primeiro uso, trazer correções do upstream do Paseo |
-| O fork é grande (~170k linhas no servidor) | Cortar agressivamente no M0; manter só o que a v1 usa |
-| Microfone no WKWebView (permissão e `getUserMedia`) e tamanho do modelo de voz | Declarar `NSMicrophoneUsageDescription` no app e validar a gravação no M0; baixar o modelo só no primeiro uso, com progresso |
+| Risco                                                                                  | Mitigação                                                                                                                                         |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node-pty` (módulo nativo) dentro do sidecar                                           | Empacotar runtime Node + `.node` pré-compilado; validar no M0 antes de tudo                                                                       |
+| WebKit renderiza diferente do Chromium (blur, container queries, motion)               | Validar a UI no Tauri no M0; corrigir com prefixos e fallbacks                                                                                    |
+| APIs de uso (`/api/oauth/usage`, `wham/usage`) não são oficiais e podem mudar          | Falha silenciosa: o anel some e o popover diz "indisponível"; nunca bloqueia o app                                                                |
+| Protocolo do CLI do Claude e do `codex app-server` mudam por versão                    | Fixar versões mínimas, checar `--version` no primeiro uso, trazer correções do upstream do Paseo                                                  |
+| O fork é grande (~170k linhas no servidor)                                             | Cortar agressivamente no M0; manter só o que a v1 usa                                                                                             |
 | Comandos de login dos CLIs mudam (`claude auth login`, `account/login/start` do Codex) | Confirmar no M0 contra as versões instaladas; sem suporte, cair para "rode `claude` / `codex login` no terminal" com o comando pronto para copiar |
-| Ler o Keychain do Claude | Explicar antes do prompt do macOS; sem permissão, só o anel do Claude fica indisponível |
+| Ler o Keychain do Claude                                                               | Explicar antes do prompt do macOS; sem permissão, só o anel do Claude fica indisponível                                                           |
 
 ## 12. Padrões assumidos (dá para vetar)
 

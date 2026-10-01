@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/**/*.{js,mjs,cjs,ts}", "eslint.config.js", "commitlint.config.js"],
+      "project": ["scripts/**/*.{js,mjs,cjs,ts}", "*.{js,mjs,cjs}"]
+    },
+    "packages/app": {
+      "entry": ["src/main.tsx", "vite.config.ts", "src/**/*.test.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/server": {
+      "entry": [
+        "src/server/index.ts",
+        "src/server/exports.ts",
+        "src/terminal/terminal-worker-process.ts",
+        "scripts/**/*.{ts,mjs,js}",
+        "src/**/*.test.ts",
+        "src/**/*.e2e.ts"
+      ],
+      "project": ["src/**/*.ts", "scripts/**/*.{ts,mjs,js}"]
+    },
+    "packages/protocol": {
+      "entry": ["src/index.ts", "src/**/*.test.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/client": {
+      "entry": ["src/index.ts", "src/**/*.test.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "apps/desktop": {
+      "entry": ["scripts/**/*.{ts,mjs,js}", "src/**/*.test.ts"],
+      "project": ["scripts/**/*.{ts,mjs,js}", "src/**/*.ts"]
+    }
+  },
+  "ignoreDependencies": ["@commitlint/config-conventional", "lefthook"],
+  "ignoreBinaries": ["cargo", "gitleaks", "tauri"]
+}

@@ -1,10 +1,57 @@
 {
   "name": "interlock",
-  "private": true,
   "version": "0.1.0",
-  "type": "module",
+  "private": true,
   "license": "Apache-2.0",
-  "engines": { "node": ">=22.13" },
-  "workspaces": ["packages/*", "apps/*"],
-  "scripts": {}
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run structure && npm run knip && npm run dup && npm run test",
+    "lint": "node scripts/quality/lint.mjs",
+    "lint:fix": "node scripts/quality/lint.mjs --fix",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present && node --test \"scripts/quality/**/*.test.mjs\"",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "format:files": "oxfmt",
+    "format:check:files": "oxfmt --check",
+    "knip": "knip",
+    "dup": "jscpd --config .jscpd.json",
+    "structure": "node scripts/quality/check-structure.mjs",
+    "baseline:freeze": "node scripts/quality/lint.mjs --suppress-all && node scripts/quality/lint.mjs --prune-suppressions",
+    "dev:app": "npm run dev --workspace @interlock/app",
+    "dev:daemon": "npm run dev --workspace @interlock/server",
+    "dev:desktop": "PATH=\"$HOME/.cargo/bin:$PATH\" npm run dev --workspace @interlock/desktop",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "jscpd": "^5.4.0",
+    "knip": "^6.39.0",
+    "lefthook": "^2.1.15",
+    "oxfmt": "^0.71.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.0"
+  },
+  "overrides": {
+    "@vitest/ui": "4.0.18",
+    "vitest": "4.0.18",
+    "zod": "4.4.3"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
 }
