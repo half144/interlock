@@ -3,6 +3,7 @@ mod daemon;
 mod login_env;
 mod notify;
 mod quit;
+mod stale;
 mod tray;
 
 use std::sync::Arc;

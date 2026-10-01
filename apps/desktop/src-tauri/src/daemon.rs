@@ -76,6 +76,7 @@ impl Daemon {
         let daemon = Arc::clone(self);
         thread::spawn(move || {
             let env = crate::login_env::resolve();
+            crate::stale::stop_stale_daemon(&interlock_home(), &format!("{HOST}:{PORT}"));
             daemon.supervise(&app, &env);
         });
     }
@@ -192,6 +193,7 @@ fn spawn(
     command
         .envs(login_env)
         .env("INTERLOCK_HOME", interlock_home())
+        .env("INTERLOCK_DESKTOP_MANAGED", "1")
         .env("INTERLOCK_LISTEN", format!("{HOST}:{PORT}"))
         .env("INTERLOCK_TOKEN", token)
         .stdin(Stdio::null())
