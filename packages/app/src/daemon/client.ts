@@ -1,7 +1,9 @@
 import { DaemonClient } from "@interlock/client/internal/daemon-client";
 import type { DaemonConnection } from "@/platform/desktop";
 
-const RECONNECT = { enabled: true, baseDelayMs: 500, maxDelayMs: 10_000 };
+// The daemon is on loopback, so retries are cheap and a stalled handshake is a failure, not latency.
+const RECONNECT = { enabled: true, baseDelayMs: 250, maxDelayMs: 2_000 };
+const CONNECT_TIMEOUT_MS = 3_000;
 
 const clientId = crypto.randomUUID();
 
@@ -19,10 +21,13 @@ export function openClient({ url, token }: DaemonConnection): DaemonClient {
     password: token,
     suppressSendErrors: true,
     reconnect: RECONNECT,
+    connectTimeoutMs: CONNECT_TIMEOUT_MS,
   });
   current = { client, key };
   return client;
 }
+
+export const currentClient = (): DaemonClient | undefined => current?.client;
 
 export function getClient(): DaemonClient {
   if (!current)

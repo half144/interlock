@@ -14,8 +14,21 @@ function unsubscribe(pending: Promise<UnlistenFn>): Unsubscribe {
 
 export const tauriBridge: Bridge = {
   getDaemonConnection: () => invoke("daemon_connection"),
-  onDaemonStatus: (callback) =>
-    unsubscribe(listen<DaemonStatus>(DAEMON_STATUS_EVENT, (e) => callback(e.payload))),
+  // The shell may emit `ready` before this window subscribes (launch, reload), so the current
+  // status is read once too; an event that lands first wins over that read.
+  onDaemonStatus: (callback) => {
+    let heard = false;
+    const off = unsubscribe(
+      listen<DaemonStatus>(DAEMON_STATUS_EVENT, (e) => {
+        heard = true;
+        callback(e.payload);
+      }),
+    );
+    void invoke<DaemonStatus>("daemon_status").then((status) => {
+      if (!heard) callback(status);
+    });
+    return off;
+  },
   pickFolder: () => invoke("pick_folder"),
   openExternal: (url) => invoke("plugin:shell|open", { path: url }),
   notify: (notice) => invoke("notify", { ...notice }),

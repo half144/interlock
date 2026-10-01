@@ -1,7 +1,7 @@
 import type { DaemonClient } from "@interlock/client/internal/daemon-client";
 import { getDaemonConnection } from "@/platform/desktop";
 import { useStore } from "@/stores/app-store";
-import { closeClient, openClient } from "./client";
+import { closeClient, currentClient, openClient } from "./client";
 import { listenAccounts } from "./sync/accounts";
 import { listenAttention } from "./sync/attention";
 import { listenDirectory, loadDirectory } from "./sync/directory";
@@ -49,6 +49,11 @@ function bind(client: DaemonClient): () => void {
     off();
     stops.forEach((stop) => stop());
   };
+}
+
+/** Skips the reconnect backoff, e.g. when the shell reports the daemon is up. */
+export function reconnectNow(): void {
+  currentClient()?.ensureConnected();
 }
 
 /**
