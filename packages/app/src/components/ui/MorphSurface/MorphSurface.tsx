@@ -6,41 +6,45 @@ import { surface } from "@/lib/styles";
 import { blurIn, sharp } from "@/lib/blur";
 
 interface MorphSurfaceProps {
-  /** The `MorphShape` id this surface grows out of. */
-  id: string;
   open: boolean;
   /** Where the surface spreads from its trigger, which it covers while open. */
   side: "top" | "bottom";
+  /** Sizes the content (its width), which the surface grows to fit. */
   className?: string;
   children: ReactNode;
 }
 
 /**
- * A control becoming its own surface: the trigger's shape stretches into an overlay on `morph`, the content
- * comes into focus once the shape has mostly landed, and on close the shape folds back into the trigger.
+ * A control becoming its own surface. It must sit in a `relative` box that wraps just the trigger: it starts
+ * at that box's size and its real width and height grow on `morph` to fit the content, then shrink back on
+ * close. The content is laid out at full size and pinned to the corner the surface grows from, so it stays
+ * put while the edges uncover it: nothing moves but the surface's edges.
  */
-export function MorphSurface({ id, open, side, className, children }: MorphSurfaceProps) {
+export function MorphSurface({ open, side, className, children }: MorphSurfaceProps) {
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          layoutId={id}
+          initial={{ width: "100%", height: "100%" }}
+          animate={{ width: "auto", height: "auto" }}
+          exit={{
+            width: "100%",
+            height: "100%",
+            opacity: 0,
+            transition: { ...morph, opacity: { duration: 0.14, delay: 0.1 } },
+          }}
           transition={morph}
-          exit={{ opacity: 0, transition: { duration: 0.14 } }}
-          style={{ borderRadius: 16 }}
           className={cn(
             surface.overlay,
-            "absolute right-0 z-40 overflow-hidden",
-            side === "top" ? "bottom-0" : "top-0",
-            className,
+            "absolute right-0 z-40 flex flex-col items-end overflow-clip rounded-2xl",
+            side === "top" ? "bottom-0 justify-end" : "top-0 justify-start",
           )}
         >
-          {/* `layout` keeps the content from stretching with the shape's scale while it morphs. */}
           <motion.div
-            layout
             initial={blurIn}
             animate={{ ...sharp, transition: { ...fadeIn, delay: 0.07 } }}
             exit={{ opacity: 0, transition: fadeOut }}
+            className={cn("shrink-0", className)}
           >
             {children}
           </motion.div>

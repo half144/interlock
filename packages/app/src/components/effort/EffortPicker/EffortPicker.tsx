@@ -1,9 +1,7 @@
-import { useId } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import type { Effort, EffortOption } from "@/types";
 import { fadeIn, fadeOut, morph } from "@/lib/motion";
 import { blurIn, sharp } from "@/lib/blur";
-import { MorphShape } from "@/components/ui/MorphShape/MorphShape";
 import { MorphSurface } from "@/components/ui/MorphSurface/MorphSurface";
 import { Dots } from "../Dots/Dots";
 import { EffortMenu } from "./EffortMenu/EffortMenu";
@@ -23,7 +21,6 @@ interface EffortPickerProps {
  * The levels are the ones the model offers; a model with none gets no pill.
  */
 export function EffortPicker({ value, options, onChange, model }: EffortPickerProps) {
-  const shape = useId();
   const { open, side, root, trigger, show, close } = useEffortPicker(options.length);
   if (options.length === 0) return null;
 
@@ -42,9 +39,9 @@ export function EffortPicker({ value, options, onChange, model }: EffortPickerPr
         aria-label={`Reasoning effort: ${label}`}
         title="Reasoning effort"
         transition={morph}
-        className="relative inline-flex h-8 items-center px-3 text-[13px] text-ink-2 transition-colors duration-150 hover:text-ink"
+        style={{ borderRadius: 16 }}
+        className="relative inline-flex h-8 items-center bg-white/[0.06] px-3 text-[13px] text-ink-2 transition-colors duration-150 hover:text-ink"
       >
-        {!open && <MorphShape id={shape} className="bg-white/[0.06]" />}
         <motion.span layout="position" className="relative flex items-center gap-2">
           <Dots filled={at + 1} total={options.length} />
           <AnimatePresence mode="popLayout" initial={false}>
@@ -60,7 +57,7 @@ export function EffortPicker({ value, options, onChange, model }: EffortPickerPr
         </motion.span>
       </motion.button>
 
-      <MorphSurface id={shape} open={open} side={side} className="w-[264px]">
+      <MorphSurface open={open} side={side} className="w-[262px]">
         <EffortMenu
           value={value}
           options={options}
