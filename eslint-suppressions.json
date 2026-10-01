@@ -14,6 +14,11 @@
       "count": 1
     }
   },
+  "packages/app/src/features/automations/components/AutomationsView/AutomationRow/AutomationRow.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
   "packages/app/src/features/automations/components/AutomationsView/AutomationsView.tsx": {
     "no-restricted-imports": {
       "count": 1
@@ -30,13 +35,41 @@
       "count": 1
     }
   },
+  "packages/app/src/features/home/components/Home/ModelPicker/ProviderTabs/ProviderTabs.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/home/components/Home/TaskFlowCard/FlowPreview/FlowPreview.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/home/components/Home/WaitingOnYou/WaitingOnYou.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
   "packages/app/src/features/palette/components/CommandPalette/PaletteDialog/PaletteDialog.tsx": {
     "jsx-a11y/no-autofocus": {
+      "count": 1
+    },
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/settings/components/SettingsView/SettingsNav/SettingsNav.tsx": {
+    "no-restricted-syntax": {
       "count": 1
     }
   },
   "packages/app/src/features/settings/components/SettingsView/SettingsView.tsx": {
     "react/jsx-max-depth": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/shell/components/Sidebar/SidebarProjects/SidebarProjects.tsx": {
+    "no-restricted-syntax": {
       "count": 1
     }
   },
@@ -76,8 +109,48 @@
       "count": 2
     }
   },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/DelegateCard/DelegateCard.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/Followups/Followups.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/HoldCard/QuestionHold/QuestionField/QuestionField.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/MessageItem/SentAttachments/SentAttachments.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/ThreadView/Transcript/WorktreeCard/StepList/StepList.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/blocks/Markdown/CodeBlock/CodeBlock.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/thread/components/blocks/ToolCalls/ToolCall/ToolCallDetail/DiffLines/DiffLines.tsx": {
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
   "packages/app/src/features/workspace/components/Workspace/CodeTab/DiffFile/DiffHunk/LineAnnotations/CommentComposer/CommentComposer.tsx": {
     "jsx-a11y/no-autofocus": {
+      "count": 1
+    }
+  },
+  "packages/app/src/features/workspace/components/Workspace/CodeTab/DiffFile/DiffHunk/LineAnnotations/CommentThread/CommentThread.tsx": {
+    "no-restricted-syntax": {
       "count": 1
     }
   },

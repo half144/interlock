@@ -11,6 +11,8 @@ const TS = ["**/*.{ts,tsx,mts,cts}"];
 const APP_REACT = ["packages/app/**/*.{ts,tsx}"];
 const TESTS = ["**/*.test.*", "**/*.spec.*", "**/__tests__/**", "**/__mocks__/**", "e2e/**"];
 const SCRIPTS = ["**/scripts/**", "**/*.config.{js,cjs,mjs,ts,mts,cts}"];
+const LIST_ITEM_MESSAGE =
+  "A list item with its own markup is its own component: render <XItem /> from the map, in its own folder (lists are a list component plus an item component).";
 const VIEW_FILES = ["packages/app/src/features/**/components/**/*.tsx"];
 const PURE_FILES = [
   "packages/app/src/lib/**/*.{ts,tsx}",
@@ -176,6 +178,19 @@ export default tseslint.config(
               message: "A view (.tsx) does not call the daemon. Do it in the paired useX.ts hook.",
             },
           ],
+        },
+      ],
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "JSXExpressionContainer > CallExpression[callee.property.name='map'] > ArrowFunctionExpression > JSXElement[openingElement.name.name=/^[a-z]/]:has(> JSXElement)",
+          message: LIST_ITEM_MESSAGE,
+        },
+        {
+          selector:
+            "JSXExpressionContainer > CallExpression[callee.property.name='map'] > ArrowFunctionExpression > BlockStatement > ReturnStatement > JSXElement[openingElement.name.name=/^[a-z]/]:has(> JSXElement)",
+          message: LIST_ITEM_MESSAGE,
         },
       ],
     },

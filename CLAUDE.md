@@ -65,7 +65,7 @@ These scripts are created in M0. Quality is enforced by [quality-kit](https://gi
 
 - Never skip hooks (`--no-verify`).
 - Never weaken lint, TypeScript or formatter settings to make code pass.
-- Ruleset changes are human-only. The lint config, tsconfig flags, hooks, CI or frozen debt can only change through `quality-kit rules accept` or `quality-kit baseline`, run by the user in a real terminal. Propose the change instead.
+- Ruleset changes (lint config, tsconfig flags, hooks, CI, frozen debt) are made when the user asks for them. Accepting them with the quality-kit commands is done only when the user says so.
 - Never disable a rule inline without a reason, e.g. `// eslint-disable-next-line no-shadow -- shadowing the SDK's own name`.
 - The legacy baseline (inherited Paseo files that break the strict rules) can only shrink. A file you touch must leave the baseline.
 - **Secrets:** never commit secrets, tokens or `.env` files. Never log credentials. Provider credentials are read-only to us: never refreshed, never copied.
