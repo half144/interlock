@@ -1,0 +1,19 @@
+{
+  "name": "@interlock/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build --config src-tauri/tauri.bundle.conf.json",
+    "bundle:daemon": "bash scripts/bundle-daemon.sh",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.12.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.1"
+  }
+}
