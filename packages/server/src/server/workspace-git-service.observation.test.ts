@@ -936,6 +936,10 @@ describe("WorkspaceGitService checkout observation", () => {
       expect(getCheckoutSnapshotFacts).toHaveBeenCalledTimes(1);
     });
 
+    // The git-dir watcher registers after the first snapshot; firing before it exists is a silent no-op.
+    await vi.waitFor(() => {
+      expect(watcher.records.some((record) => record.directory === GIT_DIR)).toBe(true);
+    });
     watcher.records
       .find((record) => record.directory === GIT_DIR)
       ?.callback(null, [
