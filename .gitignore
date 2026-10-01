@@ -15,3 +15,4 @@ target/
 apps/desktop/src-tauri/binaries/
 apps/desktop/src-tauri/resources/daemon/
 .npm-install.lock
+packages/protocol/src/generated/validation/*.aot.ts

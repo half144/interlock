@@ -37,6 +37,7 @@ export default tseslint.config(
       "**/coverage/**",
       "**/target/**",
       "**/*.gen.{ts,tsx}",
+      "**/generated/**",
       "apps/desktop/src-tauri/**",
     ],
   },
