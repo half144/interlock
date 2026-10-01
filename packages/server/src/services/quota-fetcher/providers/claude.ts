@@ -1,4 +1,5 @@
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, promises as fs } from "node:fs";
 import { homedir, userInfo } from "node:os";
 import { join } from "node:path";
@@ -313,13 +314,22 @@ async function runSecurityCommand(args: string[]): Promise<string | null> {
 }
 
 /** Read Claude Code's account-specific Keychain item, then try the legacy lookup. */
+// Claude Code suffixes the item with a hash of CLAUDE_CONFIG_DIR when one is set, so each
+// config dir keeps its own login.
+export function claudeKeychainService(configDir = process.env.CLAUDE_CONFIG_DIR): string {
+  if (!configDir) return CLAUDE_KEYCHAIN_SERVICE;
+  const hash = createHash("sha256").update(configDir).digest("hex").slice(0, 8);
+  return `${CLAUDE_KEYCHAIN_SERVICE}-${hash}`;
+}
+
 export async function readClaudeKeychainCredentials(
   run: ClaudeKeychainCommandRunner = runSecurityCommand,
   account: string = claudeKeychainAccount(),
+  service: string = claudeKeychainService(),
 ): Promise<unknown | null> {
   const lookups = [
-    ["find-generic-password", "-a", account, "-w", "-s", CLAUDE_KEYCHAIN_SERVICE],
-    ["find-generic-password", "-w", "-s", CLAUDE_KEYCHAIN_SERVICE],
+    ["find-generic-password", "-a", account, "-w", "-s", service],
+    ["find-generic-password", "-w", "-s", service],
   ];
 
   for (const args of lookups) {
@@ -350,7 +360,10 @@ export class ClaudeQuotaProvider implements ProviderUsageFetcher {
   constructor(options: ClaudeQuotaProviderOptions) {
     this.logger = options.logger.child({ module: "claude-quota-provider" });
     this.claudeHome =
-      options.claudeHome || process.env["CLAUDE_HOME"] || join(homedir(), ".claude");
+      options.claudeHome ??
+      process.env.CLAUDE_CONFIG_DIR ??
+      process.env.CLAUDE_HOME ??
+      join(homedir(), ".claude");
     this.readKeychainCredentials = options.claudeKeychainReader ?? readClaudeKeychainCredentials;
     this.platform = options.platform ?? process.platform;
     this.fetchApi = options.fetch ?? fetch;

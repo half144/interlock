@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { claudeKeychainAccount, readClaudeKeychainCredentials } from "./claude.js";
+import {
+  claudeKeychainAccount,
+  claudeKeychainService,
+  readClaudeKeychainCredentials,
+} from "./claude.js";
 
 const SERVICE = "Claude Code-credentials";
 
@@ -25,11 +29,23 @@ describe("claudeKeychainAccount", () => {
   });
 });
 
+describe("claudeKeychainService", () => {
+  it("uses the plain service name without a custom config dir", () => {
+    expect(claudeKeychainService("")).toBe(SERVICE);
+  });
+
+  it("suffixes the service with a hash of CLAUDE_CONFIG_DIR like Claude Code does", () => {
+    vi.stubEnv("CLAUDE_CONFIG_DIR", "/Users/me/.claude-work");
+    expect(claudeKeychainService()).toMatch(/^Claude Code-credentials-[0-9a-f]{8}$/);
+    expect(claudeKeychainService()).toBe(claudeKeychainService("/Users/me/.claude-work"));
+  });
+});
+
 describe("readClaudeKeychainCredentials", () => {
   it("looks the item up by account and stops there when it exists", async () => {
     const run = vi.fn(async () => JSON.stringify({ claudeAiOauth: { accessToken: "at_fresh" } }));
 
-    const credentials = await readClaudeKeychainCredentials(run, "claude-code-user");
+    const credentials = await readClaudeKeychainCredentials(run, "claude-code-user", SERVICE);
 
     expect(credentials).toEqual({ claudeAiOauth: { accessToken: "at_fresh" } });
     expect(run).toHaveBeenCalledTimes(1);
@@ -48,7 +64,7 @@ describe("readClaudeKeychainCredentials", () => {
       args.includes("-a") ? null : JSON.stringify({ claudeAiOauth: { accessToken: "at_legacy" } }),
     );
 
-    const credentials = await readClaudeKeychainCredentials(run, "claude-code-user");
+    const credentials = await readClaudeKeychainCredentials(run, "claude-code-user", SERVICE);
 
     expect(credentials).toEqual({ claudeAiOauth: { accessToken: "at_legacy" } });
     expect(run).toHaveBeenNthCalledWith(2, ["find-generic-password", "-w", "-s", SERVICE]);

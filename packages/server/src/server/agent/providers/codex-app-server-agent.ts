@@ -7165,6 +7165,12 @@ interface CodexModelBuildContext {
   hasConfiguredDefaultModel: boolean;
 }
 
+const CODEX_EFFORT_LABELS: Record<string, string> = { xhigh: "Extra High" };
+
+function codexEffortLabel(id: string): string {
+  return CODEX_EFFORT_LABELS[id] ?? id.charAt(0).toUpperCase() + id.slice(1);
+}
+
 function buildCodexModelDefinition(
   model: CodexModel,
   ctx: CodexModelBuildContext,
@@ -7226,14 +7232,14 @@ function buildCodexThinkingOptionMap(
         typeof entry?.description === "string" && entry.description.trim().length > 0
           ? entry.description
           : undefined;
-      thinkingById.set(id, { id, label: id, description });
+      thinkingById.set(id, { id, label: codexEffortLabel(id), description });
     }
   }
 
   if (resolvedDefaultReasoningEffort && !thinkingById.has(resolvedDefaultReasoningEffort)) {
     thinkingById.set(resolvedDefaultReasoningEffort, {
       id: resolvedDefaultReasoningEffort,
-      label: resolvedDefaultReasoningEffort,
+      label: codexEffortLabel(resolvedDefaultReasoningEffort),
       description:
         configuredDefaultThinkingOptionId === resolvedDefaultReasoningEffort
           ? "Configured default reasoning effort"

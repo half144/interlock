@@ -3025,7 +3025,7 @@
       "count": 2
     },
     "@typescript-eslint/dot-notation": {
-      "count": 2
+      "count": 1
     },
     "@typescript-eslint/no-redundant-type-constituents": {
       "count": 3
@@ -3034,7 +3034,7 @@
       "count": 2
     },
     "@typescript-eslint/prefer-nullish-coalescing": {
-      "count": 5
+      "count": 3
     },
     "max-lines": {
       "count": 1
