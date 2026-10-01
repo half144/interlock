@@ -22,7 +22,7 @@ export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
       style={{ transformOrigin: "bottom left" }}
       className={cn(
         surface.overlay,
-        "absolute inset-x-0 bottom-full z-30 mb-2 max-h-[360px] overflow-y-auto rounded-2xl p-1.5",
+        "absolute inset-x-0 bottom-full z-30 mb-2 max-h-[280px] overflow-y-auto rounded-xl p-1",
       )}
     >
       {items.map((item, i) => (
