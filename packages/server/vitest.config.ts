@@ -19,9 +19,9 @@ export default defineConfig({
     setupFiles: [path.resolve(__dirname, "./src/test-utils/vitest-setup.ts")],
     pool: "forks",
     fileParallelism: false,
-    // Windows runners intermittently starve subprocess-heavy Git tests at the
-    // default worker count, leaving child processes alive past their deadlines.
-    maxWorkers: process.platform === "win32" ? 2 : undefined,
+    // At the default worker count, subprocess-heavy Git tests starve and native fs-event tests lag past
+    // their deadlines (Windows first, then a loaded Mac running the pre-push gate).
+    maxWorkers: process.platform === "win32" ? 2 : 4,
     exclude: ["**/node_modules/**", "**/dist/**", "**/.claude/**", "**/.dev/**"],
   },
 });
