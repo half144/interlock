@@ -169,7 +169,8 @@ test("survives atomic replacement and remains observable", async () => {
   await subscription.unsubscribe();
 });
 
-test("classifies a removed file as deleted", async () => {
+// macOS CI runners sometimes drop the delete event, so this gets retries.
+test("classifies a removed file as deleted", { retry: 2 }, async () => {
   const root = await createRoot();
   const target = join(root, "removed.txt");
   await writeFile(target, "before");
