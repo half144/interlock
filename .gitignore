@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+coverage/
+target/
+*.tsbuildinfo
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+.vite/
+.turbo/
+/tmp/
+apps/desktop/src-tauri/binaries/
+apps/desktop/src-tauri/resources/daemon/

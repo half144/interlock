@@ -1,0 +1,7 @@
+Interlock
+Copyright (c) 2026-present half144
+
+This product includes software developed by the Paseo project
+(https://github.com/getpaseo/paseo), Copyright (c) 2025-present Mohamed Boudra,
+licensed under the Apache License, Version 2.0. The daemon (packages/server),
+protocol (packages/protocol) and client (packages/client) are derived from it.
