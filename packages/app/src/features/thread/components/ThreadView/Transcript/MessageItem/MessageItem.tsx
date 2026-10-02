@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import type { Message } from "@/types";
 import { CopyButton } from "@/features/thread/components/blocks/CopyButton/CopyButton";
 import { AgentMessage } from "./AgentMessage/AgentMessage";
-import { send } from "./rise";
+import { room, send } from "./rise";
 import { SentAttachments } from "./SentAttachments/SentAttachments";
 
 /**
@@ -23,7 +23,7 @@ export const MessageItem = memo(function MessageItem({
   streaming?: boolean;
 }) {
   return (
-    <motion.div initial={animate ? "hidden" : false} animate="shown">
+    <motion.div variants={room} initial={animate ? "hidden" : false} animate="shown">
       {message.role === "user" ? (
         <motion.div
           variants={send}

@@ -47,7 +47,11 @@ export function Transcript({
               streaming={i === messages.length - 1 && agent.aspect === "running"}
               footer={
                 i === messages.length - 1 && (
-                  <ThinkingLine text={thinking} delay={i >= seen.current ? THINKING_DELAY : 0} />
+                  <ThinkingLine
+                    key="thinking"
+                    text={thinking}
+                    delay={i >= seen.current ? THINKING_DELAY : 0}
+                  />
                 )
               }
             />

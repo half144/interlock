@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import type { Block } from "@/types";
 import { Wordmark } from "@/components/ui/Wordmark/Wordmark";
 import { CheckpointCard } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/CheckpointCard/CheckpointCard";
@@ -13,7 +13,7 @@ import { ReasoningBlock } from "@/features/thread/components/blocks/ReasoningBlo
 import { ToolCalls } from "@/features/thread/components/blocks/ToolCalls/ToolCalls";
 import { StepItem } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/StepItem/StepItem";
 import { keyBlocks, replyText } from "@/features/thread/utils/blocks";
-import { joinAnimate, joinInitial, rise } from "../rise";
+import { joinAnimate, joinInitial, leave, rise } from "../rise";
 import { useAgentMessage } from "./useAgentMessage";
 
 /**
@@ -45,22 +45,24 @@ export function AgentMessage({
         )}
       </motion.div>
       <div className="flex flex-col gap-3">
-        {keyBlocks(blocks).map(({ block, key, position }) => {
-          const content = renderBlock(block, streaming && position === lastText);
-          if (position < arrived)
+        <AnimatePresence>
+          {keyBlocks(blocks).map(({ block, key, position }) => {
+            const content = renderBlock(block, streaming && position === lastText);
+            if (position < arrived)
+              return (
+                <motion.div key={key} variants={rise} custom={position + 1} exit={leave}>
+                  {content}
+                </motion.div>
+              );
+            if (block.type === "text") return <div key={key}>{content}</div>;
             return (
-              <motion.div key={key} variants={rise} custom={position + 1}>
+              <motion.div key={key} initial={joinInitial} animate={joinAnimate} exit={leave}>
                 {content}
               </motion.div>
             );
-          if (block.type === "text") return <div key={key}>{content}</div>;
-          return (
-            <motion.div key={key} initial={joinInitial} animate={joinAnimate}>
-              {content}
-            </motion.div>
-          );
-        })}
-        {footer}
+          })}
+          {footer}
+        </AnimatePresence>
       </div>
     </div>
   );
