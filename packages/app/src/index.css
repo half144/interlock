@@ -63,7 +63,7 @@
   --animate-lamp-hold: lamp-hold 1.8s ease-in-out infinite;
   --animate-shimmer: shimmer 2.2s linear infinite;
   --animate-spin-slow: spin 1.6s linear infinite;
-  --animate-word-in: word-in 220ms var(--ease-out-quint) both;
+  --animate-word-in: word-in 320ms var(--ease-out-quint) both;
 
   @keyframes word-in {
     from {
