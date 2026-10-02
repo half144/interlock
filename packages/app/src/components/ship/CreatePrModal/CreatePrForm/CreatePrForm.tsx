@@ -4,10 +4,11 @@ import { DiffStat } from "@/components/ui/DiffStat/DiffStat";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { monoText } from "@/lib/styles";
-import { plural } from "@/lib/utils";
+import { cn, plural } from "@/lib/utils";
 
 interface CreatePrFormProps {
   agent: Agent;
+  files: number;
   title: string;
   remote: string | null;
   onTitle: (title: string) => void;
@@ -15,7 +16,14 @@ interface CreatePrFormProps {
 }
 
 /** What is about to be opened: the title (editable), the branch it goes from and to, and what it carries. */
-export function CreatePrForm({ agent, title, remote, onTitle, onSubmit }: CreatePrFormProps) {
+export function CreatePrForm({
+  agent,
+  files,
+  title,
+  remote,
+  onTitle,
+  onSubmit,
+}: CreatePrFormProps) {
   return (
     <form
       className="flex flex-col gap-4"
@@ -29,12 +37,14 @@ export function CreatePrForm({ agent, title, remote, onTitle, onSubmit }: Create
       </Field>
       <dl className="flex flex-col gap-2 text-[13px]">
         <Row term="Branch">
-          <span className={monoText}>{agent.branch}</span>
-          <span className="text-ink-3">into</span>
-          <span className={monoText}>{agent.base}</span>
+          <span className={cn(monoText, "truncate")} title={agent.branch}>
+            {agent.branch}
+          </span>
+          <span className="shrink-0 text-ink-3">into</span>
+          <span className={cn(monoText, "shrink-0")}>{agent.base}</span>
         </Row>
         <Row term="Changes">
-          <span className="text-ink-2">{plural(agent.files.length, "file")}</span>
+          <span className="text-ink-2">{plural(files, "file")}</span>
           <DiffStat additions={agent.additions} deletions={agent.deletions} />
         </Row>
         {remote && (

@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
+import { FileCode2 } from "lucide-react";
 import type { Agent } from "@/types";
+import { EmptyState } from "@/components/ui/EmptyState/EmptyState";
 import { dockCss, fadeIn, fadeOut } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
@@ -90,7 +92,11 @@ export function CodeTab({ agent }: { agent: Agent }) {
             </AnimatePresence>
           </>
         ) : (
-          <p className="m-auto text-[13px] text-ink-3">Open a file from the explorer</p>
+          <EmptyState
+            icon={FileCode2}
+            title="No file open"
+            description="Pick a changed file in the explorer to read its diff."
+          />
         )}
         <ReviewBar agentId={agent.id} />
       </div>

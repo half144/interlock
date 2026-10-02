@@ -19,6 +19,7 @@ export function useShellPane(agent: Agent) {
     const host = hostRef.current;
     if (!host) return;
     let connection: TerminalConnection | null = null;
+    let printed = false;
     const unmounted = new AbortController();
     const isUnmounted = () => unmounted.signal.aborted;
     const term = mountXterm(host, {
@@ -32,10 +33,15 @@ export function useShellPane(agent: Agent) {
       const id = await ensureShell({ cwd, workspaceId }, term.size());
       if (isUnmounted()) return;
       const opened = await connectTerminal(id, term.size(), {
-        output: (data) => term.write(data),
+        output: (data) => {
+          term.write(data);
+          printed = true;
+          setStatus((current) => (current.name === "starting" ? { name: "ready" } : current));
+        },
         restore: (data) => {
           term.reset();
           term.write(data);
+          printed ||= data.length > 0;
         },
         exit: () => setStatus({ name: "exited" }),
       });
@@ -45,7 +51,7 @@ export function useShellPane(agent: Agent) {
       }
       connection = opened;
       opened.resize(term.size());
-      setStatus({ name: "ready" });
+      setStatus({ name: printed ? "ready" : "starting" });
       term.focus();
     };
     open().catch((error: unknown) => {

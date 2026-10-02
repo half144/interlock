@@ -1,4 +1,4 @@
-import type { PanelTab, View } from "@/types";
+import type { DiffMode, PanelTab, View } from "@/types";
 import { nextToastId, patchAgent } from "../helpers";
 import type { AppState, SliceCreator, Toast } from "../types";
 
@@ -10,6 +10,7 @@ export interface UiSlice {
   /** The subagent open in the Agents tab; null shows the main agent's overview. */
   selectedSubagentId: string | null;
   panelTab: PanelTab;
+  diffMode: DiffMode;
   panelOpen: boolean;
   paletteOpen: boolean;
   newTaskProjectId: string | null;
@@ -24,6 +25,7 @@ export interface UiSlice {
   openPanel: (tab?: PanelTab) => void;
   openSubagent: (id: string | null) => void;
   setPanelTab: (tab: PanelTab) => void;
+  setDiffMode: (mode: DiffMode) => void;
   setPanelOpen: (open: boolean) => void;
   setPalette: (open: boolean) => void;
   newTask: (projectId?: string) => void;
@@ -47,6 +49,7 @@ export const createUiSlice: SliceCreator<UiSlice> = (set) => ({
   selectedAgentId: null,
   selectedSubagentId: null,
   panelTab: "diff",
+  diffMode: "unified",
   panelOpen: false,
   paletteOpen: false,
   newTaskProjectId: null,
@@ -87,6 +90,7 @@ export const createUiSlice: SliceCreator<UiSlice> = (set) => ({
     })),
   setPanelTab: (panelTab) =>
     set((s) => ({ panelTab, reviewMaximized: panelTab === "diff" && s.reviewMaximized })),
+  setDiffMode: (diffMode) => set({ diffMode }),
   setPanelOpen: (panelOpen) =>
     set((s) => ({ ...(panelOpen ? tuckSidebar(s) : { reviewMaximized: false }), panelOpen })),
   setPalette: (paletteOpen) => set({ paletteOpen }),

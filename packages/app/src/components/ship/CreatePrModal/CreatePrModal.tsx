@@ -13,7 +13,7 @@ interface CreatePrModalProps {
 
 /** Confirms the pull request, creates it, and explains what to fix when GitHub or git says no. */
 export function CreatePrModal({ agent, onClose, onCreated }: CreatePrModalProps) {
-  const { title, setTitle, canSubmit, creating, submit, submitLabel, note, detail, remote } =
+  const { title, setTitle, canSubmit, creating, submit, submitLabel, note, detail, remote, files } =
     useCreatePrModal(agent, onCreated);
 
   return (
@@ -33,6 +33,7 @@ export function CreatePrModal({ agent, onClose, onCreated }: CreatePrModalProps)
     >
       <CreatePrForm
         agent={agent}
+        files={files}
         title={title}
         remote={remote}
         onTitle={setTitle}

@@ -2,6 +2,7 @@ import { ListChecks } from "lucide-react";
 import type { Agent } from "@/types";
 import { EmptyState } from "@/components/ui/EmptyState/EmptyState";
 import { CheckRow } from "./CheckRow/CheckRow";
+import { ChecksBlocked } from "./ChecksBlocked/ChecksBlocked";
 import { ChecksHeader } from "./ChecksHeader/ChecksHeader";
 import { useChecksView } from "./useChecksView";
 
@@ -10,15 +11,13 @@ export function ChecksView({ agent }: { agent: Agent }) {
   const { pr, blocker } = useChecksView(agent);
 
   if (pr.phase === "none") {
-    return (
+    return blocker ? (
+      <ChecksBlocked note={blocker} />
+    ) : (
       <EmptyState
         icon={ListChecks}
         title="No pull request yet"
-        description={
-          blocker
-            ? `${blocker.title}. ${blocker.hint}`
-            : "Checks show up here once the task has a pull request."
-        }
+        description="Checks show up here once the task has a pull request."
       />
     );
   }

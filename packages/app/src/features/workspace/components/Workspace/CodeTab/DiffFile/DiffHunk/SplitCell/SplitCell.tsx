@@ -26,7 +26,7 @@ export function SplitCell({
       {onComment && <CommentButton onClick={onComment} />}
       <span className="pr-2 text-right text-ink-4 select-none">{number ?? ""}</span>
       <span className={cn("text-center select-none", tone.signClass)}>{tone.sign}</span>
-      <span className={cn("overflow-hidden pr-3 text-ellipsis whitespace-pre", tone.text)}>
+      <span className={cn("pr-3 whitespace-pre-wrap [overflow-wrap:anywhere]", tone.text)}>
         <CodeText text={line.text} />
       </span>
     </div>

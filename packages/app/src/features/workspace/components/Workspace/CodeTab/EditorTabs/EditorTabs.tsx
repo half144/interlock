@@ -8,6 +8,7 @@ import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { gitMark } from "@/features/workspace/utils/fileTree";
 import { fileName } from "@/features/workspace/utils/language";
 import { FileGlyph } from "@/features/workspace/components/editor/FileGlyph/FileGlyph";
+import { useEditorTabs } from "./useEditorTabs";
 
 interface EditorTabsProps {
   tabs: EditorTab[];
@@ -26,10 +27,13 @@ interface EditorTabsProps {
  */
 export function EditorTabs({ tabs, active, files, onOpen, onClose, actions }: EditorTabsProps) {
   const group = useId();
+  const { listRef, scrollSideways } = useEditorTabs(active);
 
   return (
     <div className="flex h-9 shrink-0 bg-inset">
       <div
+        ref={listRef}
+        onWheel={scrollSideways}
         role="tablist"
         aria-label="Open files"
         className="flex min-w-0 flex-1 overflow-x-auto [scrollbar-width:none]"

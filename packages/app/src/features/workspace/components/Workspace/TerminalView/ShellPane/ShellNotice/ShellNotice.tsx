@@ -32,5 +32,10 @@ export function ShellNotice({ status, onRetry }: ShellNoticeProps) {
       />
     );
   }
-  return null;
+  if (status.name === "ready") return null;
+  return (
+    <p className="pointer-events-none absolute top-2 left-4 font-mono text-[12px] text-ink-4">
+      Starting shell…
+    </p>
+  );
 }

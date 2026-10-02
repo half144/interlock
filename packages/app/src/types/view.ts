@@ -6,3 +6,4 @@ export type View =
   | { kind: "accounts" };
 
 export type PanelTab = "diff" | "terminal" | "checks" | "agents";
+export type DiffMode = "unified" | "split";
