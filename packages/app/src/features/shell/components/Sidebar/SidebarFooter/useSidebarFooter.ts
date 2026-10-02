@@ -16,7 +16,7 @@ export function useSidebarFooter() {
   });
 
   return {
-    active: view.kind === "settings",
-    openSettings: projectId ? () => go({ kind: "settings", projectId }) : null,
+    active: view.kind === "settings" || view.kind === "accounts",
+    openSettings: () => go(projectId ? { kind: "settings", projectId } : { kind: "accounts" }),
   };
 }

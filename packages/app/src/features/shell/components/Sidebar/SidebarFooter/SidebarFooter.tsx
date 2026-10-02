@@ -4,7 +4,6 @@ import { useSidebarFooter } from "./useSidebarFooter";
 
 export function SidebarFooter({ collapsed }: { collapsed: boolean }) {
   const { active, openSettings } = useSidebarFooter();
-  if (!openSettings) return null;
 
   return (
     <div className="px-2 pb-2">
