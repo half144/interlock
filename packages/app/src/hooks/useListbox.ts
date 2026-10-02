@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import type { Effort, EffortOption } from "@/types";
 
-export function useEffortMenu(
-  value: Effort,
-  options: EffortOption[],
-  onPick: (effort: Effort) => void,
+/** The highlight and keyboard navigation of a short listbox: arrows, Home/End, Enter or Space to pick, Escape or Tab to close. */
+export function useListbox(
+  value: string,
+  options: { id: string }[],
+  onPick: (id: string) => void,
   onClose: () => void,
 ) {
   const [active, setActive] = useState(value);

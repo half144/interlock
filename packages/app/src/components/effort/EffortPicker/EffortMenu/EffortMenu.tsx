@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 import { blurIn, sharp } from "@/lib/blur";
 import { effortCopy } from "@/lib/efforts";
+import { useListbox } from "@/hooks/useListbox";
 import { Dots } from "@/components/effort/Dots/Dots";
-import { useEffortMenu } from "./useEffortMenu";
 
 interface EffortMenuProps {
   value: Effort;
@@ -23,7 +23,7 @@ interface EffortMenuProps {
  */
 export function EffortMenu({ value, options, model, onPick, onClose }: EffortMenuProps) {
   const id = useId();
-  const { active, setActive, list, onKey } = useEffortMenu(value, options, onPick, onClose);
+  const { active, setActive, list, onKey } = useListbox(value, options, onPick, onClose);
   const { blurb, pace } = effortCopy(active);
 
   return (

@@ -8,6 +8,7 @@ import type { EditorSlice } from "./slices/editor";
 import type { ProjectSlice } from "./slices/projects";
 import type { ProjectSettingsSlice } from "./slices/projectSettings";
 import type { ProviderSlice } from "./slices/providers";
+import type { QueueSlice } from "./slices/queue";
 import type { ReviewSlice } from "./slices/review";
 import type { ShipSlice } from "./slices/ship";
 import type { SubagentSlice } from "./slices/subagents";
@@ -39,6 +40,7 @@ export type AppState = UiSlice &
   ProjectSlice &
   ProjectSettingsSlice &
   TaskSlice &
+  QueueSlice &
   SubagentSlice &
   ProviderSlice &
   UsageSlice &

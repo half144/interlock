@@ -1,4 +1,4 @@
-import type { AgentKind, Autonomy } from "@/types";
+import type { Access, AgentKind, Autonomy } from "@/types";
 
 const CLAUDE_MODES = { plan: "plan", auto: "auto", "full-auto": "bypassPermissions" } as const;
 const CODEX_MODES = { auto: "auto", "full-auto": "full-access" } as const;
@@ -9,6 +9,10 @@ export function modeFor(kind: AgentKind, mode: "plan" | "auto", autonomy: Autono
   if (kind === "codex") return CODEX_MODES[autonomy];
   return null;
 }
+
+/** The provider's permission mode for a level picked while the conversation runs. Plan on Codex is a feature toggle, so it has none. */
+export const modeForAccess = (kind: AgentKind, access: Access): string | null =>
+  access === "plan" ? modeFor(kind, "plan", "auto") : modeFor(kind, "auto", access);
 
 /** Codex's plan collaboration mode is a session feature, not a permission mode. */
 export const featuresFor = (

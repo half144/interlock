@@ -1,37 +1,32 @@
 import { AnimatePresence, motion } from "motion/react";
-import type { Effort, EffortOption } from "@/types";
+import type { Access } from "@/types";
+import type { AccessOption } from "@/lib/access";
+import { cn } from "@/lib/utils";
 import { fadeIn, fadeOut, morph } from "@/lib/motion";
 import { blurIn, sharp } from "@/lib/blur";
 import { useMorphMenu } from "@/hooks/useMorphMenu";
 import { MorphSurface } from "@/components/ui/MorphSurface/MorphSurface";
-import { Dots } from "../Dots/Dots";
-import { EffortMenu } from "./EffortMenu/EffortMenu";
+import { AccessMenu } from "./AccessMenu/AccessMenu";
+import { ACCESS_ICONS } from "./icons";
 
 // The menu's rows and the description block under them.
 const ROW_HEIGHT = 36;
-const MENU_CHROME = 110;
+const MENU_CHROME = 100;
 
-interface EffortPickerProps {
-  value: Effort;
-  options: EffortOption[];
-  onChange: (effort: Effort) => void;
-  model: string;
+interface AccessPickerProps {
+  value: Access;
+  options: AccessOption[];
+  onChange: (access: Access) => void;
 }
 
-/**
- * How hard the agent thinks, set per message next to Send. The pill doesn't open a menu so much as become
- * one: its shape stretches into the list (up, or down when the list would not fit above), and folds back
- * into the pill with the new level once you pick.
- * The levels are the ones the model offers; a model with none gets no pill.
- */
-export function EffortPicker({ value, options, onChange, model }: EffortPickerProps) {
+/** How far the agent may go before it stops to ask, set per conversation next to the effort pill. Only Full access carries colour. */
+export function AccessPicker({ value, options, onChange }: AccessPickerProps) {
   const { open, side, root, trigger, show, close } = useMorphMenu(
     options.length * ROW_HEIGHT + MENU_CHROME,
   );
-  if (options.length === 0) return null;
-
-  const at = options.findIndex((o) => o.id === value);
-  const label = options[at]?.label ?? value;
+  const current = options.find((o) => o.id === value);
+  if (!current) return null;
+  const Icon = ACCESS_ICONS[value];
 
   return (
     <div ref={root} className="relative">
@@ -42,14 +37,17 @@ export function EffortPicker({ value, options, onChange, model }: EffortPickerPr
         onClick={show}
         aria-expanded={open}
         aria-haspopup="listbox"
-        aria-label={`Reasoning effort: ${label}`}
-        title="Reasoning effort"
+        aria-label={`Access: ${current.label}`}
+        title="Access"
         transition={morph}
         style={{ borderRadius: 16 }}
-        className="relative inline-flex h-8 items-center bg-white/[0.06] px-3 text-[13px] text-ink-2 transition-colors duration-150 hover:text-ink"
+        className={cn(
+          "relative inline-flex h-8 items-center bg-white/[0.06] px-3 text-[13px] transition-colors duration-150 hover:text-ink",
+          value === "full-auto" ? "text-red" : "text-ink-2",
+        )}
       >
         <motion.span layout="position" className="relative flex items-center gap-2">
-          <Dots filled={at + 1} total={options.length} />
+          <Icon className="size-3.5" />
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.span
               key={value}
@@ -57,19 +55,18 @@ export function EffortPicker({ value, options, onChange, model }: EffortPickerPr
               animate={{ ...sharp, transition: { ...fadeIn, delay: 0.12 } }}
               exit={{ ...blurIn, transition: fadeOut }}
             >
-              {label}
+              {current.label}
             </motion.span>
           </AnimatePresence>
         </motion.span>
       </motion.button>
 
-      <MorphSurface open={open} side={side} className="w-[262px]">
-        <EffortMenu
+      <MorphSurface open={open} side={side} align="start" className="w-[262px]">
+        <AccessMenu
           value={value}
           options={options}
-          model={model}
-          onPick={(effort) => {
-            onChange(effort);
+          onPick={(access) => {
+            onChange(access);
             close();
           }}
           onClose={close}

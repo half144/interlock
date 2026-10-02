@@ -5,6 +5,7 @@ import { isFinished } from "@/lib/agentStatus";
 import { READING_WIDTH } from "@/lib/layout";
 import { JumpToLatest } from "./JumpToLatest/JumpToLatest";
 import { Composer } from "./Composer/Composer";
+import { MessageQueue } from "./MessageQueue/MessageQueue";
 import { MessageItem } from "./MessageItem/MessageItem";
 import { THINKING_DELAY } from "./MessageItem/rise";
 import { ThinkingLine } from "./ThinkingLine/ThinkingLine";
@@ -87,6 +88,7 @@ export function Transcript({
             <AnimatePresence initial={false}>
               {card && <WorktreeCard key="card" agent={agent} thread={thread} />}
             </AnimatePresence>
+            <MessageQueue threadId={thread.id} />
             <Composer thread={thread} agent={agent} onStop={onStop} />
             {!docked && <ThreadTray agent={agent} />}
           </motion.div>

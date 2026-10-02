@@ -7,6 +7,7 @@ import { RoundButton } from "@/components/ui/RoundButton/RoundButton";
 import { SendButton } from "@/components/ui/SendButton/SendButton";
 import { AddFilesButton } from "@/components/attachments/AddFilesButton/AddFilesButton";
 import { AttachmentChips } from "@/components/attachments/AttachmentChips/AttachmentChips";
+import { AccessPicker } from "@/components/access/AccessPicker/AccessPicker";
 import { EffortPicker } from "@/components/effort/EffortPicker/EffortPicker";
 import { SlashMenu } from "./SlashMenu/SlashMenu";
 import { useComposer } from "./useComposer";
@@ -53,11 +54,16 @@ export function Composer({
         onPaste={attachments.onPaste}
         rows={1}
         aria-label="Message"
-        placeholder={c.running ? "Steer the agent while it works" : "Send message to Interlock"}
+        placeholder={
+          c.running ? "Queue a message for when it finishes" : "Send message to Interlock"
+        }
         className="block max-h-40 min-h-[52px] w-full resize-none bg-transparent px-5 pt-4 pb-1 text-[15px] leading-relaxed text-ink outline-none placeholder:text-ink-4 [field-sizing:content]"
       />
       <div className="flex items-center gap-1.5 px-3 pb-3">
         <AddFilesButton onPick={attachments.add} />
+        {c.accessOptions.length > 0 && (
+          <AccessPicker value={c.access} options={c.accessOptions} onChange={c.changeAccess} />
+        )}
         <span className="ml-auto flex items-center gap-1.5">
           <EffortPicker
             value={agent.effort ?? ""}

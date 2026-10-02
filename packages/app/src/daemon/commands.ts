@@ -1,4 +1,4 @@
-import type { Agent, AgentKind, Autonomy, Effort, Hold, Project } from "@/types";
+import type { Access, Agent, AgentKind, Autonomy, Effort, Hold, Project } from "@/types";
 import { checkedOutBranch, startingBranches } from "./branches";
 import { loadProjectSettings } from "./projectSettings";
 import { getClient } from "./client";
@@ -10,7 +10,7 @@ import {
   planResponse,
   type PlanChoice,
 } from "./adapters/holds";
-import { featuresFor, modeFor } from "./adapters/modes";
+import { featuresFor, modeFor, modeForAccess } from "./adapters/modes";
 import { addProjectFailure, toProject } from "./adapters/projects";
 
 export interface StartTaskInput {
@@ -114,6 +114,13 @@ export async function startPlanning(agent: Agent): Promise<void> {
   const client = getClient();
   if (agent.kind === "codex") await client.setAgentFeature(agent.id, "plan_mode", true);
   else await client.setAgentMode(agent.id, "plan");
+}
+
+/** Moves a running conversation to another level; the provider applies it from its next permission request. */
+export async function setAccess(agent: Agent, access: Access): Promise<void> {
+  if (access === "plan") return startPlanning(agent);
+  const modeId = modeForAccess(agent.kind, access);
+  if (modeId) await getClient().setAgentMode(agent.id, modeId);
 }
 
 export async function setEffort(agentId: string, effort: Effort): Promise<void> {

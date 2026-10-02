@@ -2,6 +2,9 @@ import type { AgentKind } from "./agent";
 
 export type Autonomy = "auto" | "full-auto";
 
+/** How far an agent may go on its own, picked per conversation: plan first, work and ask when risky, or never ask. */
+export type Access = "plan" | Autonomy;
+
 export interface ProjectSettings {
   setupCommands: string[];
   env: [string, string][];

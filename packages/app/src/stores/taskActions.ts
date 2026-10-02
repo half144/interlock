@@ -1,8 +1,8 @@
 import * as daemon from "@/daemon/commands";
 import { isImageFile } from "@/lib/attachments";
 import type { Message } from "@/types";
-import { patchAgent } from "./helpers";
 import { holdActions } from "./holdActions";
+import { settingActions } from "./settingActions";
 import type { TaskSlice } from "./slices/tasks";
 import { withMessage, withoutMessage } from "./threads";
 import type { AppState } from "./types";
@@ -18,6 +18,7 @@ type Actions = Pick<
   | "sendMessage"
   | "interrupt"
   | "startPlanning"
+  | "setAccess"
   | "setEffort"
   | "setModel"
   | "deleteTask"
@@ -68,19 +69,9 @@ export function taskActions(set: Set, get: Get): Actions {
     }
   };
 
-  const changeEffort = async (agentId: string, effort: string) => {
-    const previous = get().agents[agentId]?.effort;
-    set((s) => ({ agents: patchAgent(s.agents, agentId, { effort }) }));
-    try {
-      await daemon.setEffort(agentId, effort);
-    } catch (error) {
-      set((s) => ({ agents: patchAgent(s.agents, agentId, previous ? { effort: previous } : {}) }));
-      throw error;
-    }
-  };
-
   return {
     ...holdActions(get, attempt),
+    ...settingActions(set, get, attempt),
     startTask: (task) =>
       attempt(async () => {
         const project = get().projects[task.projectId];
@@ -99,14 +90,15 @@ export function taskActions(set: Set, get: Get): Actions {
         get().openThread(agentId);
       }),
     sendMessage: (threadId, text, files) => attempt(() => send(threadId, text, files)),
-    interrupt: (agentId) => attempt(() => daemon.interrupt(agentId)),
+    interrupt: (agentId) => {
+      if (get().queues[agentId]) set((s) => ({ paused: { ...s.paused, [agentId]: true } }));
+      return attempt(() => daemon.interrupt(agentId));
+    },
     startPlanning: (agentId) =>
       attempt(async () => {
         const agent = get().agents[agentId];
         if (agent) await daemon.startPlanning(agent);
       }),
-    setEffort: (agentId, effort) => attempt(() => changeEffort(agentId, effort)),
-    setModel: (agentId, modelId) => attempt(() => daemon.setModel(agentId, modelId)),
     deleteTask: (agentId) => attempt(() => removeTask(get, agentId)),
   };
 }
