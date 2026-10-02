@@ -2,6 +2,7 @@ import { hasResumeAction } from "@/daemon/adapters/holds";
 import { modeFor } from "@/daemon/adapters/modes";
 import { useStore } from "@/stores/app-store";
 import type { Hold } from "@/types";
+import { useOverflowFade } from "@/features/thread/hooks/useOverflowFade";
 import { focusComposer } from "@/features/thread/utils/focusComposer";
 
 export function usePlanHold(agentId: string, hold: Hold) {
@@ -11,7 +12,10 @@ export function usePlanHold(agentId: string, hold: Hold) {
   const fullAutoOffered =
     hasResumeAction(hold) || (fullAuto !== null && agent?.modeId !== fullAuto);
 
+  const plan = useOverflowFade();
+
   return {
+    plan,
     fullAutoOffered,
     approve: () => void resolvePlan(agentId, "approve"),
     reject: () => void resolvePlan(agentId, "reject"),

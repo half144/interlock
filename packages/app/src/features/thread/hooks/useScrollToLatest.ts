@@ -31,6 +31,7 @@ export function useScrollToLatest(count: number) {
     let frame = 0;
     let last = 0;
     let expected = el.scrollTop;
+    let height = el.scrollHeight;
     const bottom = () => el.scrollHeight - el.clientHeight;
     const tick = (now: number) => {
       frame = 0;
@@ -48,8 +49,12 @@ export function useScrollToLatest(count: number) {
       frame = requestAnimationFrame(tick);
     };
     const track = () => {
+      const shrank = el.scrollHeight < height;
+      height = el.scrollHeight;
       if (Math.abs(el.scrollTop - expected) < 1) return;
       expected = el.scrollTop;
+      // The browser pulling the view up because content got shorter is not you scrolling away.
+      if (shrank) return;
       pinned.current = bottom() - el.scrollTop < STICK_DISTANCE;
     };
     const release = (e: WheelEvent) => {

@@ -1,11 +1,15 @@
 import type { Hold } from "@/types";
 import { Button } from "@/components/ui/Button/Button";
 import { Markdown } from "@/features/thread/components/blocks/Markdown/Markdown";
+import { cn } from "@/lib/utils";
 import { HoldFrame } from "../HoldFrame/HoldFrame";
 import { usePlanHold } from "./usePlanHold";
 
 export function PlanHold({ agentId, hold }: { agentId: string; hold: Hold }) {
-  const { fullAutoOffered, approve, reject, approveFullAuto, suggest } = usePlanHold(agentId, hold);
+  const { plan, fullAutoOffered, approve, reject, approveFullAuto, suggest } = usePlanHold(
+    agentId,
+    hold,
+  );
 
   return (
     <HoldFrame
@@ -30,7 +34,15 @@ export function PlanHold({ agentId, hold }: { agentId: string; hold: Hold }) {
       }
     >
       {hold.plan && (
-        <div className="mt-3 max-h-[320px] overflow-y-auto rounded-lg bg-inset px-3 py-2">
+        <div
+          ref={plan.ref}
+          onScroll={plan.onScroll}
+          className={cn(
+            "mt-3 max-h-[320px] overflow-y-auto rounded-lg bg-inset px-3 py-2",
+            plan.fade &&
+              "[mask-image:linear-gradient(to_bottom,black_calc(100%-40px),transparent)]",
+          )}
+        >
           <Markdown text={hold.plan} />
         </div>
       )}

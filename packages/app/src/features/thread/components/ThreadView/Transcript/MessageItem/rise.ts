@@ -17,7 +17,8 @@ const fold = (gap: number) => ({
     transitionEnd: { overflow: "visible" },
   },
 });
-const makeRoom = { height: spring, marginTop: spring };
+const roomSpring = { ...spring, visualDuration: 0.38 };
+const makeRoom = { height: roomSpring, marginTop: roomSpring };
 
 const reply = fold(REPLY_GAP);
 const thread = fold(MESSAGE_GAP);

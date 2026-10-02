@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
-import { Check } from "lucide-react";
 import type { Hold } from "@/types";
-import { fadeIn, fadeOut, spring } from "@/lib/motion";
+import { fadeOut } from "@/lib/motion";
 import { ApprovalHold } from "./ApprovalHold/ApprovalHold";
 import { PlanHold } from "./PlanHold/PlanHold";
 import { QuestionHold } from "./QuestionHold/QuestionHold";
@@ -13,30 +12,16 @@ function HoldBody({ agentId, hold }: { agentId: string; hold: Hold }) {
   return <ApprovalHold agentId={agentId} hold={hold} />;
 }
 
-/** The agent is paused until you answer. Once you do, the card folds away into a one-line receipt. */
+/** The agent is paused until you answer. The card fades while the reply folds the room it took away. */
 export function HoldCard({ agentId }: { agentId: string }) {
   const { hold } = useHoldCard(agentId);
 
   return (
     <AnimatePresence initial={false}>
-      {hold ? (
-        <motion.div
-          key="ask"
-          exit={{ height: 0, opacity: 0, transition: { height: spring, opacity: fadeOut } }}
-          style={{ overflow: "hidden" }}
-        >
+      {hold && (
+        <motion.div key="ask" exit={{ opacity: 0, transition: fadeOut }}>
           <HoldBody agentId={agentId} hold={hold} />
         </motion.div>
-      ) : (
-        <motion.p
-          key="answered"
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0, transition: { y: spring, opacity: fadeIn } }}
-          className="flex items-center gap-1.5 text-[13.5px] text-ink-3"
-        >
-          <Check className="size-3.5 text-green" />
-          Answered
-        </motion.p>
       )}
     </AnimatePresence>
   );
