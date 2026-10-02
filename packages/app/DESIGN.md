@@ -360,7 +360,7 @@ A fixed desktop app shell with no breakpoints: the app holds a 1100px minimum wi
 - **Thread with workspace:** the chat narrows to **40%** of the main area (clamped 420–580px) and the workspace takes the other **60%**, inset 8px top/bottom/right so it floats as a card. The conversation's reading width animates from 700px to the chat width on the same spring, so it slides as a block.
 - **Code tab as an editor:** it follows VS Code's anatomy so a developer reads it without learning it: an explorer (uppercase project header, 22px rows, file-type marks, git colours and letters, a dot on folders holding changes), editor tabs (single click previews in italics, double click pins, middle click closes; the active tab is Raised and slides on `spring`), breadcrumbs down to the class or function, and the file's diff as before (old and new line numbers, sign, 10% row washes, the `@@` hunk header). No per-change Keep / Undo: the agent writes in its own worktree, so the decision is the PR, line comments or the chat, not each hunk. Chrome stays Interlock: graphite surfaces (explorer and tab strip Inset, editor Raised), our overlays, our motion; no VS Code blue.
 - **Maximized review (mini-IDE):** only the Code tab can maximize. The sidebar steps out (width 0); the workspace card loses its corners, shadow and gutters on the layout's timing and sits flush at the left edge, its explorer widening from 220 to 280px; the chat docks on the right at 25% (clamped 340–420px) as a side pane with a hairline edge, its title (the chat switcher) on the toolbar's row, and without the worktree strip and tray. A 24px Ground status bar rises under both: branch, checks and the agent's status line on the left; files changed, indentation, encoding, line endings and language on the right. Picking another active chat, restoring, Esc or leaving the Code tab returns to the normal layout. The chat never crosses the review visibly: it fades out in place, travels unseen, and fades in as it settles, while the review slides over on the same `dock` spring.
-- **The dock:** sidebar width, chat width and the workspace's edge all ride one spring (`dock`, 0.44s, no bounce) and start on the same frame. The workspace is laid out at its final width from the first frame and is pinned to the chat's edge, so it slides in whole and never reflows mid-flight. Window resizes follow instantly, without animation.
+- **The dock:** sidebar width, chat width and the workspace's edge all ride one spring (`dock`, 0.3s, no bounce) and start on the same frame. The workspace is laid out at its final width from the first frame and is pinned to the chat's edge, so it slides in whole and never reflows mid-flight. Window resizes follow instantly, without animation.
 - **Pages:** Automations max 1040px, Settings max 1100px, 32px padding; Settings pairs a 180px sticky section nav with an 880px column.
 - **Floating:** palette 620px wide, 14vh from the top; dialogs 440px, centred. Both sit on `Backdrop`: after Manus, the app dims to 45% black and blurs 6px out of focus behind them. Toasts bottom-right, 16px from the edges, 320px wide.
 
@@ -468,9 +468,9 @@ Tokens live in `src/lib/motion.ts` (and `--ease-out-quint` in CSS). Every animat
 - `easeOut` (0.23, 1, 0.32, 1) for arrivals; `easeIn` (0.4, 0, 1, 1) for departures.
 - `fadeIn` 0.18s, `fadeOut` 0.11s: exits always run faster than entrances.
 - `spring` (0.26s, no bounce): state changes, sliding highlights, toggles, small swaps.
-- `dock` (0.44s, no bounce): the sidebar ↔ chat ↔ workspace layout, one spring for all three.
+- `dock` (0.3s, no bounce): the sidebar ↔ chat ↔ workspace layout, one spring for all three.
 - `morph` (0.34s, bounce 0.12): a control becoming its own surface (the effort pill). The only spring with give.
-- Durations: feedback 100–150ms, state 160–260ms, panels and views ≤ 440ms. Nothing in product UI runs longer.
+- Durations: feedback 100–150ms, state 160–260ms, panels and views ≤ 300ms. Nothing in product UI runs longer.
 
 What animates, and why:
 

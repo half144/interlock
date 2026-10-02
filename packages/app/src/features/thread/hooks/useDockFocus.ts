@@ -7,7 +7,7 @@ import {
 } from "motion/react";
 
 const MAX_BLUR_PX = 5;
-const BLUR_PER_SPEED = 1 / 60;
+const BLUR_PER_SPEED = 1 / 90;
 const DEAD_BAND_PX = 0.8;
 const FOCUS_PULL = { stiffness: 1000, damping: 58 };
 
