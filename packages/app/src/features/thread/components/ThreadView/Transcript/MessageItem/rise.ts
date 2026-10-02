@@ -19,6 +19,12 @@ const fold = (gap: number) => ({
 });
 const makeRoom = { height: dock, marginTop: dock };
 
+/** Coming in, the room opens without clipping: what arrives is seen whole while the space grows, not wiped in from its top. */
+const unfold = (gap: number) => ({
+  closed: { height: 0, marginTop: -gap },
+  open: { height: "auto", marginTop: 0 },
+});
+
 const reply = fold(REPLY_GAP);
 const thread = fold(MESSAGE_GAP);
 const STAGGER = 0.04;
@@ -65,11 +71,11 @@ export const send: Variants = {
 };
 
 /** A block that joins a reply already being written: a short, plain arrival with no wait. */
-export const joinInitial = { opacity: 0, y: 6, ...reply.closed };
+export const joinInitial = { opacity: 0, y: 6, ...unfold(REPLY_GAP).closed };
 export const joinAnimate = {
   opacity: 1,
   y: 0,
-  ...reply.open,
+  ...unfold(REPLY_GAP).open,
   transition: { y: spring, opacity: fadeIn, ...makeRoom },
 };
 
@@ -78,8 +84,8 @@ export const leave = { opacity: 0, ...reply.closed, transition: { opacity: fadeO
 
 /** A new message opens up its room as it comes. */
 export const room: Variants = {
-  hidden: thread.closed,
-  shown: { ...thread.open, transition: makeRoom },
+  hidden: unfold(MESSAGE_GAP).closed,
+  shown: { ...unfold(MESSAGE_GAP).open, transition: makeRoom },
 };
 
 /** A line under the conversation, like the outcome, arriving and leaving. */
