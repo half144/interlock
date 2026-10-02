@@ -1,8 +1,9 @@
 import { memo, type ReactNode } from "react";
 import { motion } from "motion/react";
 import type { Message } from "@/types";
+import { CopyButton } from "@/features/thread/components/blocks/CopyButton/CopyButton";
 import { AgentMessage } from "./AgentMessage/AgentMessage";
-import { send } from "./rise";
+import { room, send } from "./rise";
 import { SentAttachments } from "./SentAttachments/SentAttachments";
 
 /**
@@ -22,7 +23,7 @@ export const MessageItem = memo(function MessageItem({
   streaming?: boolean;
 }) {
   return (
-    <motion.div initial={animate ? "hidden" : false} animate="shown">
+    <motion.div variants={room} initial={animate ? "hidden" : false} animate="shown">
       {message.role === "user" ? (
         <motion.div
           variants={send}
@@ -30,8 +31,13 @@ export const MessageItem = memo(function MessageItem({
           className="flex flex-col items-end"
         >
           {message.attachments && <SentAttachments items={message.attachments} />}
-          <div className="max-w-[85%] rounded-2xl border border-seam bg-raised px-4 py-3 text-[15px] leading-[1.6] break-words whitespace-pre-wrap text-ink shadow-button [text-wrap:pretty]">
-            {message.text}
+          <div className="group/sent relative flex max-w-[85%] items-center">
+            <span className="absolute right-full pr-1.5 opacity-0 transition-opacity duration-150 group-hover/sent:opacity-100 focus-within:opacity-100">
+              <CopyButton text={message.text} label="Copy message" />
+            </span>
+            <div className="rounded-2xl border border-seam bg-raised px-4 py-3 text-[15px] leading-[1.6] break-words whitespace-pre-wrap text-ink shadow-button [text-wrap:pretty]">
+              {message.text}
+            </div>
           </div>
         </motion.div>
       ) : (

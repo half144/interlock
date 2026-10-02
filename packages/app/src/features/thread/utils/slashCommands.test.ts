@@ -22,6 +22,16 @@ describe("slash commands", () => {
     expect(matchSlash(commands, "/plan fix it")).toEqual([]);
   });
 
+  it("lists commands that contain the word after those that start with it", () => {
+    const all = [
+      { name: "/a11y-audit", hint: "" },
+      { name: "/audit", hint: "" },
+      { name: "/plan", hint: "" },
+    ];
+    expect(matchSlash(all, "/aud").map((c) => c.name)).toEqual(["/audit", "/a11y-audit"]);
+    expect(matchSlash(all, "/").map((c) => c.name)).toEqual(["/a11y-audit", "/audit", "/plan"]);
+  });
+
   it("splits a command from the message that follows it", () => {
     expect(parseSlash(commands, "/plan add a refund endpoint")).toMatchObject({
       command: { name: "/plan" },

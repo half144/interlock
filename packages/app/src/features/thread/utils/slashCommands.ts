@@ -31,11 +31,16 @@ export function commandSource(name: string) {
 
 export const slashOptionId = (index: number) => `slash-option-${index}`;
 
-/** Commands matching a lone slash word, like `/pl`; anything else typed means no menu. */
-export const matchSlash = (commands: SlashCommand[], text: string) =>
-  /^\/\S*$/.test(text)
-    ? commands.filter((c) => c.name.toLowerCase().startsWith(text.toLowerCase()))
-    : [];
+/** Commands matching a lone slash word, like `/pl`: those that start with it first, then those that merely contain it. */
+export function matchSlash(commands: SlashCommand[], text: string) {
+  if (!/^\/\S*$/.test(text)) return [];
+  const query = text.slice(1).toLowerCase();
+  const named = (c: SlashCommand) => c.name.slice(1).toLowerCase();
+  return [
+    ...commands.filter((c) => named(c).startsWith(query)),
+    ...commands.filter((c) => !named(c).startsWith(query) && named(c).includes(query)),
+  ];
+}
 
 /** A message that starts with a command: which one, and what is left to send. */
 export function parseSlash(commands: SlashCommand[], text: string) {

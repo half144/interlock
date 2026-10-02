@@ -2,6 +2,7 @@ import { AnimatePresence, motion, type MotionValue } from "motion/react";
 import { Dock } from "@/components/ui/Dock/Dock";
 import { Outcome } from "@/features/thread/components/ThreadView/Transcript/Outcome/Outcome";
 import { isFinished } from "@/lib/agentStatus";
+import { JumpToLatest } from "./JumpToLatest/JumpToLatest";
 import { Composer } from "./Composer/Composer";
 import { MessageItem } from "./MessageItem/MessageItem";
 import { THINKING_DELAY } from "./MessageItem/rise";
@@ -21,8 +22,23 @@ export function Transcript({
   threadId: string;
   reading: MotionValue<number>;
 }) {
-  const { thread, agent, messages, thinking, card, docked, scroller, content, dock, seen, focus } =
-    useTranscript(threadId, reading);
+  const {
+    thread,
+    agent,
+    messages,
+    thinking,
+    card,
+    docked,
+    scroller,
+    content,
+    dock,
+    seen,
+    focus,
+    away,
+    jump,
+    stopped,
+    onStop,
+  } = useTranscript(threadId, reading);
 
   if (!thread || !agent) return null;
 
@@ -33,6 +49,7 @@ export function Transcript({
         style={{ opacity: focus.haze, bottom: focus.clearance }}
         className="pointer-events-none absolute inset-x-0 top-0 z-10 backdrop-blur-[4px]"
       />
+      <JumpToLatest visible={away} clearance={focus.clearance} onJump={jump} />
       <div ref={scroller} className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <motion.div
           ref={content}
@@ -47,13 +64,17 @@ export function Transcript({
               streaming={i === messages.length - 1 && agent.aspect === "running"}
               footer={
                 i === messages.length - 1 && (
-                  <ThinkingLine text={thinking} delay={i >= seen.current ? THINKING_DELAY : 0} />
+                  <ThinkingLine
+                    key="thinking"
+                    text={thinking}
+                    delay={i >= seen.current ? THINKING_DELAY : 0}
+                  />
                 )
               }
             />
           ))}
           <AnimatePresence initial={false}>
-            {isFinished(agent) && <Outcome key="outcome" agent={agent} />}
+            {isFinished(agent) && <Outcome key="outcome" agent={agent} stopped={stopped} />}
           </AnimatePresence>
         </motion.div>
         <Dock surface="panel">
@@ -65,7 +86,7 @@ export function Transcript({
             <AnimatePresence initial={false}>
               {card && <WorktreeCard key="card" agent={agent} thread={thread} />}
             </AnimatePresence>
-            <Composer thread={thread} agent={agent} />
+            <Composer thread={thread} agent={agent} onStop={onStop} />
             {!docked && <ThreadTray agent={agent} />}
           </motion.div>
         </Dock>

@@ -16,18 +16,22 @@ export function useQuestionHold(agentId: string, hold: Hold) {
   const [picks, setPicks] = useState<Picks>({});
   const [typed, setTyped] = useState<Typed>({});
 
+  const ready = allAnswered(questions, picks, typed);
+  const submit = () => void resolveQuestions(agentId, buildAnswers(questions, picks, typed));
+
   return {
     questions,
     picks,
     typed,
-    ready: allAnswered(questions, picks, typed),
+    ready,
     pick: (index: number, label: string) => {
       const question = questions[index];
       if (question)
         setPicks((p) => ({ ...p, [index]: togglePick(question, p[index] ?? [], label) }));
     },
     type: (index: number, text: string) => setTyped((t) => ({ ...t, [index]: text })),
-    submit: () => void resolveQuestions(agentId, buildAnswers(questions, picks, typed)),
+    submit,
+    submitIfReady: () => ready && submit(),
     dismiss: () => void resolveHold(agentId, "Deny"),
   };
 }

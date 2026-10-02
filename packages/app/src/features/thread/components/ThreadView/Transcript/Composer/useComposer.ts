@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, type KeyboardEvent } from "react";
 import { canPlanFirst } from "@/daemon/adapters/modes";
 import { useAttachmentDraft } from "@/hooks/useAttachmentDraft";
 import { effortsOf } from "@/lib/providers";
 import { useStore } from "@/stores/app-store";
 import type { Agent, Thread } from "@/types";
+import { useDraft } from "@/features/thread/hooks/useDraft";
 import { useAgentSkills } from "@/features/thread/hooks/useAgentSkills";
 import { useSlashCommands } from "@/features/thread/hooks/useSlashCommands";
 import { COMPOSER_PREFILL } from "@/features/thread/utils/focusComposer";
 import { commandsFor, parseSlash, skillCommands } from "@/features/thread/utils/slashCommands";
 
-export function useComposer(thread: Thread, agent: Agent) {
+export function useComposer(thread: Thread, agent: Agent, onStop: () => void) {
   const sendMessage = useStore((s) => s.sendMessage);
   const interrupt = useStore((s) => s.interrupt);
   const setEffort = useStore((s) => s.setEffort);
   const startPlanning = useStore((s) => s.startPlanning);
   const providers = useStore((s) => s.providers);
   const attachments = useAttachmentDraft();
-  const [text, setText] = useState("");
+  const [text, setText] = useDraft(thread.id);
   const input = useRef<HTMLTextAreaElement>(null);
   const commands = commandsFor(canPlanFirst(agent.kind));
   const skills = useAgentSkills(agent.id);
@@ -34,7 +35,7 @@ export function useComposer(thread: Thread, agent: Agent) {
     };
     window.addEventListener(COMPOSER_PREFILL, prefill);
     return () => window.removeEventListener(COMPOSER_PREFILL, prefill);
-  }, []);
+  }, [setText]);
 
   const send = () => {
     if (!hasContent) return;
@@ -50,7 +51,7 @@ export function useComposer(thread: Thread, agent: Agent) {
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (slash.onKey(e)) return;
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       send();
     }
@@ -69,7 +70,10 @@ export function useComposer(thread: Thread, agent: Agent) {
     running,
     hasContent,
     send,
-    stop: () => void interrupt(agent.id),
+    stop: () => {
+      onStop();
+      void interrupt(agent.id);
+    },
     changeEffort: (effort: string) => void setEffort(agent.id, effort),
     onKeyDown,
   };

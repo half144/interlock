@@ -1,8 +1,6 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { followStep } from "@/features/thread/utils/follow";
-
-const STICK_DISTANCE = 96;
+import { watchLatest } from "@/features/thread/utils/watchLatest";
 
 /**
  * Keeps a conversation scrolled to its latest message. It opens already at the bottom, before the first
@@ -20,64 +18,24 @@ export function useScrollToLatest(count: number) {
   const pinned = useRef(true);
   const follow = useRef<(() => void) | null>(null);
   const reduced = useReducedMotion() === true;
+  const [away, setAway] = useState(false);
 
   useLayoutEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
   }, []);
 
   useEffect(() => {
-    const el = scroller.current;
-    if (!el) return;
-    let frame = 0;
-    let last = 0;
-    let expected = el.scrollTop;
-    const bottom = () => el.scrollHeight - el.clientHeight;
-    const tick = (now: number) => {
-      frame = 0;
-      if (!pinned.current) return;
-      const gap = bottom() - el.scrollTop;
-      if (gap <= 0) return;
-      el.scrollTop += reduced ? gap : followStep(gap, now - last);
-      expected = el.scrollTop;
-      last = now;
-      frame = requestAnimationFrame(tick);
-    };
-    follow.current = () => {
-      if (frame || !pinned.current) return;
-      last = performance.now();
-      frame = requestAnimationFrame(tick);
-    };
-    const track = () => {
-      if (Math.abs(el.scrollTop - expected) < 1) return;
-      expected = el.scrollTop;
-      pinned.current = bottom() - el.scrollTop < STICK_DISTANCE;
-    };
-    const release = (e: WheelEvent) => {
-      if (e.deltaY < 0) pinned.current = false;
-    };
-    el.addEventListener("scroll", track, { passive: true });
-    el.addEventListener("wheel", release, { passive: true });
-    let width = content.current?.clientWidth ?? 0;
-    const grow = new ResizeObserver(() => {
-      const next = content.current?.clientWidth ?? 0;
-      const reflowed = next !== width;
-      width = next;
-      if (reflowed && pinned.current) {
-        // Text re-wrapping changes the height with no new content, so the view has to stay put on the bottom this very frame.
-        el.scrollTop = bottom();
-        expected = el.scrollTop;
-        return;
-      }
-      follow.current?.();
+    if (!scroller.current) return;
+    const watch = watchLatest({
+      scroller: scroller.current,
+      content: content.current,
+      dock: dock.current,
+      pinned,
+      reduced,
+      onAway: setAway,
     });
-    if (content.current) grow.observe(content.current);
-    if (dock.current) grow.observe(dock.current);
-    return () => {
-      cancelAnimationFrame(frame);
-      el.removeEventListener("scroll", track);
-      el.removeEventListener("wheel", release);
-      grow.disconnect();
-    };
+    follow.current = watch.follow;
+    return watch.stop;
   }, [reduced]);
 
   useEffect(() => {
@@ -87,5 +45,11 @@ export function useScrollToLatest(count: number) {
     follow.current?.();
   }, [count]);
 
-  return { scroller, content, dock, seen };
+  const jump = () => {
+    pinned.current = true;
+    setAway(false);
+    follow.current?.();
+  };
+
+  return { scroller, content, dock, seen, away, jump };
 }

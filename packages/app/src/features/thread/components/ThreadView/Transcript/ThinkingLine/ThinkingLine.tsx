@@ -1,13 +1,15 @@
 import { AnimatePresence, motion } from "motion/react";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
+import { leave } from "../MessageItem/rise";
 
 /**
- * The line keeps its slot under the last reply when it goes, so the reply doesn't drop when the turn ends.
+ * The line keeps its slot under the last reply when it goes, so the reply doesn't drop when the turn ends;
+ * the slot folds away once a newer message takes the place under it.
  * Entering, it waits `delay` seconds, so a new reply's name settles first.
  */
 export function ThinkingLine({ text, delay = 0 }: { text: string | null; delay?: number }) {
   return (
-    <div className="h-6">
+    <motion.div exit={leave} className="h-6">
       <AnimatePresence>
         {text && (
           <motion.p
@@ -25,6 +27,6 @@ export function ThinkingLine({ text, delay = 0 }: { text: string | null; delay?:
           </motion.p>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

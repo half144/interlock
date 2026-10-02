@@ -6,3 +6,10 @@ export const keyBlocks = (blocks: Block[]) =>
 
 /** For lists that have no ids and are only ever rebuilt whole, like the nodes of a parsed message. */
 export const keyed = <T>(items: T[]) => items.map((item, position) => ({ item, key: position }));
+
+/** What a reply says in prose, for copying: its text blocks, a paragraph apart. */
+export const replyText = (blocks: Block[]) =>
+  blocks
+    .flatMap((b) => (b.type === "text" ? [b.text] : []))
+    .join("\n\n")
+    .trim();

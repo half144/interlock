@@ -131,7 +131,7 @@ function Block({ block }: { block: MdBlock }) {
               {each(block.rows, (row) => (
                 <tr>
                   {each(row, (cell) => (
-                    <td className="border border-seam px-3 py-1.5">
+                    <td className="border border-seam px-3 py-1.5 [&_code]:whitespace-nowrap">
                       <Inline nodes={cell} />
                     </td>
                   ))}
@@ -161,7 +161,7 @@ export function Markdown({ text, streaming = false }: { text: string; streaming?
   const { blocks, fade } = useMarkdown(text, streaming);
   return (
     <StreamFade.Provider value={fade}>
-      <div className="prose-agent space-y-3 text-[15px] leading-[1.65] text-ink">
+      <div className="prose-agent space-y-3 text-[15px] leading-[1.65] break-words text-ink">
         <Blocks blocks={blocks} />
       </div>
     </StreamFade.Provider>
