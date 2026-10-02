@@ -1,19 +1,24 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { useReducedMotion } from "motion/react";
+import { followStep } from "@/features/thread/utils/follow";
 
 const STICK_DISTANCE = 96;
 
 /**
  * Keeps a conversation scrolled to its latest message. It opens already at the bottom, before the first
- * paint, so a chat never lands at the top and jumps; a new message glides into view, and a reply that keeps
- * growing (`size`) stays in view as long as you haven't scrolled away from the bottom. So does the latest
- * message when the `dock` pinned under it grows, like the plan card rising behind the composer.
+ * paint, so a chat never lands at the top and jumps. From then on the view glides after whatever grows the
+ * conversation (a new message, a reply being written, the plan card rising behind the composer) for as long
+ * as you haven't scrolled away from the bottom; one gliding motion for all of it, never a step.
  * `seen` is how many messages were already on screen, so only newer ones play their entrance.
  */
-export function useScrollToLatest(count: number, size: number) {
+export function useScrollToLatest(count: number) {
   const scroller = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
   const dock = useRef<HTMLDivElement>(null);
   const seen = useRef(count);
   const pinned = useRef(true);
+  const follow = useRef<(() => void) | null>(null);
+  const reduced = useReducedMotion() === true;
 
   useLayoutEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
@@ -22,33 +27,52 @@ export function useScrollToLatest(count: number, size: number) {
   useEffect(() => {
     const el = scroller.current;
     if (!el) return;
+    let frame = 0;
+    let last = 0;
+    let expected = el.scrollTop;
+    const bottom = () => el.scrollHeight - el.clientHeight;
+    const tick = (now: number) => {
+      frame = 0;
+      if (!pinned.current) return;
+      const gap = bottom() - el.scrollTop;
+      if (gap <= 0) return;
+      el.scrollTop += reduced ? gap : followStep(gap, now - last);
+      expected = el.scrollTop;
+      last = now;
+      frame = requestAnimationFrame(tick);
+    };
+    follow.current = () => {
+      if (frame || !pinned.current) return;
+      last = performance.now();
+      frame = requestAnimationFrame(tick);
+    };
     const track = () => {
-      pinned.current = el.scrollHeight - el.scrollTop - el.clientHeight < STICK_DISTANCE;
+      if (Math.abs(el.scrollTop - expected) < 1) return;
+      expected = el.scrollTop;
+      pinned.current = bottom() - el.scrollTop < STICK_DISTANCE;
+    };
+    const release = (e: WheelEvent) => {
+      if (e.deltaY < 0) pinned.current = false;
     };
     el.addEventListener("scroll", track, { passive: true });
-    return () => el.removeEventListener("scroll", track);
-  }, []);
-
-  useEffect(() => {
-    const el = scroller.current;
-    if (!el || !dock.current) return;
-    const follow = new ResizeObserver(() => {
-      if (pinned.current) el.scrollTo({ top: el.scrollHeight });
-    });
-    follow.observe(dock.current);
-    return () => follow.disconnect();
-  }, []);
+    el.addEventListener("wheel", release, { passive: true });
+    const grow = new ResizeObserver(() => follow.current?.());
+    if (content.current) grow.observe(content.current);
+    if (dock.current) grow.observe(dock.current);
+    return () => {
+      cancelAnimationFrame(frame);
+      el.removeEventListener("scroll", track);
+      el.removeEventListener("wheel", release);
+      grow.disconnect();
+    };
+  }, [reduced]);
 
   useEffect(() => {
     if (seen.current === count) return;
-    scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" });
     pinned.current = true;
     seen.current = count;
+    follow.current?.();
   }, [count]);
 
-  useLayoutEffect(() => {
-    if (pinned.current) scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
-  }, [size]);
-
-  return { scroller, dock, seen };
+  return { scroller, content, dock, seen };
 }
