@@ -1,3 +1,5 @@
+import { execSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig, type EnvironmentModuleNode, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
@@ -42,9 +44,22 @@ function reloadOnSingletonUpdate(): Plugin {
   };
 }
 
-export default defineConfig({
+const { version } = JSON.parse(
+  readFileSync(new URL("./package.json", import.meta.url), "utf8"),
+) as {
+  version: string;
+};
+
+export default defineConfig(({ command }) => ({
   plugins: [react(), tailwindcss(), reloadOnSingletonUpdate()],
   resolve: {
     alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
   },
-});
+  // A dev server outlives commits, so only a built app is pinned to one.
+  define: {
+    __APP_VERSION__: JSON.stringify(version),
+    __APP_BUILD__: JSON.stringify(
+      command === "build" ? execSync("git rev-parse --short HEAD").toString().trim() : "dev",
+    ),
+  },
+}));
