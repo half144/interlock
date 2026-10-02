@@ -4,11 +4,16 @@ import { fadeIn, spring } from "@/lib/motion";
 const STAGGER = 0.04;
 const MAX_STAGGERED = 5;
 
-/** A message rises in; the blocks of a new agent reply follow a beat apart, capped so long replies don't drag. */
+/** A new reply waits for your message to leave the composer before it begins to appear. */
+const REPLY_DELAY = 0.16;
+/** The thinking line comes in once the reply's name has settled. */
+export const THINKING_DELAY = 0.42;
+
+/** The blocks of a new agent reply settle in a beat apart, capped so long replies don't drag. */
 export const rise: Variants = {
   hidden: { opacity: 0, y: 10, filter: "blur(4px)" },
   shown: (i: number) => {
-    const delay = Math.min(i, MAX_STAGGERED) * STAGGER;
+    const delay = REPLY_DELAY + Math.min(i, MAX_STAGGERED) * STAGGER;
     return {
       opacity: 1,
       y: 0,
@@ -21,6 +26,10 @@ export const rise: Variants = {
     };
   },
 };
+
+/** A block that joins a reply already being written: a short, plain arrival with no wait. */
+export const joinInitial = { opacity: 0, y: 6 };
+export const joinAnimate = { opacity: 1, y: 0, transition: { y: spring, opacity: fadeIn } };
 
 /** Your message leaves the composer: it grows a touch from its bottom-right corner as it rises. */
 export const send: Variants = {

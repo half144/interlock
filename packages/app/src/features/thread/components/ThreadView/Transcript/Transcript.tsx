@@ -4,6 +4,7 @@ import { Outcome } from "@/features/thread/components/ThreadView/Transcript/Outc
 import { isFinished } from "@/lib/agentStatus";
 import { Composer } from "./Composer/Composer";
 import { MessageItem } from "./MessageItem/MessageItem";
+import { THINKING_DELAY } from "./MessageItem/rise";
 import { ThinkingLine } from "./ThinkingLine/ThinkingLine";
 import { ThreadTray } from "./ThreadTray/ThreadTray";
 import { useTranscript } from "./useTranscript";
@@ -20,7 +21,7 @@ export function Transcript({
   threadId: string;
   reading: MotionValue<number>;
 }) {
-  const { thread, agent, messages, thinking, card, docked, scroller, dock, seen } =
+  const { thread, agent, messages, thinking, card, docked, scroller, content, dock, seen } =
     useTranscript(threadId);
 
   if (!thread || !agent) return null;
@@ -29,6 +30,7 @@ export function Transcript({
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div ref={scroller} className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <motion.div
+          ref={content}
           className="mx-auto flex max-w-full flex-1 flex-col gap-7 px-6 pt-6 pb-2"
           style={{ width: reading }}
         >
@@ -38,7 +40,11 @@ export function Transcript({
               message={m}
               animate={i >= seen.current}
               streaming={i === messages.length - 1 && agent.aspect === "running"}
-              footer={i === messages.length - 1 && <ThinkingLine text={thinking} />}
+              footer={
+                i === messages.length - 1 && (
+                  <ThinkingLine text={thinking} delay={i >= seen.current ? THINKING_DELAY : 0} />
+                )
+              }
             />
           ))}
           <AnimatePresence initial={false}>

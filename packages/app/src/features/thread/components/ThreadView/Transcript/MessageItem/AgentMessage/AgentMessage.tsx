@@ -12,7 +12,8 @@ import { ReasoningBlock } from "@/features/thread/components/blocks/ReasoningBlo
 import { ToolCalls } from "@/features/thread/components/blocks/ToolCalls/ToolCalls";
 import { StepItem } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/StepItem/StepItem";
 import { keyBlocks } from "@/features/thread/utils/blocks";
-import { rise } from "../rise";
+import { joinAnimate, joinInitial, rise } from "../rise";
+import { useAgentMessage } from "./useAgentMessage";
 
 /**
  * `footer` closes the reply, under its last block: what the agent is doing while the turn runs.
@@ -27,6 +28,7 @@ export function AgentMessage({
   footer?: ReactNode;
   streaming?: boolean;
 }) {
+  const { arrived } = useAgentMessage(blocks);
   const lastText = blocks.findLastIndex((b) => b.type === "text");
   return (
     <div>
@@ -34,11 +36,21 @@ export function AgentMessage({
         <Wordmark className="mb-2.5 [&>span]:text-[16px]" />
       </motion.div>
       <div className="flex flex-col gap-3">
-        {keyBlocks(blocks).map(({ block, key, position }) => (
-          <motion.div key={key} variants={rise} custom={position + 1}>
-            {renderBlock(block, streaming && position === lastText)}
-          </motion.div>
-        ))}
+        {keyBlocks(blocks).map(({ block, key, position }) => {
+          const content = renderBlock(block, streaming && position === lastText);
+          if (position < arrived)
+            return (
+              <motion.div key={key} variants={rise} custom={position + 1}>
+                {content}
+              </motion.div>
+            );
+          if (block.type === "text") return <div key={key}>{content}</div>;
+          return (
+            <motion.div key={key} initial={joinInitial} animate={joinAnimate}>
+              {content}
+            </motion.div>
+          );
+        })}
         {footer}
       </div>
     </div>
