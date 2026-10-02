@@ -20,7 +20,7 @@ export function useSidebarTasks() {
   return {
     tasks,
     order: tasks.map((t) => t.id).join(),
-    filterName: filtered?.name,
+    filterName: filtered?.label,
     activeThreadId: view.kind === "thread" ? view.threadId : null,
     clearFilter: projectFilter ? () => setProjectFilter(null) : null,
   };
