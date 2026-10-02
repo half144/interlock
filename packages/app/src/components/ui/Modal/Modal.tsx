@@ -23,8 +23,11 @@ export function Modal({ title, onClose, children, footer, className }: ModalProp
   useFocusTrap(dialog);
   useEscape(onClose);
 
-  // Focus starts on the dialog itself, so Tab begins inside it and screen readers announce the title.
-  useEffect(() => dialog.current?.focus(), []);
+  // A dialog with a text field opens ready to type; otherwise focus starts on the dialog itself, so Tab begins inside it and screen readers announce the title.
+  useEffect(() => {
+    const field = dialog.current?.querySelector<HTMLElement>("input, textarea");
+    (field ?? dialog.current)?.focus();
+  }, []);
 
   return (
     <Backdrop onClose={onClose}>

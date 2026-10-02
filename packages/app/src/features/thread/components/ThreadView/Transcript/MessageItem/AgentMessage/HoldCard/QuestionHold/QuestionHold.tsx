@@ -5,10 +5,8 @@ import { QuestionField } from "./QuestionField/QuestionField";
 import { useQuestionHold } from "./useQuestionHold";
 
 export function QuestionHold({ agentId, hold }: { agentId: string; hold: Hold }) {
-  const { questions, picks, typed, ready, pick, type, submit, dismiss } = useQuestionHold(
-    agentId,
-    hold,
-  );
+  const { questions, picks, typed, ready, pick, type, submit, submitIfReady, dismiss } =
+    useQuestionHold(agentId, hold);
 
   return (
     <HoldFrame
@@ -34,6 +32,7 @@ export function QuestionHold({ agentId, hold }: { agentId: string; hold: Hold })
           typed={typed[index] ?? ""}
           onPick={(label) => pick(index, label)}
           onType={(text) => type(index, text)}
+          onSubmit={submitIfReady}
         />
       ))}
     </HoldFrame>

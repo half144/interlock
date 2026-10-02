@@ -33,7 +33,18 @@ export const ancestorsOf = (path: string) =>
     .map((_, i, parts) => parts.slice(0, i + 1).join("/"));
 
 const byKindThenName = (a: TreeNode, b: TreeNode) =>
-  Number(b.kind === "folder") - Number(a.kind === "folder") || a.name.localeCompare(b.name);
+  Number(b.kind === "folder") - Number(a.kind === "folder") ||
+  a.name.localeCompare(b.name, undefined, { numeric: true });
+
+/** Like VS Code's compact folders: a folder that holds nothing but one folder shares a row with it. */
+function compact(node: TreeNode): TreeNode {
+  const children = node.children.map(compact);
+  const only = children[0];
+  if (node.kind === "folder" && node.listed && children.length === 1 && only?.kind === "folder") {
+    return { ...only, name: `${node.name}/${only.name}` };
+  }
+  return { ...node, children };
+}
 
 /**
  * The worktree as it is: the folders the daemon listed, with the changed files in their real places. A
@@ -77,7 +88,7 @@ export function buildTree(files: FileDiff[], listings: Listings): TreeNode[] {
   }
 
   for (const node of nodes.values()) node.children.sort(byKindThenName);
-  return root.children;
+  return root.children.map(compact);
 }
 
 /** The git decoration VS Code puts on a changed file: its letter, and the colour its name takes. */

@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from "react";
+import { useId, type CSSProperties, type ReactNode } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import {
   Code2,
@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import type { Agent, PanelTab } from "@/types";
 import { IconButton } from "@/components/ui/IconButton/IconButton";
-import { fadeIn, fadeOut } from "@/lib/motion";
+import { dockCss, fadeIn, fadeOut } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import { hasTab, shownTab } from "@/features/workspace/utils/panelTabs";
 import { WorkspaceTab } from "./WorkspaceTab/WorkspaceTab";
 import { useToolbar } from "./useToolbar";
@@ -38,6 +39,7 @@ export function Toolbar({ agent, pr, onClose }: ToolbarProps) {
     selectTab,
     subagentCount,
     maximized,
+    inset,
     toggleMaximized,
     openSettings,
   } = useToolbar(agent.id, agent.projectId);
@@ -45,7 +47,15 @@ export function Toolbar({ agent, pr, onClose }: ToolbarProps) {
   const panelTab = shownTab(requestedTab, agent.git);
 
   return (
-    <div className="flex h-12 shrink-0 items-center gap-1 border-b border-seam px-2">
+    <div
+      data-tauri-drag-region
+      style={{ "--bar-inset": `${inset}px` } as CSSProperties}
+      className={cn(
+        "flex h-12 shrink-0 items-center gap-1 border-b border-seam px-2 transition-[padding]",
+        dockCss,
+        "mac:h-full mac:min-w-0 mac:flex-1 mac:border-b-0 mac:pl-[max(8px,var(--bar-inset))]",
+      )}
+    >
       {/* The active tab widens to show its label: the pill slides and the neighbours glide over instead of jumping. */}
       <LayoutGroup id={group}>
         <nav role="tablist" aria-label="Workspace" className="flex items-center gap-0.5">

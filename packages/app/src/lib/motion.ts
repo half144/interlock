@@ -20,10 +20,13 @@ export const fadeOut = { duration: 0.11, ease: easeIn } satisfies Transition;
  * frame, so their edges travel together and the panel settles into the space the others make for it.
  * No bounce: the conversation travels hundreds of pixels here, and any overshoot reads as a wobble.
  */
-export const dock = { type: "spring", visualDuration: 0.44, bounce: 0 } satisfies Transition;
+export const dock = { type: "spring", visualDuration: 0.3, bounce: 0 } satisfies Transition;
+
+/** The panel coming in travels far more than a sidebar folding; on the dock's spring it reads as a snap. Everything that moves with it must use this one too. */
+export const dockOpen = { type: "spring", visualDuration: 0.36, bounce: 0 } satisfies Transition;
 
 /** A control turning into its own surface: the shape stretches with a hint of give, then settles. */
 export const morph = { type: "spring", visualDuration: 0.34, bounce: 0.12 } satisfies Transition;
 
 /** The dock spring's timing for what CSS animates alongside it (padding, corners), so they land together. */
-export const dockCss = "duration-[440ms] ease-out-quint";
+export const dockCss = "duration-[300ms] ease-out-quint";

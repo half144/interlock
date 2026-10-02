@@ -1,16 +1,14 @@
 import { useLayoutEffect, useRef } from "react";
 import { animate, useMotionValue, useReducedMotion, type MotionValue } from "motion/react";
-import { dock } from "@/lib/motion";
-import { MIN_APP_WIDTH } from "@/lib/layout";
+import { dock, dockOpen } from "@/lib/motion";
+import { MIN_APP_WIDTH, READING_WIDTH } from "@/lib/layout";
 import { useViewportWidth } from "@/hooks/useViewportWidth";
 import { SIDEBAR_WIDTH } from "@/hooks/useRail";
 
-/** The chat on its own keeps its usual reading width; it only narrows to sit beside the open panel. */
-const READING_WIDTH = 700;
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 /** With the panel open the work gets the room: the chat keeps about 40%, as Manus does, within readable limits. */
-const splitWidth = (main: number) => clamp(main * 0.4, 420, 580);
+const splitWidth = (main: number) => clamp(main * 0.4, 380, 580);
 /** In the mini-IDE the chat becomes a side column, like an editor's assistant pane. */
 const ideChatWidth = (main: number) => clamp(main * 0.25, 340, 420);
 
@@ -95,7 +93,9 @@ export function useSplit(panelOpen: boolean, sidebar: number, maximized: boolean
       keys.forEach((k) => values[k].set(target[k]));
       return;
     }
-    const runs = keys.map((k) => animate(values[k], target[k], dock));
+    const runs = keys.map((k) =>
+      animate(values[k], target[k], panelOpen && !previous.panelOpen ? dockOpen : dock),
+    );
     // The chat swaps sides only when the review is maximized or restored: it fades out of its old spot,
     // travels unseen, and fades in as it settles into the new one.
     if (previous.maximized !== maximized) {

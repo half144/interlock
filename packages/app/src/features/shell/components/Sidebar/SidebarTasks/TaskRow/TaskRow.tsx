@@ -63,7 +63,7 @@ export function TaskRow({ thread, active }: { thread: Thread; active: boolean })
         </AnimatePresence>
         <span
           className={cn(
-            "relative min-w-0 flex-1 truncate text-[14px]",
+            "relative min-w-0 flex-1 truncate text-[14px] group-focus-within:pr-6 group-hover:pr-6",
             active || agent.unseen > 0 ? "text-ink" : "text-ink-2",
           )}
         >

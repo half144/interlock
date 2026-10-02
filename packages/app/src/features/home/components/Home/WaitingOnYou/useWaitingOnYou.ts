@@ -16,7 +16,7 @@ export function useWaitingOnYou() {
       .filter((a) => WAITING.includes(a.aspect))
       .sort((a, b) => WAITING.indexOf(a.aspect) - WAITING.indexOf(b.aspect)),
     open,
-    projectName: (id: string) => projects[id]?.name ?? "",
+    projectName: (id: string) => projects[id]?.label ?? "",
     working: all.filter((a) => a.aspect === "running").length,
   };
 }

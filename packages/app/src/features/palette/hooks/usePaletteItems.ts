@@ -35,7 +35,7 @@ const commandsFor = (projects: Project[]): PaletteItem[] => [
   ...projects.map<PaletteItem>((p) => ({
     id: `cmd-settings-${p.id}`,
     group: "Commands",
-    title: `${p.name} settings`,
+    title: `${p.label} settings`,
     icon: Settings,
     run: () => s().go({ kind: "settings", projectId: p.id }),
   })),
@@ -58,7 +58,7 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
       id: `needs-${a.id}`,
       group: "Needs you",
       title: a.hold?.title ?? a.title,
-      hint: projects[a.projectId]?.name ?? "",
+      hint: projects[a.projectId]?.label ?? "",
       agent: a,
       run: () => s().openThread(a.threadId),
     }));
@@ -69,7 +69,7 @@ export function usePaletteItems(rawQuery: string): PaletteItem[] {
       id: `thread-${t.id}`,
       group: "Threads",
       title: t.title,
-      hint: projects[t.projectId]?.name ?? "",
+      hint: projects[t.projectId]?.label ?? "",
       icon: MessageSquare,
       agent: agentOf(t),
       run: () => s().openThread(t.id),

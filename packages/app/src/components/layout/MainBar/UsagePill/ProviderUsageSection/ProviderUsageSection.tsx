@@ -24,7 +24,7 @@ export function ProviderUsageSection({ view }: { view: ProviderView }) {
                   key={w.id}
                   label={w.label}
                   meta={w.resets}
-                  value={w.remainingPct === null ? "–" : `${w.remainingPct}%`}
+                  value={w.remainingPct === null ? "–" : `${w.remainingPct}% left`}
                   tone={w.tone}
                 />
               ))}

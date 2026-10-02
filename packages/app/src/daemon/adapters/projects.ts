@@ -22,6 +22,7 @@ export function toProject(
   return {
     id: descriptor.projectId,
     name: descriptor.projectDisplayName,
+    label: descriptor.projectDisplayName,
     rootPath: descriptor.projectRootPath,
     git: descriptor.projectKind === "git",
     remoteUrl: extras.remoteUrl ?? null,

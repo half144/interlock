@@ -11,7 +11,7 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
   const { expand, collapse } = useSidebarHeader();
 
   return (
-    <div className="flex h-[52px] shrink-0 items-center pl-3.5">
+    <div data-tauri-drag-region className="flex h-[52px] shrink-0 items-center pl-3.5 mac:h-10">
       <button
         type="button"
         disabled={!collapsed}
@@ -35,9 +35,11 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
           </span>
           <VersionBadge />
         </span>
-        <SidebarIconButton label="Collapse sidebar" onClick={collapse}>
-          <PanelLeft />
-        </SidebarIconButton>
+        <span className="mac:hidden">
+          <SidebarIconButton label="Collapse sidebar" onClick={collapse}>
+            <PanelLeft />
+          </SidebarIconButton>
+        </span>
       </Fold>
     </div>
   );

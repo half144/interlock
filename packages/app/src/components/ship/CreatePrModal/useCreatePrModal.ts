@@ -13,6 +13,7 @@ function submitLabel(creating: boolean, failed: boolean) {
 export function useCreatePrModal(agent: Agent, onCreated: () => void) {
   const createPullRequest = useStore((s) => s.createPullRequest);
   const remoteUrl = useStore((s) => s.workspaces[agent.workspaceId ?? ""]?.remoteUrl ?? null);
+  const files = useStore((s) => s.diffs[agent.id]?.length ?? agent.files.length);
   const { access } = usePullRequest(agent);
   const [title, setTitle] = useState(agent.title);
   const [creating, setCreating] = useState(false);
@@ -36,7 +37,8 @@ export function useCreatePrModal(agent: Agent, onCreated: () => void) {
   return {
     title,
     setTitle,
-    canSubmit: trimmed.length > 0,
+    canSubmit: trimmed.length > 0 && access === "ready",
+    files,
     creating,
     submit,
     submitLabel: submitLabel(creating, failure !== null),

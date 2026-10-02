@@ -17,7 +17,7 @@ interface ExplorerProps {
 
 /** The worktree's real folders and files, with the changed ones wearing their git colour. */
 export function Explorer({ agent, files, selected, onOpen, maximized }: ExplorerProps) {
-  const { projectName, tree, load } = useExplorer(agent, files);
+  const { projectName, tree, load, navigate } = useExplorer(agent, files);
   const group = useId();
 
   return (
@@ -26,7 +26,7 @@ export function Explorer({ agent, files, selected, onOpen, maximized }: Explorer
       initial={false}
       animate={{ width: maximized ? 280 : 220 }}
       transition={dock}
-      className="flex shrink-0 flex-col border-r border-seam bg-inset"
+      className="flex max-w-[40%] shrink-0 flex-col border-r border-seam bg-inset"
       aria-label="Explorer"
     >
       <h2 className="flex h-9 shrink-0 items-center gap-1 border-b border-seam px-2.5 text-[11px] font-semibold tracking-[0.06em] text-ink-3 uppercase">
@@ -34,7 +34,11 @@ export function Explorer({ agent, files, selected, onOpen, maximized }: Explorer
         {projectName}
       </h2>
       <LayoutGroup id={group}>
-        <motion.div layoutScroll className="min-h-0 flex-1 overflow-y-auto py-1 text-[13px]">
+        <motion.div
+          layoutScroll
+          onKeyDown={navigate}
+          className="min-h-0 flex-1 overflow-y-auto py-1 text-[13px]"
+        >
           <FileTree nodes={tree} selected={selected} onOpen={onOpen} onLoad={load} />
         </motion.div>
       </LayoutGroup>

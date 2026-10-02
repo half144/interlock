@@ -19,7 +19,7 @@ export function ProjectPill({
       trigger={({ open, toggle }) => (
         <Pill onClick={toggle} aria-expanded={open}>
           <Folder className="size-3.5 text-ink-2" />
-          {project.name}
+          {project.label}
           <ChevronDown className="size-3 text-ink-3" />
         </Pill>
       )}
@@ -36,7 +36,7 @@ export function ProjectPill({
             hint={p.id === project.id ? <Check className="size-3.5" /> : undefined}
           >
             <Folder />
-            {p.name}
+            {p.label}
           </MenuItem>
         ))
       }

@@ -22,6 +22,11 @@ export function SidebarTasks() {
       {/* Rows re-render on every tick, so only real changes animate: a new task grows in, the rest reflow, and the selection slides. */}
       <LayoutGroup id="sidebar-tasks">
         <motion.div layoutScroll className="min-h-0 flex-1 overflow-y-auto px-2 pb-3">
+          {tasks.length === 0 && (
+            <p className="px-2.5 text-[13px] leading-5 text-ink-3">
+              {filterName ? "No tasks in this project yet." : "Tasks you start show up here."}
+            </p>
+          )}
           <AnimatePresence initial={false}>
             {tasks.map((t) => (
               <motion.div

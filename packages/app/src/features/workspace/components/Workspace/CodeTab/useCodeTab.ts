@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { useStore } from "@/stores/app-store";
 import { useCopy } from "@/hooks/useCopy";
 import { useReview } from "@/features/workspace/hooks/useReview";
-import type { DiffMode } from "@/features/workspace/utils/diff";
 import type { Agent } from "@/types";
 
 const STATUS_REQUEST = "Where are you at? Give me a short status update.";
@@ -13,7 +11,8 @@ export function useCodeTab(agent: Agent) {
   const openFile = useStore((s) => s.openFile);
   const closeFile = useStore((s) => s.closeFile);
   const { files, editor } = useReview(agent.id);
-  const [mode, setMode] = useState<DiffMode>("unified");
+  const mode = useStore((s) => s.diffMode);
+  const setMode = useStore((s) => s.setDiffMode);
   const { copied, copy } = useCopy();
 
   return {

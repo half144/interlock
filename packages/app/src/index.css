@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
+/* Under a Mac window whose title bar is our own window bar (see `macChrome`). */
+@custom-variant mac (&:where([data-chrome="mac"] *));
+
 @theme {
+  /* What the window bar reserves for the window buttons of a Mac window (see `macChrome`). */
+  --spacing-lights: 92px;
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter Variable", "Segoe UI", ui-sans-serif,
     sans-serif;
@@ -63,7 +68,7 @@
   --animate-lamp-hold: lamp-hold 1.8s ease-in-out infinite;
   --animate-shimmer: shimmer 2.2s linear infinite;
   --animate-spin-slow: spin 1.6s linear infinite;
-  --animate-word-in: word-in 220ms var(--ease-out-quint) both;
+  --animate-word-in: word-in 320ms var(--ease-out-quint) both;
 
   @keyframes word-in {
     from {
@@ -129,6 +134,14 @@
 
   button {
     cursor: pointer;
+  }
+
+  /* Chrome is not content: dragging across the sidebar or a button must not paint a selection. */
+  aside,
+  button,
+  [data-tauri-drag-region] {
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   button:disabled {

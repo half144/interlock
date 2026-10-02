@@ -64,7 +64,10 @@ export const createProjectSlice: SliceCreator<ProjectSlice> = (set, get) => ({
       return { projects: withProjectMeta({ ...s.projects, [project.id]: next }, s.workspaces) };
     }),
 
-  removeProject: (projectId) => set((s) => ({ projects: withoutKey(s.projects, projectId) })),
+  removeProject: (projectId) =>
+    set((s) => ({
+      projects: withProjectMeta(withoutKey(s.projects, projectId), s.workspaces),
+    })),
 
   replaceWorkspaces: (entries) =>
     set((s) => {

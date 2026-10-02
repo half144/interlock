@@ -12,6 +12,7 @@ interface QuestionFieldProps {
   typed: string;
   onPick: (label: string) => void;
   onType: (text: string) => void;
+  onSubmit: () => void;
 }
 
 export function QuestionField({
@@ -21,6 +22,7 @@ export function QuestionField({
   typed,
   onPick,
   onType,
+  onSubmit,
 }: QuestionFieldProps) {
   return (
     <fieldset className="mt-4 min-w-0 first:mt-3">
@@ -67,6 +69,9 @@ export function QuestionField({
         <Input
           value={typed}
           onChange={(e) => onType(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.nativeEvent.isComposing) onSubmit();
+          }}
           placeholder={
             question.placeholder ??
             (question.options.length > 0 ? "Something else…" : "Your answer")

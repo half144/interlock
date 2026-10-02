@@ -136,6 +136,13 @@ describe("providerView", () => {
     expect(
       providerView("claude", usage({ status: "error", error: "Token expired" }), now).reason,
     ).toBe("Token expired");
+    expect(
+      providerView(
+        "claude",
+        usage({ status: "error", error: "Claude usage API returned 429" }),
+        now,
+      ).reason,
+    ).toBe("Usage checks are rate limited right now. Try again in a minute.");
     expect(providerView("claude", usage({ status: "unavailable" }), now).reason).toBe(
       "Usage is not available",
     );

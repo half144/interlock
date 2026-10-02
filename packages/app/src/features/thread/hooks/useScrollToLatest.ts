@@ -1,54 +1,55 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-
-const STICK_DISTANCE = 96;
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useReducedMotion } from "motion/react";
+import { watchLatest } from "@/features/thread/utils/watchLatest";
 
 /**
  * Keeps a conversation scrolled to its latest message. It opens already at the bottom, before the first
- * paint, so a chat never lands at the top and jumps; a new message glides into view, and a reply that keeps
- * growing (`size`) stays in view as long as you haven't scrolled away from the bottom. So does the latest
- * message when the `dock` pinned under it grows, like the plan card rising behind the composer.
+ * paint, so a chat never lands at the top and jumps. From then on the view glides after whatever grows the
+ * conversation (a new message, a reply being written, the plan card rising behind the composer) for as long
+ * as you haven't scrolled away from the bottom; one gliding motion for all of it, never a step. A change of
+ * width (the side panel squeezing the column) is the exception: the text re-wraps and the view stays glued.
  * `seen` is how many messages were already on screen, so only newer ones play their entrance.
  */
-export function useScrollToLatest(count: number, size: number) {
+export function useScrollToLatest(count: number) {
   const scroller = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
   const dock = useRef<HTMLDivElement>(null);
   const seen = useRef(count);
   const pinned = useRef(true);
+  const follow = useRef<(() => void) | null>(null);
+  const reduced = useReducedMotion() === true;
+  const [away, setAway] = useState(false);
 
   useLayoutEffect(() => {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
   }, []);
 
   useEffect(() => {
-    const el = scroller.current;
-    if (!el) return;
-    const track = () => {
-      pinned.current = el.scrollHeight - el.scrollTop - el.clientHeight < STICK_DISTANCE;
-    };
-    el.addEventListener("scroll", track, { passive: true });
-    return () => el.removeEventListener("scroll", track);
-  }, []);
-
-  useEffect(() => {
-    const el = scroller.current;
-    if (!el || !dock.current) return;
-    const follow = new ResizeObserver(() => {
-      if (pinned.current) el.scrollTo({ top: el.scrollHeight });
+    if (!scroller.current) return;
+    const watch = watchLatest({
+      scroller: scroller.current,
+      content: content.current,
+      dock: dock.current,
+      pinned,
+      reduced,
+      onAway: setAway,
     });
-    follow.observe(dock.current);
-    return () => follow.disconnect();
-  }, []);
+    follow.current = watch.follow;
+    return watch.stop;
+  }, [reduced]);
 
   useEffect(() => {
     if (seen.current === count) return;
-    scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" });
     pinned.current = true;
     seen.current = count;
+    follow.current?.();
   }, [count]);
 
-  useLayoutEffect(() => {
-    if (pinned.current) scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
-  }, [size]);
+  const jump = () => {
+    pinned.current = true;
+    setAway(false);
+    follow.current?.();
+  };
 
-  return { scroller, dock, seen };
+  return { scroller, content, dock, seen, away, jump };
 }

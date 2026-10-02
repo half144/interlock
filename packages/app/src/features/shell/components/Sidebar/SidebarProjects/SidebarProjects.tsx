@@ -37,7 +37,7 @@ export function SidebarProjects() {
                 className="flex min-w-0 flex-1 items-center gap-2.5 self-stretch pl-2.5 text-left text-[14px] text-ink"
               >
                 <Icon className="size-4 shrink-0 text-ink-2" />
-                <span className="truncate">{p.name}</span>
+                <span className="truncate">{p.label}</span>
                 {needsYou.has(p.id) && (
                   <span
                     role="img"
@@ -47,7 +47,7 @@ export function SidebarProjects() {
                 )}
               </button>
               <SidebarIconButton
-                label={`${p.name} settings`}
+                label={`${p.label} settings`}
                 reveal
                 onClick={() => go({ kind: "settings", projectId: p.id })}
               >

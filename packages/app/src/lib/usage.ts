@@ -85,11 +85,20 @@ const balanceViews = (balances: UsageBalance[]) =>
       : [],
   );
 
+const RATE_LIMITED = /\b429\b/;
+
 const unavailable = (reason: string) => ({ reason, lead: null, rest: [], balances: [] });
 
 function readings(usage: ProviderUsage | undefined, now: number) {
   if (!usage) return unavailable("Usage not loaded yet");
-  if (usage.status !== "available") return unavailable(usage.error ?? "Usage is not available");
+  if (usage.status !== "available") {
+    const error = usage.error ?? "Usage is not available";
+    return unavailable(
+      RATE_LIMITED.test(error)
+        ? "Usage checks are rate limited right now. Try again in a minute."
+        : error,
+    );
+  }
   const windows = usage.windows.map((w) => windowView(w, now));
   const balances = balanceViews(usage.balances);
   if (windows.length === 0 && balances.length === 0) return unavailable("No usage reported");

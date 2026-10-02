@@ -3,6 +3,7 @@ import type { Agent } from "@/types";
 import { easeIn, easeOut } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { ThreadHeader } from "../ThreadHeader/ThreadHeader";
+import { FreshPresence } from "@/components/ui/FreshPresence/FreshPresence";
 import { Transcript } from "../Transcript/Transcript";
 
 interface ChatColumnProps {
@@ -34,7 +35,13 @@ export function ChatColumn({
       )}
       style={{ left, width, opacity }}
     >
-      <ThreadHeader threadId={threadId} agent={agent} panelOpen={panelOpen} maximized={maximized} />
+      <ThreadHeader
+        threadId={threadId}
+        agent={agent}
+        panelOpen={panelOpen}
+        maximized={maximized}
+        frame={{ left, width, opacity }}
+      />
       {/* Switching chats: the old conversation fades out on top while the new one fades in beneath it, in place. */}
       <div className="relative min-h-0 flex-1">
         <AnimatePresence initial={false}>
@@ -45,7 +52,9 @@ export function ChatColumn({
             exit={{ opacity: 0, transition: { duration: 0.16, ease: easeIn } }}
             className="absolute inset-0 flex flex-col"
           >
-            <Transcript threadId={threadId} reading={reading} />
+            <FreshPresence>
+              <Transcript threadId={threadId} reading={reading} />
+            </FreshPresence>
           </motion.div>
         </AnimatePresence>
       </div>

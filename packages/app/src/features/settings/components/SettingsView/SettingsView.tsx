@@ -12,12 +12,12 @@ import { useSettingsView } from "./useSettingsView";
 
 /** One project's settings. The app keys this view by project, so switching projects starts fresh. */
 export function SettingsView({ projectId }: { projectId: string }) {
-  const { project, sections, scroller, active, onScroll, jump, openAccounts } =
+  const { project, sections, scroller, active, onScroll, userInput, jump, openAccounts } =
     useSettingsView(projectId);
   if (!project) return null;
 
   return (
-    <div ref={scroller} onScroll={onScroll} className="h-full overflow-y-auto">
+    <div ref={scroller} onScroll={onScroll} {...userInput} className="h-full overflow-y-auto">
       <div className="mx-auto flex max-w-[1100px] gap-10 px-8 pt-8 pb-24">
         <SettingsNav sections={sections} active={active} onJump={jump} />
 

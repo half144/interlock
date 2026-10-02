@@ -17,8 +17,16 @@ const swap = {
   exit: { opacity: 0, scale: 0.6, transition: fadeOut },
 };
 
-export function Composer({ thread, agent }: { thread: Thread; agent: Agent }) {
-  const c = useComposer(thread, agent);
+export function Composer({
+  thread,
+  agent,
+  onStop,
+}: {
+  thread: Thread;
+  agent: Agent;
+  onStop: () => void;
+}) {
+  const c = useComposer(thread, agent, onStop);
   const { attachments, slash } = c;
 
   return (
@@ -28,7 +36,12 @@ export function Composer({ thread, agent }: { thread: Thread; agent: Agent }) {
     >
       <AnimatePresence>
         {slash.items.length > 0 && (
-          <SlashMenu items={slash.items} active={slash.active} onPick={slash.pick} />
+          <SlashMenu
+            items={slash.items}
+            active={slash.active}
+            onPick={slash.pick}
+            onHover={slash.hover}
+          />
         )}
       </AnimatePresence>
       <AttachmentChips items={attachments.items} onRemove={attachments.remove} />
@@ -39,6 +52,7 @@ export function Composer({ thread, agent }: { thread: Thread; agent: Agent }) {
         onKeyDown={c.onKeyDown}
         onPaste={attachments.onPaste}
         rows={1}
+        aria-label="Message"
         placeholder={c.running ? "Steer the agent while it works" : "Send message to Interlock"}
         className="block max-h-40 min-h-[52px] w-full resize-none bg-transparent px-5 pt-4 pb-1 text-[15px] leading-relaxed text-ink outline-none placeholder:text-ink-4 [field-sizing:content]"
       />

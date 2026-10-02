@@ -9,6 +9,7 @@ import type { ModelChoice } from "@/features/home/types";
 
 export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setup: ProjectSetup) {
   const startTask = useStore((s) => s.startTask);
+  const online = useStore((s) => s.daemon.phase === "connected");
   const { preset, project, setProjectId, base, setBase } = target;
   const { efforts, effort, setEffort } = useEffortChoice(choice);
   const attachments = useAttachmentDraft();
@@ -19,7 +20,7 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setu
 
   const planAvailable = canPlanFirst(choice.kind);
   const plan = planWanted && planAvailable;
-  const ready = text.trim().length > 0 && !starting && project !== undefined;
+  const ready = text.trim().length > 0 && !starting && project !== undefined && online;
   const dropping = !project && setup.dragging;
 
   useEffect(() => input.current?.focus(), [preset]);
@@ -48,7 +49,7 @@ export function useHomeComposer(choice: ModelChoice, target: ProjectChoice, setu
 
   return {
     input,
-    placeholder: project ? `Give Interlock a task in ${project.name}` : setup.prompt,
+    placeholder: project ? `Give Interlock a task in ${project.label}` : setup.prompt,
     dropping,
     highlighted: attachments.dragging || dropping,
     setupError: project ? null : setup.error,

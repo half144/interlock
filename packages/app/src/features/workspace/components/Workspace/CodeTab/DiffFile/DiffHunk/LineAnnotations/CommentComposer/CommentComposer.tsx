@@ -22,7 +22,10 @@ export function CommentComposer({ onSubmit, onCancel }: CommentComposerProps) {
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
-          if (e.key === "Escape") onCancel();
+          if (e.key === "Escape") {
+            e.preventDefault();
+            onCancel();
+          }
         }}
         placeholder="Leave a note for the agent on this line"
         className={cn(field, "w-full resize-none px-3 py-2 font-sans")}

@@ -9,9 +9,10 @@ interface SlashMenuProps {
   items: SlashCommand[];
   active: number;
   onPick: (name: string) => void;
+  onHover: (index: number) => void;
 }
 
-export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
+export function SlashMenu({ items, active, onPick, onHover }: SlashMenuProps) {
   return (
     <motion.div
       role="listbox"
@@ -32,6 +33,7 @@ export function SlashMenu({ items, active, onPick }: SlashMenuProps) {
           index={i}
           active={i === active}
           onPick={onPick}
+          onHover={onHover}
         />
       ))}
     </motion.div>
