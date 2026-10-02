@@ -77,6 +77,7 @@ impl Daemon {
         thread::spawn(move || {
             let env = crate::login_env::resolve();
             crate::stale::stop_stale_daemon(&interlock_home(), &format!("{HOST}:{PORT}"));
+            crate::stale::stop_port_owner(PORT);
             daemon.supervise(&app, &env);
         });
     }
