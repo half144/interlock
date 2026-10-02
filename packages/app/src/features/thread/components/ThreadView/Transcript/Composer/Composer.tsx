@@ -17,8 +17,16 @@ const swap = {
   exit: { opacity: 0, scale: 0.6, transition: fadeOut },
 };
 
-export function Composer({ thread, agent }: { thread: Thread; agent: Agent }) {
-  const c = useComposer(thread, agent);
+export function Composer({
+  thread,
+  agent,
+  onStop,
+}: {
+  thread: Thread;
+  agent: Agent;
+  onStop: () => void;
+}) {
+  const c = useComposer(thread, agent, onStop);
   const { attachments, slash } = c;
 
   return (

@@ -36,6 +36,8 @@ export function Transcript({
     focus,
     away,
     jump,
+    stopped,
+    onStop,
   } = useTranscript(threadId, reading);
 
   if (!thread || !agent) return null;
@@ -72,7 +74,7 @@ export function Transcript({
             />
           ))}
           <AnimatePresence initial={false}>
-            {isFinished(agent) && <Outcome key="outcome" agent={agent} />}
+            {isFinished(agent) && <Outcome key="outcome" agent={agent} stopped={stopped} />}
           </AnimatePresence>
         </motion.div>
         <Dock surface="panel">
@@ -84,7 +86,7 @@ export function Transcript({
             <AnimatePresence initial={false}>
               {card && <WorktreeCard key="card" agent={agent} thread={thread} />}
             </AnimatePresence>
-            <Composer thread={thread} agent={agent} />
+            <Composer thread={thread} agent={agent} onStop={onStop} />
             {!docked && <ThreadTray agent={agent} />}
           </motion.div>
         </Dock>

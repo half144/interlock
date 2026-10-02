@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { MotionValue } from "motion/react";
 import { useStore } from "@/stores/app-store";
 import { useDockFocus } from "@/features/thread/hooks/useDockFocus";
@@ -16,6 +16,8 @@ export function useTranscript(threadId: string, reading: MotionValue<number>) {
     () => (thread && agent ? withoutStaleCards(withPendingReply(thread.messages, agent)) : []),
     [thread, agent],
   );
+  const [stoppedAt, setStoppedAt] = useState<number | null>(null);
+  const asked = thread?.messages.filter((m) => m.role === "user").length ?? 0;
   const reply = messages.at(-1);
   const thinking = agent && reply?.role === "agent" ? thinkingLine(agent, reply.blocks) : null;
   const { scroller, content, dock, seen, away, jump } = useScrollToLatest(messages.length);
@@ -35,5 +37,7 @@ export function useTranscript(threadId: string, reading: MotionValue<number>) {
     focus,
     away,
     jump,
+    stopped: stoppedAt === asked,
+    onStop: () => setStoppedAt(asked),
   };
 }

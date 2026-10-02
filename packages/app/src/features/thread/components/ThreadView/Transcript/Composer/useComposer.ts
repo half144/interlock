@@ -10,7 +10,7 @@ import { useSlashCommands } from "@/features/thread/hooks/useSlashCommands";
 import { COMPOSER_PREFILL } from "@/features/thread/utils/focusComposer";
 import { commandsFor, parseSlash, skillCommands } from "@/features/thread/utils/slashCommands";
 
-export function useComposer(thread: Thread, agent: Agent) {
+export function useComposer(thread: Thread, agent: Agent, onStop: () => void) {
   const sendMessage = useStore((s) => s.sendMessage);
   const interrupt = useStore((s) => s.interrupt);
   const setEffort = useStore((s) => s.setEffort);
@@ -70,7 +70,10 @@ export function useComposer(thread: Thread, agent: Agent) {
     running,
     hasContent,
     send,
-    stop: () => void interrupt(agent.id),
+    stop: () => {
+      onStop();
+      void interrupt(agent.id);
+    },
     changeEffort: (effort: string) => void setEffort(agent.id, effort),
     onKeyDown,
   };
