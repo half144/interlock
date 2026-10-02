@@ -21,8 +21,8 @@ export function Transcript({
   threadId: string;
   reading: MotionValue<number>;
 }) {
-  const { thread, agent, messages, thinking, card, docked, scroller, content, dock, seen } =
-    useTranscript(threadId);
+  const { thread, agent, messages, thinking, card, docked, scroller, content, dock, seen, focus } =
+    useTranscript(threadId, reading);
 
   if (!thread || !agent) return null;
 
@@ -32,7 +32,7 @@ export function Transcript({
         <motion.div
           ref={content}
           className="mx-auto flex max-w-full flex-1 flex-col gap-7 px-6 pt-6 pb-2"
-          style={{ width: reading }}
+          style={{ width: reading, filter: focus }}
         >
           {messages.map((m, i) => (
             <MessageItem
