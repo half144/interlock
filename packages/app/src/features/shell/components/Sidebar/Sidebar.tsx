@@ -25,6 +25,7 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
           onClick={newTask}
           icon={<SquarePen />}
           label="New task"
+          keys={["D"]}
         />
         <NavItem
           collapsed={collapsed}
@@ -32,6 +33,7 @@ export function Sidebar({ collapsed }: { collapsed: boolean }) {
           onClick={search}
           icon={<Search />}
           label="Search"
+          keys={["⌘", "K"]}
         />
       </nav>
 

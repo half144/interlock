@@ -13,6 +13,7 @@ export function SidebarFooter({ collapsed }: { collapsed: boolean }) {
         onClick={openSettings}
         icon={<Settings2 />}
         label="Settings"
+        keys={["⌘", ","]}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { Kbd } from "@/components/ui/Kbd/Kbd";
 import { foldTransition } from "@/features/shell/utils/fold";
 
 interface NavItemProps {
@@ -9,10 +10,11 @@ interface NavItemProps {
   onClick: () => void;
   icon: ReactNode;
   label: string;
+  keys?: string[];
 }
 
-/** A sidebar destination; folded to the rail, only its icon shows and the label becomes a tooltip. */
-export function NavItem({ collapsed, active, onClick, icon, label }: NavItemProps) {
+/** A sidebar destination; folded to the rail, only its icon shows and the label becomes a tooltip. Its shortcut appears on hover. */
+export function NavItem({ collapsed, active, onClick, icon, label, keys }: NavItemProps) {
   return (
     <button
       type="button"
@@ -20,7 +22,7 @@ export function NavItem({ collapsed, active, onClick, icon, label }: NavItemProp
       aria-current={active ? "page" : undefined}
       title={collapsed ? label : undefined}
       className={cn(
-        "flex h-9 w-full items-center gap-2.5 overflow-hidden rounded-lg px-2.5 text-[14px] text-ink transition-colors duration-150 [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-ink-2",
+        "group flex h-9 w-full items-center gap-2.5 overflow-hidden rounded-lg px-2.5 text-[14px] text-ink transition-colors duration-150 [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-ink-2",
         active ? "bg-selected" : "hover:bg-hover",
       )}
     >
@@ -33,6 +35,13 @@ export function NavItem({ collapsed, active, onClick, icon, label }: NavItemProp
       >
         {label}
       </motion.span>
+      {keys && !collapsed && (
+        <span className="ml-auto flex gap-0.5 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100">
+          {keys.map((key) => (
+            <Kbd key={key}>{key}</Kbd>
+          ))}
+        </span>
+      )}
     </button>
   );
 }

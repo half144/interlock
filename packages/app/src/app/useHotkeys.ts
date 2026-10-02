@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useStore } from "@/stores/app-store";
+import { projectsByLabel } from "@/stores/selectors";
+import { settingsView } from "@/features/shell/utils/settingsTarget";
 import { isTyping } from "@/lib/utils";
 
-/** Global keys: ⌘K palette, D new task, G then H home, Escape closes overlays. */
+/** Global keys: ⌘K palette, ⌘, settings, D new task, G then H home, Escape closes overlays. */
 export function useHotkeys() {
   useEffect(() => {
     let lastG = 0;
@@ -11,6 +13,18 @@ export function useHotkeys() {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         s.setPalette(!s.paletteOpen);
+        return;
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === ",") {
+        e.preventDefault();
+        s.go(
+          settingsView({
+            view: s.view,
+            agents: s.agents,
+            projectFilter: s.projectFilter,
+            projectIds: projectsByLabel(s.projects).map((p) => p.id),
+          }),
+        );
         return;
       }
       if (e.key === "Escape") {
