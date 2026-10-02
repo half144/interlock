@@ -6,12 +6,13 @@ import { CheckpointCard } from "@/features/thread/components/ThreadView/Transcri
 import { DelegateCard } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/DelegateCard/DelegateCard";
 import { Followups } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/Followups/Followups";
 import { HoldCard } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/HoldCard/HoldCard";
+import { CopyButton } from "@/features/thread/components/blocks/CopyButton/CopyButton";
 import { Markdown } from "@/features/thread/components/blocks/Markdown/Markdown";
 import { NoticeLine } from "@/features/thread/components/blocks/NoticeLine/NoticeLine";
 import { ReasoningBlock } from "@/features/thread/components/blocks/ReasoningBlock/ReasoningBlock";
 import { ToolCalls } from "@/features/thread/components/blocks/ToolCalls/ToolCalls";
 import { StepItem } from "@/features/thread/components/ThreadView/Transcript/MessageItem/AgentMessage/StepItem/StepItem";
-import { keyBlocks } from "@/features/thread/utils/blocks";
+import { keyBlocks, replyText } from "@/features/thread/utils/blocks";
 import { joinAnimate, joinInitial, rise } from "../rise";
 import { useAgentMessage } from "./useAgentMessage";
 
@@ -30,10 +31,18 @@ export function AgentMessage({
 }) {
   const { arrived } = useAgentMessage(blocks);
   const lastText = blocks.findLastIndex((b) => b.type === "text");
+  const text = replyText(blocks);
   return (
-    <div>
-      <motion.div variants={rise} custom={0}>
-        <Wordmark className="mb-2.5 [&>span]:text-[16px]" />
+    <div className="group/reply">
+      <motion.div variants={rise} custom={0} className="mb-2.5 flex items-center justify-between">
+        <Wordmark className="[&>span]:text-[16px]" />
+        {text && !streaming && (
+          <CopyButton
+            text={text}
+            label="Copy reply"
+            className="-my-1 opacity-0 transition-opacity duration-150 group-hover/reply:opacity-100 focus-visible:opacity-100"
+          />
+        )}
       </motion.div>
       <div className="flex flex-col gap-3">
         {keyBlocks(blocks).map(({ block, key, position }) => {

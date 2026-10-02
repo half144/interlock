@@ -11,7 +11,8 @@ export function useSlashCommands(
   setText: (text: string) => void,
 ) {
   const [active, setActive] = useState(0);
-  const items = matchSlash(commands, text);
+  const [dismissed, setDismissed] = useState<string | null>(null);
+  const items = dismissed === text ? [] : matchSlash(commands, text);
   useEffect(() => {
     document.getElementById(slashOptionId(active))?.scrollIntoView({ block: "nearest" });
   }, [active, items.length]);
@@ -26,6 +27,11 @@ export function useSlashCommands(
       setActive((i) => (i + (e.key === "ArrowDown" ? 1 : items.length - 1)) % items.length);
       return true;
     }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      setDismissed(text);
+      return true;
+    }
     if (e.key === "Enter" || e.key === "Tab") {
       e.preventDefault();
       const item = items[active];
@@ -35,5 +41,5 @@ export function useSlashCommands(
     return false;
   };
 
-  return { items, active, pick, onKey, reset: () => setActive(0) };
+  return { items, active, pick, onKey, hover: setActive, reset: () => setActive(0) };
 }
