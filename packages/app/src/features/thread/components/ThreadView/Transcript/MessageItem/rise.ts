@@ -1,5 +1,5 @@
 import type { Variants } from "motion/react";
-import { fadeIn, fadeOut, spring } from "@/lib/motion";
+import { dock, fadeIn, fadeOut, spring } from "@/lib/motion";
 
 /** The gap between messages (`gap-7`) and between a reply's blocks (`gap-3`). */
 const MESSAGE_GAP = 28;
@@ -17,8 +17,7 @@ const fold = (gap: number) => ({
     transitionEnd: { overflow: "visible" },
   },
 });
-const roomSpring = { ...spring, visualDuration: 0.38 };
-const makeRoom = { height: roomSpring, marginTop: roomSpring };
+const makeRoom = { height: dock, marginTop: dock };
 
 const reply = fold(REPLY_GAP);
 const thread = fold(MESSAGE_GAP);
