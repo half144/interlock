@@ -13,7 +13,7 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
   return (
     <div
       data-tauri-drag-region
-      className="flex h-[52px] shrink-0 items-center pl-3.5 mac:pl-[76px]"
+      className="flex h-[52px] shrink-0 items-center pl-3.5 mac:pl-lights"
     >
       <button
         type="button"
@@ -30,7 +30,7 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
       </button>
       <Fold
         show={!collapsed}
-        className="flex w-[218px] shrink-0 items-center justify-between pr-2 pl-1.5 mac:w-[188px] mac:pl-0"
+        className="flex w-[218px] shrink-0 items-center justify-between pr-2 pl-1.5 mac:w-[calc(264px-var(--spacing-lights))] mac:pl-0"
       >
         <span className="flex items-center gap-2">
           <span className="font-serif text-[17px] leading-none tracking-[-0.01em] text-ink">

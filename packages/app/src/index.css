@@ -4,6 +4,8 @@
 @custom-variant mac (&:where([data-chrome="mac"] *));
 
 @theme {
+  /* The window buttons of a Mac window with the title bar folded into our top bar. */
+  --spacing-lights: 92px;
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter Variable", "Segoe UI", ui-sans-serif,
     sans-serif;
