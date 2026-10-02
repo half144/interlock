@@ -2,8 +2,8 @@ import type { Variants } from "motion/react";
 import { fadeIn, fadeOut, spring } from "@/lib/motion";
 
 /** The gap between messages (`gap-7`) and between a reply's blocks (`gap-3`). */
-export const MESSAGE_GAP = 28;
-export const REPLY_GAP = 12;
+const MESSAGE_GAP = 28;
+const REPLY_GAP = 12;
 
 /**
  * Whatever comes or goes makes its room on the spring, margin included, so the view sees one smooth change in
