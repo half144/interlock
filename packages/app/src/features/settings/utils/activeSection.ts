@@ -1,5 +1,5 @@
 /** How far below the scroller's top a section's heading must rise before it counts as the one you're reading. */
-export const READ_LINE = 120;
+const READ_LINE = 120;
 
 /** The last section whose heading passed the read line; at the very end of the page, the last section, which can never reach it. */
 export function activeSection(offsets: Record<string, number>, ids: string[], atEnd: boolean) {
