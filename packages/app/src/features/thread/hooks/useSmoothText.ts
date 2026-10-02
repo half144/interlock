@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
-import { advance, countWords, wordsPerSecond } from "@/features/thread/utils/pacing";
+import { paceStep } from "@/features/thread/utils/pacing";
 
 /**
  * Releases streamed text at a steady pace instead of in the chunks the daemon sends. What is already there
@@ -24,15 +24,12 @@ export function useSmoothText(target: string, streaming: boolean) {
     let owed = 0;
     const tick = (now: number) => {
       const { target: text, shown: from } = latest.current;
-      owed += ((now - last) / 1000) * wordsPerSecond(countWords(text, from));
+      const step = paceStep(text, from, owed, now - last);
+      owed = step.owed;
       last = now;
-      const words = Math.floor(owed);
-      if (words > 0) {
-        owed -= words;
-        const to = advance(text, from, words);
-        latest.current.shown = to;
-        setShown(to);
-        if (to >= text.length) return;
+      if (step.to !== from) {
+        latest.current.shown = step.to;
+        setShown(step.to);
       }
       frame = requestAnimationFrame(tick);
     };

@@ -22,3 +22,10 @@ export function advance(text: string, from: number, words: number) {
   }
   return at;
 }
+
+/** One frame of the reveal: how far `from` moves after `elapsedMs`, and the fraction of a word still owed. */
+export function paceStep(text: string, from: number, owed: number, elapsedMs: number) {
+  const due = owed + (elapsedMs / 1000) * wordsPerSecond(countWords(text, from));
+  const words = Math.floor(due);
+  return { to: words > 0 ? advance(text, from, words) : from, owed: due - words };
+}

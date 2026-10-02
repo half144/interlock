@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { advance, countWords, wordsPerSecond } from "./pacing";
+import { advance, countWords, paceStep, wordsPerSecond } from "./pacing";
 
 describe("advance", () => {
   const text = "one two  three four";
@@ -33,5 +33,23 @@ describe("wordsPerSecond", () => {
     expect(wordsPerSecond(0)).toBe(24);
     expect(wordsPerSecond(10)).toBe(54);
     expect(wordsPerSecond(10_000)).toBe(220);
+  });
+});
+
+describe("paceStep", () => {
+  const text = "one two three four";
+
+  it("holds still until a whole word is owed, and carries the remainder", () => {
+    const first = paceStep(text, 0, 0, 20);
+    expect(first.to).toBe(0);
+    const second = paceStep(text, 0, first.owed, 40);
+    expect(second.to).toBe(7);
+    expect(second.owed).toBeLessThan(1);
+  });
+
+  it("keeps moving when text arrives after it caught up", () => {
+    const caught = paceStep("one two", 0, 0, 1000);
+    expect(caught.to).toBe(7);
+    expect(paceStep("one two three", caught.to, caught.owed, 100).to).toBe(13);
   });
 });
