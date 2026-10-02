@@ -10,7 +10,7 @@ const READING_WIDTH = 700;
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 /** With the panel open the work gets the room: the chat keeps about 40%, as Manus does, within readable limits. */
-const splitWidth = (main: number) => clamp(main * 0.4, 420, 580);
+const splitWidth = (main: number) => clamp(main * 0.4, 380, 580);
 /** In the mini-IDE the chat becomes a side column, like an editor's assistant pane. */
 const ideChatWidth = (main: number) => clamp(main * 0.25, 340, 420);
 
