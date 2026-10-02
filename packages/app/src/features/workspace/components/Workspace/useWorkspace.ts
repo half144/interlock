@@ -1,3 +1,4 @@
+import { useBarSlot } from "@/components/layout/WindowBar/barSlot";
 import { useStore } from "@/stores/app-store";
 import { shownTab } from "@/features/workspace/utils/panelTabs";
 import { useDeferredMount } from "@/features/workspace/hooks/useDeferredMount";
@@ -11,5 +12,5 @@ export function useWorkspace(agentId: string) {
 
   const panelTab = shownTab(requestedTab, agent?.git ?? true);
 
-  return { agent, panelTab, maximized, ready };
+  return { agent, panelTab, maximized, ready, inBar: useBarSlot() !== null };
 }

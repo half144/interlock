@@ -34,7 +34,13 @@ export function ChatColumn({
       )}
       style={{ left, width, opacity }}
     >
-      <ThreadHeader threadId={threadId} agent={agent} panelOpen={panelOpen} maximized={maximized} />
+      <ThreadHeader
+        threadId={threadId}
+        agent={agent}
+        panelOpen={panelOpen}
+        maximized={maximized}
+        frame={{ left, width, opacity }}
+      />
       {/* Switching chats: the old conversation fades out on top while the new one fades in beneath it, in place. */}
       <div className="relative min-h-0 flex-1">
         <AnimatePresence initial={false}>

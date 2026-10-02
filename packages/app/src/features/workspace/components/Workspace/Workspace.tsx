@@ -19,7 +19,7 @@ interface WorkspaceProps {
 
 /** The agent's workspace beside the chat: code, terminal and checks, and the PR that ships it. */
 export function Workspace({ agentId, onClose }: WorkspaceProps) {
-  const { agent, panelTab, maximized, ready } = useWorkspace(agentId);
+  const { agent, panelTab, maximized, ready, inBar } = useWorkspace(agentId);
   if (!agent) return null;
 
   return (
@@ -32,7 +32,9 @@ export function Workspace({ agentId, onClose }: WorkspaceProps) {
         maximized && "rounded-none border-transparent shadow-none",
       )}
     >
-      <Toolbar agent={agent} pr={agent.git && <PrButton agent={agent} />} onClose={onClose} />
+      {!inBar && (
+        <Toolbar agent={agent} pr={agent.git && <PrButton agent={agent} />} onClose={onClose} />
+      )}
 
       <div
         className={cn(
