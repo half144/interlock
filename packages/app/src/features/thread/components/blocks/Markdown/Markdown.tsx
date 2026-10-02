@@ -1,8 +1,11 @@
 import { openExternal } from "@/platform/desktop";
-import { Fragment, useMemo, type ReactNode } from "react";
-import { isSafeHref, parseMarkdown, type MdBlock, type MdInline } from "../../../utils/markdown";
+import { Fragment, type ReactNode } from "react";
+import { isSafeHref, type MdBlock, type MdInline } from "../../../utils/markdown";
 import { keyed } from "@/features/thread/utils/blocks";
 import { CodeBlock } from "./CodeBlock/CodeBlock";
+import { StreamedText } from "./StreamedText/StreamedText";
+import { StreamFade } from "./StreamedText/StreamFade";
+import { useMarkdown } from "./useMarkdown";
 
 /** AST nodes have no identity, so React keys them by position. */
 const each = <T,>(items: T[], render: (item: T) => ReactNode) =>
@@ -22,7 +25,7 @@ function Inline({ nodes }: { nodes: MdInline[] }) {
   return each(nodes, (n): ReactNode => {
     switch (n.type) {
       case "text":
-        return n.value;
+        return <StreamedText value={n.value} />;
       case "code":
         return <code>{n.value}</code>;
       case "strong":
@@ -154,11 +157,13 @@ function Blocks({ blocks, inline = false }: { blocks: MdBlock[]; inline?: boolea
 }
 
 /** Agent prose as markdown. Built from the parsed AST, never from HTML strings. */
-export function Markdown({ text }: { text: string }) {
-  const blocks = useMemo(() => parseMarkdown(text), [text]);
+export function Markdown({ text, streaming = false }: { text: string; streaming?: boolean }) {
+  const { blocks, fade } = useMarkdown(text, streaming);
   return (
-    <div className="prose-agent space-y-3 text-[15px] leading-[1.65] text-ink [text-wrap:pretty]">
-      <Blocks blocks={blocks} />
-    </div>
+    <StreamFade.Provider value={fade}>
+      <div className="prose-agent space-y-3 text-[15px] leading-[1.65] text-ink [text-wrap:pretty]">
+        <Blocks blocks={blocks} />
+      </div>
+    </StreamFade.Provider>
   );
 }
