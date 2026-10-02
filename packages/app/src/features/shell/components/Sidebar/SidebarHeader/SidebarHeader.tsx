@@ -11,14 +11,17 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
   const { expand, collapse } = useSidebarHeader();
 
   return (
-    <div className="flex h-[52px] shrink-0 items-center pl-3.5">
+    <div
+      data-tauri-drag-region
+      className="flex h-[52px] shrink-0 items-center pl-3.5 mac:pl-[76px]"
+    >
       <button
         type="button"
         disabled={!collapsed}
         onClick={expand}
         aria-label={collapsed ? "Expand sidebar" : undefined}
         title={collapsed ? "Expand sidebar" : undefined}
-        className="group/logo relative inline-flex size-6 shrink-0 items-center justify-center rounded-md text-ink"
+        className="group/logo relative inline-flex size-6 shrink-0 items-center justify-center rounded-md text-ink mac:hidden"
       >
         <span className={cn("transition-opacity", collapsed && "group-hover/logo:opacity-0")}>
           <LogoMark />
@@ -27,7 +30,7 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
       </button>
       <Fold
         show={!collapsed}
-        className="flex w-[218px] shrink-0 items-center justify-between pr-2 pl-1.5"
+        className="flex w-[218px] shrink-0 items-center justify-between pr-2 pl-1.5 mac:w-[188px] mac:pl-0"
       >
         <span className="flex items-center gap-2">
           <span className="font-serif text-[17px] leading-none tracking-[-0.01em] text-ink">
