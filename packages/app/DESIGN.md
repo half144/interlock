@@ -475,7 +475,8 @@ What animates, and why:
 
 - **Feedback:** press dips, send ↔ stop swap, toggles, menus growing from their trigger, copy → check.
 - **Continuity:** expand/collapse by height (`Collapse`), sliding selection backgrounds (tabs, chips, tree rows, sidebar rows, effort rows), text swapping in place (`SwapText`), the dock, chat switching as a crossfade of the conversation only (frame and composer stay still).
-- **Hierarchy:** a step's check landing when it completes, the worktree strip rising from behind the composer when a turn makes a plan and settling into its finished state, a new message rising 8px, "Ready for review" arriving when a task finishes while you watch.
+- **Hierarchy:** a step's check landing when it completes, the worktree strip rising from behind the composer when a turn makes a plan and settling into its finished state, a new message rising 10px out of a 4px blur, "Ready for review" arriving when a task finishes while you watch.
+- **Streaming prose:** the words of the reply being written fade in from a 4px blur (`word-in`, 220ms, `--ease-out-quint`), each once, as they arrive. Only the last text block of a running reply does it; when the turn ends the words are plain text again, and a reply you open mid-stream does not replay what is already there. Reduced motion drops it.
 
 What never animates: anything on the store's 1.4s simulation tick (entrances replay only for genuinely new items), streaming terminal lines, diff rows, the palette and slash-menu highlight (keyboard speed), elapsed timers and counters, and nothing ever loops except live state: the running spinner (1.6s), the shimmer on a running status line, the thinking line included (2.2s) and the held glyph pulse (1.8s).
 

@@ -37,6 +37,7 @@ export function Transcript({
               key={m.id}
               message={m}
               animate={i >= seen.current}
+              streaming={i === messages.length - 1 && agent.aspect === "running"}
               footer={i === messages.length - 1 && <ThinkingLine text={thinking} />}
             />
           ))}

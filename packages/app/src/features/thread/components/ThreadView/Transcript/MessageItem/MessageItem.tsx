@@ -14,10 +14,12 @@ export const MessageItem = memo(function MessageItem({
   message,
   animate,
   footer,
+  streaming = false,
 }: {
   message: Message;
   animate: boolean;
   footer?: ReactNode;
+  streaming?: boolean;
 }) {
   return (
     <motion.div initial={animate ? "hidden" : false} animate="shown">
@@ -29,7 +31,7 @@ export const MessageItem = memo(function MessageItem({
           </div>
         </motion.div>
       ) : (
-        <AgentMessage blocks={message.blocks} footer={footer} />
+        <AgentMessage blocks={message.blocks} footer={footer} streaming={streaming} />
       )}
     </motion.div>
   );

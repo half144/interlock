@@ -14,8 +14,20 @@ import { StepItem } from "@/features/thread/components/ThreadView/Transcript/Mes
 import { keyBlocks } from "@/features/thread/utils/blocks";
 import { rise } from "../rise";
 
-/** `footer` closes the reply, under its last block: what the agent is doing while the turn runs. */
-export function AgentMessage({ blocks, footer }: { blocks: Block[]; footer?: ReactNode }) {
+/**
+ * `footer` closes the reply, under its last block: what the agent is doing while the turn runs.
+ * `streaming` is a reply still being written: its last text block fades its words in.
+ */
+export function AgentMessage({
+  blocks,
+  footer,
+  streaming = false,
+}: {
+  blocks: Block[];
+  footer?: ReactNode;
+  streaming?: boolean;
+}) {
+  const lastText = blocks.findLastIndex((b) => b.type === "text");
   return (
     <div>
       <motion.div variants={rise} custom={0}>
@@ -24,7 +36,7 @@ export function AgentMessage({ blocks, footer }: { blocks: Block[]; footer?: Rea
       <div className="flex flex-col gap-3">
         {keyBlocks(blocks).map(({ block, key, position }) => (
           <motion.div key={key} variants={rise} custom={position + 1}>
-            {renderBlock(block)}
+            {renderBlock(block, streaming && position === lastText)}
           </motion.div>
         ))}
         {footer}
@@ -33,10 +45,10 @@ export function AgentMessage({ blocks, footer }: { blocks: Block[]; footer?: Rea
   );
 }
 
-function renderBlock(block: Block) {
+function renderBlock(block: Block, streaming: boolean) {
   switch (block.type) {
     case "text":
-      return <Markdown text={block.text} />;
+      return <Markdown text={block.text} streaming={streaming} />;
     case "reasoning":
       return <ReasoningBlock text={block.text} />;
     case "tools":
