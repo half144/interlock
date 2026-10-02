@@ -136,6 +136,14 @@
     cursor: pointer;
   }
 
+  /* Chrome is not content: dragging across the sidebar or a button must not paint a selection. */
+  aside,
+  button,
+  [data-tauri-drag-region] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   button:disabled {
     cursor: not-allowed;
   }
