@@ -18,7 +18,7 @@ export function ThreadView({ threadId }: { threadId: string }) {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="relative min-h-0 flex-1 overflow-hidden">
+      <div className="relative min-h-0 flex-1 overflow-clip">
         <ChatColumn
           threadId={threadId}
           agent={agent}

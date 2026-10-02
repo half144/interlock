@@ -2,6 +2,7 @@ import { AnimatePresence, motion, type MotionValue } from "motion/react";
 import { Dock } from "@/components/ui/Dock/Dock";
 import { Outcome } from "@/features/thread/components/ThreadView/Transcript/Outcome/Outcome";
 import { isFinished } from "@/lib/agentStatus";
+import { READING_WIDTH } from "@/lib/layout";
 import { JumpToLatest } from "./JumpToLatest/JumpToLatest";
 import { Composer } from "./Composer/Composer";
 import { MessageItem } from "./MessageItem/MessageItem";
@@ -12,8 +13,8 @@ import { useTranscript } from "./useTranscript";
 import { WorktreeCard } from "./WorktreeCard/WorktreeCard";
 
 /**
- * `reading` is the conversation's width: its usual width on its own, the chat's width beside the open panel.
- * It never exceeds the scroller, whose scrollbar would otherwise push it into a sideways scroll.
+ * The conversation fills its column up to the reading width, so it follows the column as it narrows beside the
+ * panel instead of racing it on a spring of its own and spilling out of its sides. `reading` only paces the focus.
  */
 export function Transcript({
   threadId,
@@ -53,8 +54,8 @@ export function Transcript({
       <div ref={scroller} className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <motion.div
           ref={content}
-          className="mx-auto flex max-w-full flex-1 flex-col gap-7 px-6 pt-6 pb-2"
-          style={{ width: reading }}
+          className="mx-auto flex w-full flex-1 flex-col gap-7 px-6 pt-6 pb-2"
+          style={{ maxWidth: READING_WIDTH }}
         >
           {messages.map((m, i) => (
             <MessageItem
@@ -80,8 +81,8 @@ export function Transcript({
         <Dock surface="panel">
           <motion.div
             ref={dock}
-            className="mx-auto max-w-full px-6 pb-4"
-            style={{ width: reading }}
+            className="mx-auto w-full px-6 pb-4"
+            style={{ maxWidth: READING_WIDTH }}
           >
             <AnimatePresence initial={false}>
               {card && <WorktreeCard key="card" agent={agent} thread={thread} />}

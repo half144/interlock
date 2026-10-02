@@ -1,3 +1,6 @@
+/** The chat on its own keeps this reading width; it only narrows to sit beside the open panel. */
+export const READING_WIDTH = 700;
+
 /** The app never lays out narrower than this; below it the page scrolls sideways. */
 export const MIN_APP_WIDTH = 1100;
 

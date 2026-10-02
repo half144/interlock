@@ -22,6 +22,9 @@ export const fadeOut = { duration: 0.11, ease: easeIn } satisfies Transition;
  */
 export const dock = { type: "spring", visualDuration: 0.3, bounce: 0 } satisfies Transition;
 
+/** The panel coming in travels far more than a sidebar folding; on the dock's spring it reads as a snap. Everything that moves with it must use this one too. */
+export const dockOpen = { type: "spring", visualDuration: 0.36, bounce: 0 } satisfies Transition;
+
 /** A control turning into its own surface: the shape stretches with a hint of give, then settles. */
 export const morph = { type: "spring", visualDuration: 0.34, bounce: 0.12 } satisfies Transition;
 

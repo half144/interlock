@@ -1,11 +1,10 @@
 import { MotionConfig, motion, useReducedMotion } from "motion/react";
 import { WindowFrame } from "@/components/layout/WindowFrame/WindowFrame";
-import { dock } from "@/lib/motion";
 import { FirstRun } from "@/features/onboarding/components/FirstRun/FirstRun";
 import { CommandPalette } from "@/features/palette/components/CommandPalette/CommandPalette";
 import { Sidebar } from "@/features/shell/components/Sidebar/Sidebar";
 import { Toaster } from "@/features/shell/components/Toaster/Toaster";
-import { useRail, useSidebarWidth } from "@/hooks/useRail";
+import { useRail, useSidebarSpring, useSidebarWidth } from "@/hooks/useRail";
 import { DaemonNotice } from "./DaemonNotice";
 import { useDaemon } from "./useDaemon";
 import { useHotkeys } from "./useHotkeys";
@@ -17,6 +16,7 @@ import { ViewOutlet } from "./ViewOutlet";
 export function App() {
   const rail = useRail();
   const sidebarWidth = useSidebarWidth();
+  const spring = useSidebarSpring();
   const reduce = useReducedMotion();
   useDaemon();
   useRouteSync();
@@ -30,7 +30,7 @@ export function App() {
         <motion.div
           initial={false}
           animate={{ width: sidebarWidth }}
-          transition={reduce ? { duration: 0 } : dock}
+          transition={reduce ? { duration: 0 } : spring}
           inert={sidebarWidth === 0}
           className="shrink-0 overflow-hidden"
         >

@@ -1,3 +1,4 @@
+import { dock, dockOpen } from "@/lib/motion";
 import { useStore } from "@/stores/app-store";
 
 export const SIDEBAR_WIDTH = { open: 264, rail: 52 };
@@ -15,4 +16,9 @@ export function useSidebarWidth() {
   const rail = useRail();
   const maximized = useStore((s) => s.reviewMaximized);
   return maximized ? 0 : rail ? SIDEBAR_WIDTH.rail : SIDEBAR_WIDTH.open;
+}
+
+/** The spring the sidebar rides: the panel's own while it is open, so every edge lands together. */
+export function useSidebarSpring() {
+  return useStore((s) => (s.panelOpen ? dockOpen : dock));
 }
