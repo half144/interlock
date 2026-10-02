@@ -19,6 +19,6 @@ export function useTranscript(threadId: string, reading: MotionValue<number>) {
     transcriptSize(messages, thinking !== null),
   );
   const card = !docked && thread !== undefined && turnPlan(thread).length > 0;
-  const focus = useDockFocus(reading);
+  const focus = useDockFocus(reading, dock);
   return { thread, agent, messages, thinking, card, docked, scroller, dock, seen, focus };
 }
