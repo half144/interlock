@@ -13,7 +13,7 @@ export function DaemonNotice() {
       role={notice.tone === "error" ? "alert" : "status"}
       className={cn(
         surface.overlay,
-        "fixed top-3 left-1/2 z-50 flex max-w-[min(560px,90vw)] -translate-x-1/2 items-center gap-2 rounded-lg px-3.5 py-2 text-[13px]",
+        "fixed top-14 left-1/2 z-50 flex max-w-[min(560px,90vw)] -translate-x-1/2 items-center gap-2 rounded-lg px-3.5 py-2 text-[13px]",
         notice.tone === "error" ? "text-red" : "text-ink-2",
       )}
     >
