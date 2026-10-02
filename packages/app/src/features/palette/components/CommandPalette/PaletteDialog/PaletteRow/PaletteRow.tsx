@@ -1,7 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Kbd } from "@/components/ui/Kbd/Kbd";
 import { Lamp } from "@/components/ui/Lamp/Lamp";
+import type { Aspect } from "@/types";
 import type { PaletteItem } from "@/features/palette/types";
+
+/** The lamp draws nothing for these, so the row keeps its own icon. */
+const QUIET: Aspect[] = ["idle", "discarded"];
 
 interface PaletteRowProps {
   item: PaletteItem;
@@ -12,6 +16,7 @@ interface PaletteRowProps {
 
 export function PaletteRow({ item, active, onHover, onRun }: PaletteRowProps) {
   const Icon = item.icon;
+  const lamp = item.agent && !QUIET.includes(item.agent.aspect) ? item.agent.aspect : null;
   return (
     <button
       type="button"
@@ -26,7 +31,7 @@ export function PaletteRow({ item, active, onHover, onRun }: PaletteRowProps) {
       )}
     >
       <span className="flex w-4 shrink-0 justify-center text-ink-3 [&_svg]:size-4">
-        {item.agent ? <Lamp aspect={item.agent.aspect} /> : Icon && <Icon />}
+        {lamp ? <Lamp aspect={lamp} /> : Icon && <Icon />}
       </span>
       <span className="min-w-0 flex-1 truncate text-[13.5px] text-ink">{item.title}</span>
       {item.hint && <span className="shrink-0 truncate text-[12.5px] text-ink-3">{item.hint}</span>}
