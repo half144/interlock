@@ -17,7 +17,7 @@ export function MenuItem({ children, onSelect, active, hint, danger }: MenuItemP
       role="menuitem"
       onClick={onSelect}
       className={cn(
-        "flex h-8 w-full items-center gap-2 rounded-[5px] px-2 text-left text-[13px] transition-colors duration-100 [&_svg]:size-3.5",
+        "flex h-8 w-full items-center whitespace-nowrap gap-2 rounded-[5px] px-2 text-left text-[13px] transition-colors duration-100 [&_svg]:size-3.5",
         !danger && "[&_svg]:text-ink-3",
         danger && "text-red hover:bg-red/10",
         !danger &&

@@ -5,7 +5,7 @@ import { useStore } from "./app-store";
 export function useProjectList() {
   const projects = useStore((s) => s.projects);
   return useMemo(
-    () => Object.values(projects).sort((a, b) => a.name.localeCompare(b.name)),
+    () => Object.values(projects).sort((a, b) => a.label.localeCompare(b.label)),
     [projects],
   );
 }

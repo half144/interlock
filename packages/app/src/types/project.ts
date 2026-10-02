@@ -17,6 +17,8 @@ export interface ProjectSettings {
 export interface Project {
   id: string;
   name: string;
+  /** The name as the UI shows it: the folder name, plus its parent folder when another project has the same name. */
+  label: string;
   rootPath: string;
   /** False for a plain folder: tasks run in it directly, with no branches, diff or pull requests. */
   git: boolean;

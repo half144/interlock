@@ -4,6 +4,9 @@ import { withProjectMeta } from "./projectMeta";
 
 const project = {
   id: "p",
+  name: "app",
+  label: "app",
+  rootPath: "/code/app",
   defaultBranch: "main",
   remoteUrl: null,
   settings: { defaultBranch: null },
@@ -35,6 +38,12 @@ describe("withProjectMeta", () => {
 
   it("keeps what it has when no workspace says otherwise", () => {
     expect(withProjectMeta({ p: project }, {})["p"]).toEqual(project);
+  });
+
+  it("tells projects with the same name apart by their folders", () => {
+    const other = { ...project, id: "q", rootPath: "/play/app" };
+    const result = withProjectMeta({ p: project, q: other }, {});
+    expect([result["p"]?.label, result["q"]?.label]).toEqual(["app · code", "app · play"]);
   });
 
   it("keeps the branch picked in settings over the main checkout's branch", () => {

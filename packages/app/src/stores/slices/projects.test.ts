@@ -5,6 +5,7 @@ import { useStore } from "../app-store";
 const project = (patch: Partial<Project> = {}): Project => ({
   id: "p",
   name: "repo",
+  label: "repo",
   rootPath: "/repo",
   git: true,
   remoteUrl: null,
