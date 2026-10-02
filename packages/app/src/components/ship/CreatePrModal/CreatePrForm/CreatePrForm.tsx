@@ -4,7 +4,7 @@ import { DiffStat } from "@/components/ui/DiffStat/DiffStat";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { monoText } from "@/lib/styles";
-import { plural } from "@/lib/utils";
+import { cn, plural } from "@/lib/utils";
 
 interface CreatePrFormProps {
   agent: Agent;
@@ -37,9 +37,11 @@ export function CreatePrForm({
       </Field>
       <dl className="flex flex-col gap-2 text-[13px]">
         <Row term="Branch">
-          <span className={monoText}>{agent.branch}</span>
-          <span className="text-ink-3">into</span>
-          <span className={monoText}>{agent.base}</span>
+          <span className={cn(monoText, "truncate")} title={agent.branch}>
+            {agent.branch}
+          </span>
+          <span className="shrink-0 text-ink-3">into</span>
+          <span className={cn(monoText, "shrink-0")}>{agent.base}</span>
         </Row>
         <Row term="Changes">
           <span className="text-ink-2">{plural(files, "file")}</span>
