@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { dock } from "@/lib/motion";
+import { WorkspaceBar } from "@/features/workspace/components/WorkspaceBar/WorkspaceBar";
 import { StatusBar } from "@/features/workspace/components/editor/StatusBar/StatusBar";
 import { ChatColumn } from "./ChatColumn/ChatColumn";
 import { useThreadView } from "./useThreadView";
@@ -29,6 +30,14 @@ export function ThreadView({ threadId }: { threadId: string }) {
           reading={frame.reading}
         />
         <WorkspaceDock
+          agentId={agent.id}
+          open={panelOpen}
+          maximized={maximized}
+          left={frame.panelLeft}
+          width={frame.panelWidth}
+          onClose={closePanel}
+        />
+        <WorkspaceBar
           agentId={agent.id}
           open={panelOpen}
           maximized={maximized}
