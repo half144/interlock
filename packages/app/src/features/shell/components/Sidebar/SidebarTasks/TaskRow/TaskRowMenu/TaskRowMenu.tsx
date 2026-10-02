@@ -12,7 +12,7 @@ export function TaskRowMenu({ agentId }: { agentId: string }) {
 
   return (
     <>
-      <div className="absolute top-1/2 right-1 -translate-y-1/2">
+      <div className="absolute top-1/2 right-1 z-10 -translate-y-1/2">
         <Popover
           align="end"
           side={side}
