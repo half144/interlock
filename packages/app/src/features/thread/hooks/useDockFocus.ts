@@ -10,7 +10,11 @@ import {
 import { useRef } from "react";
 
 const PEAK_BLUR_PX = 5;
-const BELL = { duration: 0.34, times: [0, 0.3, 1], ease: "easeInOut" } satisfies Transition;
+const BELL = {
+  duration: 0.55,
+  times: [0, 0.22, 1],
+  ease: ["easeOut", "easeInOut"],
+} satisfies Transition;
 const MOVING = 60;
 
 /**
