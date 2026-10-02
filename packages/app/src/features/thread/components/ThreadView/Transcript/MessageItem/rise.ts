@@ -5,7 +5,7 @@ const STAGGER = 0.04;
 const MAX_STAGGERED = 5;
 
 /** A new reply waits for your message to leave the composer before it begins to appear. */
-export const REPLY_DELAY = 0.16;
+const REPLY_DELAY = 0.16;
 /** The thinking line comes in once the reply's name has settled. */
 export const THINKING_DELAY = 0.42;
 
