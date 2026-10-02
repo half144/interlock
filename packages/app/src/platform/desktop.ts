@@ -5,6 +5,9 @@ const isDesktop = "__TAURI_INTERNALS__" in globalThis;
 
 const bridge = isDesktop ? tauriBridge : browserBridge;
 
+/** In the desktop app on a Mac the title bar is transparent and the window buttons sit inside our own top bar. */
+export const macChrome = isDesktop && navigator.userAgent.includes("Macintosh");
+
 export const getDaemonConnection = bridge.getDaemonConnection;
 export const onDaemonStatus = bridge.onDaemonStatus;
 export const pickFolder = bridge.pickFolder;

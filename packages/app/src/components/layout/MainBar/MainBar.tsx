@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
+import { PanelLeft } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { fadeIn, fadeOut } from "@/lib/motion";
+import { IconButton } from "@/components/ui/IconButton/IconButton";
+import { dockCss, fadeIn, fadeOut } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import { UsagePill } from "./UsagePill/UsagePill";
+import { useMainBar } from "./useMainBar";
 
 /**
  * Top of the main area: a title or picker on the left, the usage pill on the right. Going compact (the side
@@ -16,9 +20,25 @@ export function MainBar({
   right?: ReactNode;
   compact?: boolean;
 }) {
+  const { overhang, expand } = useMainBar();
+
   return (
-    <header className="relative flex h-[52px] shrink-0 items-center gap-2 px-4">
-      <div className="flex min-w-0 flex-1 items-center gap-2">{left}</div>
+    <header
+      data-tauri-drag-region
+      className={cn(
+        "relative flex h-[52px] shrink-0 items-center gap-2 px-4 transition-[padding]",
+        dockCss,
+        overhang && "mac:pl-10",
+      )}
+    >
+      <div data-tauri-drag-region className="flex min-w-0 flex-1 items-center gap-2">
+        {overhang && (
+          <IconButton label="Expand sidebar" onClick={expand} className="hidden mac:inline-flex">
+            <PanelLeft />
+          </IconButton>
+        )}
+        {left}
+      </div>
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={compact ? "compact" : "full"}
