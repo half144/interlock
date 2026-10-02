@@ -29,11 +29,11 @@ export function scopeOf(files) {
 const git = (...args) => spawnSync("git", args, { encoding: "utf8" }).stdout.trim();
 const lines = (out) => out.split("\n").filter(Boolean);
 
-export const stagedFiles = () => lines(git("diff", "--name-only", "--cached"));
+export const stagedFiles = () => lines(git("diff", "--name-only", "--diff-filter=d", "--cached"));
 
 export function changedSinceBase(base = "origin/main") {
   const mergeBase = git("merge-base", base, "HEAD") || base;
-  return lines(git("diff", "--name-only", `${mergeBase}...HEAD`));
+  return lines(git("diff", "--name-only", "--diff-filter=d", `${mergeBase}...HEAD`));
 }
 
 // Git exports GIT_DIR and friends to hooks. The server tests run git in temp dirs and, with those set, would act on this repo.
