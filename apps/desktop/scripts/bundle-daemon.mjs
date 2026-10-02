@@ -118,11 +118,10 @@ async function bundleDaemon() {
   cpSync(join(pty, "prebuilds/darwin-arm64"), join(ptyOut, "prebuilds/darwin-arm64"), {
     recursive: true,
   });
-  cpSync(
-    join(server, "src/terminal/shell-integration"),
-    join(daemonDir, "terminal/shell-integration"),
-    { recursive: true },
-  );
+  // terminal.ts resolves ./shell-integration next to the bundled worker, not under terminal/.
+  cpSync(join(server, "src/terminal/shell-integration"), join(daemonDir, "shell-integration"), {
+    recursive: true,
+  });
 }
 
 await stageNode();
