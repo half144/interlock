@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { listFolder, type FolderEntry } from "@/daemon/files";
 import { useStore } from "@/stores/app-store";
 import { ancestorsOf, buildTree, type Listings } from "@/features/workspace/utils/fileTree";
@@ -9,6 +9,27 @@ const foldersToList = (files: FileDiff[]) => [
   "",
   ...new Set(files.flatMap((file) => ancestorsOf(file.path))),
 ];
+
+/** Arrow keys walk the visible rows; right and left open and close the folder under focus. */
+function navigate(event: KeyboardEvent<HTMLElement>) {
+  const rows = [...event.currentTarget.querySelectorAll<HTMLButtonElement>("li > button:enabled")];
+  const at = rows.indexOf(document.activeElement as HTMLButtonElement);
+  const row = rows[at];
+  const step = { ArrowDown: at + 1, ArrowUp: at - 1, Home: 0, End: rows.length - 1 }[event.key];
+  if (step !== undefined) {
+    event.preventDefault();
+    rows[Math.min(rows.length - 1, Math.max(0, step))]?.focus();
+    return;
+  }
+  const expanded = row?.getAttribute("aria-expanded");
+  if (
+    (event.key === "ArrowRight" && expanded === "false") ||
+    (event.key === "ArrowLeft" && expanded === "true")
+  ) {
+    event.preventDefault();
+    row?.click();
+  }
+}
 
 export function useExplorer(agent: Agent, files: FileDiff[]) {
   const projectName = useStore((s) => s.projects[agent.projectId]?.name);
@@ -42,5 +63,10 @@ export function useExplorer(agent: Agent, files: FileDiff[]) {
     for (const path of wanted.split("\n")) load(path, true);
   }, [wanted, load]);
 
-  return { projectName, tree: useMemo(() => buildTree(files, listings), [files, listings]), load };
+  return {
+    projectName,
+    tree: useMemo(() => buildTree(files, listings), [files, listings]),
+    load,
+    navigate,
+  };
 }

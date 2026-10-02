@@ -84,4 +84,29 @@ describe("buildTree", () => {
   it("has nothing without files or listings", () => {
     expect(buildTree([], {})).toEqual([]);
   });
+
+  it("sorts numbered names naturally", () => {
+    const tree = buildTree([diff("mod10.ts"), diff("mod2.ts"), diff("mod1.ts")], {});
+    expect(names(tree)).toEqual(["mod1.ts", "mod2.ts", "mod10.ts"]);
+  });
+
+  it("shares a row between a folder and the only folder it holds", () => {
+    const listings: Listings = {
+      "": [{ name: "src", path: "src", kind: "directory" }],
+      src: [{ name: "lib", path: "src/lib", kind: "directory" }],
+      "src/lib": [
+        { name: "a.ts", path: "src/lib/a.ts", kind: "file" },
+        { name: "b.ts", path: "src/lib/b.ts", kind: "file" },
+      ],
+    };
+    const [merged] = buildTree([diff("src/lib/a.ts")], listings);
+    expect(merged?.name).toBe("src/lib");
+    expect(merged?.path).toBe("src/lib");
+    expect(names(merged?.children ?? [])).toEqual(["a.ts", "b.ts"]);
+  });
+
+  it("keeps a folder apart while its other contents are unknown", () => {
+    const [src] = buildTree([diff("src/lib/a.ts")], {});
+    expect(src?.name).toBe("src");
+  });
 });

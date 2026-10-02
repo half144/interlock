@@ -1,6 +1,6 @@
-import type { DiffLine, FileDiff } from "@/types";
+import type { DiffLine, DiffMode, FileDiff } from "@/types";
 
-export type DiffMode = "unified" | "split";
+export type { DiffMode };
 
 interface HasLine {
   line: DiffLine;
