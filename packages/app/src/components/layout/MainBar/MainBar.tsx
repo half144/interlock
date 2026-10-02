@@ -28,7 +28,7 @@ export function MainBar({
       className={cn(
         "relative flex h-[52px] shrink-0 items-center gap-2 px-4 transition-[padding]",
         dockCss,
-        overhang && "mac:pl-10",
+        overhang && "mac:pl-[calc(var(--spacing-lights)-52px+16px)]",
       )}
     >
       <div data-tauri-drag-region className="flex min-w-0 flex-1 items-center gap-2">
