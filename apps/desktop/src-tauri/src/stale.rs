@@ -1,7 +1,9 @@
 //! Stops an Interlock daemon left behind by a previous launch (the app was killed or crashed),
 //! so the new launch can bind the port and its own token. Only a daemon that proves to be ours
-//! is signalled: the pid file must be marked `desktopManaged` for our listen address, and the
-//! live process command line must look like the Interlock daemon.
+//! is signalled. Two ways to find it: the pid file, when it is marked `desktopManaged` for our
+//! listen address, and whoever listens on the port, which also catches a daemon started by hand
+//! (`npm run dev:daemon`) and a worker orphaned when its supervisor died. Either way the live
+//! process command line must look like the Interlock daemon.
 
 use std::path::Path;
 use std::process::Command;
@@ -77,14 +79,74 @@ pub fn stop_stale_daemon(home: &Path, listen: &str) -> bool {
         return false;
     }
     eprintln!("[interlock] stopping stale daemon (pid {})", lock.pid);
-    // SAFETY: the pid was verified above to be an Interlock daemon of ours.
-    unsafe { libc::kill(lock.pid, libc::SIGTERM) };
+    terminate(lock.pid);
+    true
+}
+
+fn terminate(pid: i32) {
+    // SAFETY: callers only pass pids already verified to be an Interlock daemon.
+    unsafe { libc::kill(pid, libc::SIGTERM) };
     let deadline = Instant::now() + TERM_GRACE;
-    while alive(lock.pid) && Instant::now() < deadline {
+    while alive(pid) && Instant::now() < deadline {
         thread::sleep(Duration::from_millis(50));
     }
-    if alive(lock.pid) {
-        unsafe { libc::kill(lock.pid, libc::SIGKILL) };
+    if alive(pid) {
+        unsafe { libc::kill(pid, libc::SIGKILL) };
+    }
+}
+
+fn port_owner(port: u16) -> Option<i32> {
+    let output = Command::new("lsof")
+        .args(["-nP", &format!("-iTCP:{port}"), "-sTCP:LISTEN", "-t"])
+        .output()
+        .ok()?;
+    String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .next()?
+        .trim()
+        .parse()
+        .ok()
+}
+
+fn parent_pid(pid: i32) -> Option<i32> {
+    let output = Command::new("ps")
+        .args(["-o", "ppid=", "-p", &pid.to_string()])
+        .output()
+        .ok()?;
+    String::from_utf8_lossy(&output.stdout).trim().parse().ok()
+}
+
+/// What to stop for a process holding our port: the supervisor first, so it cannot respawn the
+/// worker, then the worker. None when the holder is not an Interlock daemon.
+pub fn stop_order(worker: (i32, &str), parent: Option<(i32, &str)>) -> Option<Vec<i32>> {
+    if !command_looks_like_daemon(worker.1) {
+        return None;
+    }
+    let supervisor = parent
+        .filter(|(pid, command)| *pid > 1 && command_looks_like_daemon(command))
+        .map(|(pid, _)| pid);
+    Some(supervisor.into_iter().chain([worker.0]).collect())
+}
+
+/// Returns true when an Interlock daemon was holding the port and was stopped.
+pub fn stop_port_owner(port: u16) -> bool {
+    let Some(pid) = port_owner(port) else {
+        return false;
+    };
+    let Some(command) = process_command(pid) else {
+        return false;
+    };
+    let parent = parent_pid(pid).and_then(|ppid| Some((ppid, process_command(ppid)?)));
+    let Some(order) = stop_order(
+        (pid, &command),
+        parent.as_ref().map(|(ppid, c)| (*ppid, c.as_str())),
+    ) else {
+        eprintln!("[interlock] port {port} is held by pid {pid}, which is not our daemon; leaving it alone");
+        return false;
+    };
+    eprintln!("[interlock] port {port} is held by a stale daemon; stopping {order:?}");
+    for pid in order {
+        terminate(pid);
     }
     true
 }
@@ -151,6 +213,34 @@ mod tests {
             LISTEN,
             "/usr/bin/paseo-daemon --port 6868"
         ));
+    }
+
+    #[test]
+    fn stops_the_supervisor_before_its_worker() {
+        assert_eq!(
+            stop_order((20, "Interlock Daemon"), Some((10, "Interlock Supervisor"))),
+            Some(vec![10, 20])
+        );
+    }
+
+    #[test]
+    fn stops_an_orphaned_worker_alone() {
+        assert_eq!(
+            stop_order((20, "Interlock Daemon"), Some((1, "/sbin/launchd"))),
+            Some(vec![20])
+        );
+        assert_eq!(
+            stop_order((20, "Interlock Daemon"), Some((10, "/usr/bin/zsh"))),
+            Some(vec![20])
+        );
+    }
+
+    #[test]
+    fn leaves_a_foreign_port_holder_alone() {
+        assert_eq!(
+            stop_order((20, "/usr/bin/some-other-server --port 6868"), None),
+            None
+        );
     }
 
     #[test]
