@@ -161,7 +161,7 @@ export function Markdown({ text, streaming = false }: { text: string; streaming?
   const { blocks, fade } = useMarkdown(text, streaming);
   return (
     <StreamFade.Provider value={fade}>
-      <div className="prose-agent space-y-3 text-[15px] leading-[1.65] text-ink [text-wrap:pretty]">
+      <div className="prose-agent space-y-3 text-[15px] leading-[1.65] text-ink">
         <Blocks blocks={blocks} />
       </div>
     </StreamFade.Provider>
