@@ -60,7 +60,12 @@ async function stageNode() {
     "--strip-components=2",
     `node-v${NODE_VERSION}-darwin-arm64/bin/node`,
   ]);
-  chmodSync(join(nodeDir, "bin/node"), 0o755);
+  const node = join(nodeDir, "bin/node");
+  chmodSync(node, 0o755);
+  // Local symbols are dead weight (about 29 MB); addons only need the exported ones, which `-x` keeps.
+  // Stripping invalidates the signature, so sign it again.
+  execFileSync("strip", ["-x", node]);
+  execFileSync("codesign", ["--force", "--sign", "-", node]);
 }
 
 const common = {
@@ -70,6 +75,9 @@ const common = {
   format: "esm",
   logLevel: "warning",
   external: ["node-pty"],
+  // Identifiers stay as they are: the daemon logs and matches on class and function names.
+  minifyWhitespace: true,
+  minifySyntax: true,
   banner: {
     js: 'import { createRequire as __createRequire } from "node:module"; const require = __createRequire(import.meta.url);',
   },
@@ -110,11 +118,10 @@ async function bundleDaemon() {
   cpSync(join(pty, "prebuilds/darwin-arm64"), join(ptyOut, "prebuilds/darwin-arm64"), {
     recursive: true,
   });
-  cpSync(
-    join(server, "src/terminal/shell-integration"),
-    join(daemonDir, "terminal/shell-integration"),
-    { recursive: true },
-  );
+  // terminal.ts resolves ./shell-integration next to the bundled worker, not under terminal/.
+  cpSync(join(server, "src/terminal/shell-integration"), join(daemonDir, "shell-integration"), {
+    recursive: true,
+  });
 }
 
 await stageNode();

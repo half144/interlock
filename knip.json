@@ -34,5 +34,5 @@
     }
   },
   "ignoreDependencies": ["@commitlint/config-conventional", "lefthook"],
-  "ignoreBinaries": ["cargo", "gitleaks", "tauri"]
+  "ignoreBinaries": ["cargo", "gitleaks", "hdiutil", "strip", "tauri"]
 }
