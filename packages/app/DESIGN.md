@@ -476,6 +476,7 @@ What animates, and why:
 
 - **Feedback:** press dips, send ↔ stop swap, toggles, menus growing from their trigger, copy → check.
 - **Continuity:** expand/collapse by height (`Collapse`), sliding selection backgrounds (tabs, chips, tree rows, sidebar rows, effort rows), text swapping in place (`SwapText`), the dock, chat switching as a crossfade of the conversation only (frame and composer stay still).
+- **Focus pull:** while the chat column is squeezed or released (the side panel opening, the sidebar folding), the conversation goes soft, up to 6px of blur following how fast its width changes, and pulls back into focus on a slower spring as it settles, like a lens following a moving subject. Zero at rest, `none` under reduced motion; the header stays sharp.
 - **Hierarchy:** a step's check landing when it completes, the worktree strip rising from behind the composer when a turn makes a plan and settling into its finished state, a new message rising 10px out of a 4px blur, "Ready for review" arriving when a task finishes while you watch.
 - **Streaming prose:** the words of the reply being written fade in from a 4px blur (`word-in`, 220ms, `--ease-out-quint`), each once, as they arrive. Only the last text block of a running reply does it; when the turn ends the words are plain text again, and a reply you open mid-stream does not replay what is already there. Reduced motion drops it.
 

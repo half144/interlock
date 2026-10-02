@@ -4,6 +4,7 @@ import { easeIn, easeOut } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { ThreadHeader } from "../ThreadHeader/ThreadHeader";
 import { Transcript } from "../Transcript/Transcript";
+import { useChatColumn } from "./useChatColumn";
 
 interface ChatColumnProps {
   threadId: string;
@@ -26,6 +27,8 @@ export function ChatColumn({
   opacity,
   reading,
 }: ChatColumnProps) {
+  const { focus } = useChatColumn(reading);
+
   return (
     <motion.div
       className={cn(
@@ -43,6 +46,7 @@ export function ChatColumn({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.16, ease: easeOut } }}
             exit={{ opacity: 0, transition: { duration: 0.16, ease: easeIn } }}
+            style={{ filter: focus }}
             className="absolute inset-0 flex flex-col"
           >
             <Transcript threadId={threadId} reading={reading} />
