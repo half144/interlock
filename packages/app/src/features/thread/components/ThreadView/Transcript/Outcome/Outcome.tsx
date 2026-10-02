@@ -1,22 +1,15 @@
 import { motion } from "motion/react";
 import { Check } from "lucide-react";
 import type { Agent } from "@/types";
-import { fadeIn, fadeOut, spring } from "@/lib/motion";
-import { MESSAGE_GAP } from "../MessageItem/rise";
+import { lineAnimate, lineExit, lineInitial } from "../MessageItem/rise";
 import { finishedLabel } from "@/lib/agentStatus";
 
 export function Outcome({ agent }: { agent: Agent }) {
   return (
     <motion.p
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0, transition: { y: spring, opacity: fadeIn } }}
-      exit={{
-        opacity: 0,
-        height: 0,
-        marginTop: -MESSAGE_GAP,
-        overflow: "hidden",
-        transition: { height: spring, marginTop: spring, opacity: fadeOut },
-      }}
+      initial={lineInitial}
+      animate={lineAnimate}
+      exit={lineExit}
       className="flex items-center gap-1.5 text-[14px] text-green"
     >
       <Check className="size-4" strokeWidth={2.5} />

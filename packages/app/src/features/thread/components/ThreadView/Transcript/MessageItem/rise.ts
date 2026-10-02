@@ -4,6 +4,23 @@ import { fadeIn, fadeOut, spring } from "@/lib/motion";
 /** The gap between messages (`gap-7`) and between a reply's blocks (`gap-3`). */
 export const MESSAGE_GAP = 28;
 export const REPLY_GAP = 12;
+
+/**
+ * Whatever comes or goes makes its room on the spring, margin included, so the view sees one smooth change in
+ * height. Left to snap, the follower would chase each step and the conversation would lurch up and back.
+ */
+const fold = (gap: number) => ({
+  closed: { height: 0, marginTop: -gap, overflow: "hidden" },
+  open: {
+    height: "auto",
+    marginTop: 0,
+    transitionEnd: { overflow: "visible" },
+  },
+});
+const makeRoom = { height: spring, marginTop: spring };
+
+const reply = fold(REPLY_GAP);
+const thread = fold(MESSAGE_GAP);
 const STAGGER = 0.04;
 const MAX_STAGGERED = 5;
 
@@ -30,10 +47,6 @@ export const rise: Variants = {
   },
 };
 
-/** A block that joins a reply already being written: a short, plain arrival with no wait. */
-export const joinInitial = { opacity: 0, y: 6 };
-export const joinAnimate = { opacity: 1, y: 0, transition: { y: spring, opacity: fadeIn } };
-
 /** Your message leaves the composer: it grows a touch from its bottom-right corner as it rises. */
 export const send: Variants = {
   hidden: { opacity: 0, y: 14, scale: 0.97, filter: "blur(4px)" },
@@ -51,25 +64,34 @@ export const send: Variants = {
   },
 };
 
-/** A block that leaves a reply (a card the agent no longer owes you) folds away, so what is below it glides up instead of dropping. */
-export const leave = {
-  opacity: 0,
-  height: 0,
-  marginTop: -REPLY_GAP,
-  overflow: "hidden",
-  transition: { height: spring, marginTop: spring, opacity: fadeOut },
+/** A block that joins a reply already being written: a short, plain arrival with no wait. */
+export const joinInitial = { opacity: 0, y: 6, ...reply.closed };
+export const joinAnimate = {
+  opacity: 1,
+  y: 0,
+  ...reply.open,
+  transition: { y: spring, opacity: fadeIn, ...makeRoom },
 };
 
-/**
- * A new message makes room for itself on the same spring the cards that leave fold away on, so the view sees one
- * smooth change in height and not a step in each direction.
- */
+/** A block that leaves a reply (a card the agent no longer owes you) folds away. */
+export const leave = { opacity: 0, ...reply.closed, transition: { opacity: fadeOut, ...makeRoom } };
+
+/** A new message opens up its room as it comes. */
 export const room: Variants = {
-  hidden: { height: 0, marginTop: -MESSAGE_GAP, overflow: "hidden" },
-  shown: {
-    height: "auto",
-    marginTop: 0,
-    transition: { height: spring, marginTop: spring },
-    transitionEnd: { overflow: "visible" },
-  },
+  hidden: thread.closed,
+  shown: { ...thread.open, transition: makeRoom },
+};
+
+/** A line under the conversation, like the outcome, arriving and leaving. */
+export const lineInitial = { opacity: 0, y: 8, ...thread.closed };
+export const lineAnimate = {
+  opacity: 1,
+  y: 0,
+  ...thread.open,
+  transition: { y: spring, opacity: fadeIn, ...makeRoom },
+};
+export const lineExit = {
+  opacity: 0,
+  ...thread.closed,
+  transition: { opacity: fadeOut, ...makeRoom },
 };
