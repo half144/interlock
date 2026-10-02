@@ -1,4 +1,4 @@
-import type { DiffLine, DiffMode, FileDiff } from "@/types";
+import type { DiffLine, DiffMode, FileDiff, Hunk } from "@/types";
 
 export type { DiffMode };
 
@@ -42,4 +42,22 @@ export function symbolOf(file: FileDiff) {
     if (name) return name;
   }
   return null;
+}
+
+/** Past this many lines a diff opens cut short: mounting thousands of rows holds the panel up for a second. */
+export const FIRST_DIFF_LINES = 400;
+
+/** The first `max` lines of a file's hunks, and how many lines were left out. */
+export function capHunks(hunks: Hunk[], max: number) {
+  let room = max;
+  let hidden = 0;
+  const shown: Hunk[] = [];
+  for (const hunk of hunks) {
+    const kept = hunk.lines.slice(0, Math.max(0, room));
+    room -= kept.length;
+    hidden += hunk.lines.length - kept.length;
+    if (kept.length)
+      shown.push(kept.length === hunk.lines.length ? hunk : { ...hunk, lines: kept });
+  }
+  return { shown, hidden };
 }
