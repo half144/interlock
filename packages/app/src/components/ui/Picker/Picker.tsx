@@ -14,7 +14,7 @@ interface PickerProps<T extends string> {
   className?: string;
 }
 
-/** Select built on the anchored Popover, filled like a text field, with a down caret. */
+/** Select built on the anchored Popover, filled like a text field, with a down caret. Its menu is at least as wide as the field and grows leftwards for long options. */
 export function Picker<T extends string>({
   value,
   options,
@@ -26,7 +26,8 @@ export function Picker<T extends string>({
   const current = options.find((o) => o.value === value);
   return (
     <Popover
-      className="max-h-72 overflow-y-auto"
+      align="end"
+      className="max-h-72 w-max max-w-[360px] min-w-full overflow-y-auto"
       trigger={({ open, toggle }) => (
         <button
           type="button"
