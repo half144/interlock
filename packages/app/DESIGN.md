@@ -406,6 +406,7 @@ The shared primitives live in `src/components/ui`; class recipes for repeated su
 - **Composer pills:** 32px full pills with a Seam outline, 13px ink text, 14px Ink 2 icon (project picker). "Plan first" is a borderless text pill: Ink 3 at rest, Selected and ink when on.
 - **Skill pills:** 28px Seam-outlined pills under the home tray, the project's skills in 12px mono (`/a11y-audit`). Picking one writes `/skill ` at the start of the prompt as plain text, replacing a skill already there; nothing is armed or locked.
 - **Waiting on you:** a placard and up to the tasks blocked on a person, across projects: held (the question or approval as the line), failed, then ready for review (with its diff stat). 44px rows: Lamp, line, detail in Ink 3, project in Ink 4. With nothing waiting it says so in one Ink 3 line and how many agents are working.
+- **Version badge:** an 18px Seam-outlined pill beside the sidebar wordmark, `v0.1.0` in 10.5px mono Ink 4. Its tooltip names the build: the commit for a built app, "development build" under the dev server. It folds away with the wordmark.
 - **Tool chips:** 28px pills on Inset, 13px Ink 2 with an Ink 3 tool glyph.
 
 ### Cards and frames

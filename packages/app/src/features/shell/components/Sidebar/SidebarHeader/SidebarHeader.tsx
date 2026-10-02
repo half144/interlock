@@ -4,6 +4,7 @@ import { LogoMark } from "@/components/ui/LogoMark/LogoMark";
 import { Fold } from "@/features/shell/components/Fold/Fold";
 import { SidebarIconButton } from "@/features/shell/components/SidebarIconButton/SidebarIconButton";
 import { useSidebarHeader } from "./useSidebarHeader";
+import { VersionBadge } from "./VersionBadge/VersionBadge";
 
 /** The mark, the wordmark and the collapse control. Folded, the mark itself expands the sidebar on hover. */
 export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
@@ -28,8 +29,11 @@ export function SidebarHeader({ collapsed }: { collapsed: boolean }) {
         show={!collapsed}
         className="flex w-[218px] shrink-0 items-center justify-between pr-2 pl-1.5"
       >
-        <span className="font-serif text-[17px] leading-none tracking-[-0.01em] text-ink">
-          interlock
+        <span className="flex items-center gap-2">
+          <span className="font-serif text-[17px] leading-none tracking-[-0.01em] text-ink">
+            interlock
+          </span>
+          <VersionBadge />
         </span>
         <SidebarIconButton label="Collapse sidebar" onClick={collapse}>
           <PanelLeft />
