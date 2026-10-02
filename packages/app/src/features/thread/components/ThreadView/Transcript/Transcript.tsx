@@ -2,6 +2,7 @@ import { AnimatePresence, motion, type MotionValue } from "motion/react";
 import { Dock } from "@/components/ui/Dock/Dock";
 import { Outcome } from "@/features/thread/components/ThreadView/Transcript/Outcome/Outcome";
 import { isFinished } from "@/lib/agentStatus";
+import { JumpToLatest } from "./JumpToLatest/JumpToLatest";
 import { Composer } from "./Composer/Composer";
 import { MessageItem } from "./MessageItem/MessageItem";
 import { THINKING_DELAY } from "./MessageItem/rise";
@@ -21,8 +22,21 @@ export function Transcript({
   threadId: string;
   reading: MotionValue<number>;
 }) {
-  const { thread, agent, messages, thinking, card, docked, scroller, content, dock, seen, focus } =
-    useTranscript(threadId, reading);
+  const {
+    thread,
+    agent,
+    messages,
+    thinking,
+    card,
+    docked,
+    scroller,
+    content,
+    dock,
+    seen,
+    focus,
+    away,
+    jump,
+  } = useTranscript(threadId, reading);
 
   if (!thread || !agent) return null;
 
@@ -33,6 +47,7 @@ export function Transcript({
         style={{ opacity: focus.haze, bottom: focus.clearance }}
         className="pointer-events-none absolute inset-x-0 top-0 z-10 backdrop-blur-[4px]"
       />
+      <JumpToLatest visible={away} clearance={focus.clearance} onJump={jump} />
       <div ref={scroller} className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <motion.div
           ref={content}
