@@ -15,6 +15,6 @@ export function useTranscript(threadId: string, reading: MotionValue<number>) {
   const thinking = agent && reply?.role === "agent" ? thinkingLine(agent, reply.blocks) : null;
   const { scroller, content, dock, seen } = useScrollToLatest(messages.length);
   const card = !docked && thread !== undefined && turnPlan(thread).length > 0;
-  const focus = useDockFocus(reading);
+  const focus = useDockFocus(reading, dock);
   return { thread, agent, messages, thinking, card, docked, scroller, content, dock, seen, focus };
 }

@@ -27,12 +27,17 @@ export function Transcript({
   if (!thread || !agent) return null;
 
   return (
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+    <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
+      <motion.div
+        aria-hidden
+        style={{ opacity: focus.haze, bottom: focus.clearance }}
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 backdrop-blur-[4px]"
+      />
       <div ref={scroller} className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <motion.div
           ref={content}
           className="mx-auto flex max-w-full flex-1 flex-col gap-7 px-6 pt-6 pb-2"
-          style={{ width: reading, filter: focus }}
+          style={{ width: reading }}
         >
           {messages.map((m, i) => (
             <MessageItem
