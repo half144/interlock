@@ -21,3 +21,20 @@ export const rise: Variants = {
     };
   },
 };
+
+/** Your message leaves the composer: it grows a touch from its bottom-right corner as it rises. */
+export const send: Variants = {
+  hidden: { opacity: 0, y: 14, scale: 0.97, filter: "blur(4px)" },
+  shown: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      y: { ...spring, visualDuration: 0.34 },
+      scale: { ...spring, visualDuration: 0.34 },
+      opacity: fadeIn,
+      filter: fadeIn,
+    },
+  },
+};

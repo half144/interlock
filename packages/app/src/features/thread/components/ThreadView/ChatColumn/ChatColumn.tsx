@@ -3,6 +3,7 @@ import type { Agent } from "@/types";
 import { easeIn, easeOut } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { ThreadHeader } from "../ThreadHeader/ThreadHeader";
+import { FreshPresence } from "@/components/ui/FreshPresence/FreshPresence";
 import { Transcript } from "../Transcript/Transcript";
 
 interface ChatColumnProps {
@@ -45,7 +46,9 @@ export function ChatColumn({
             exit={{ opacity: 0, transition: { duration: 0.16, ease: easeIn } }}
             className="absolute inset-0 flex flex-col"
           >
-            <Transcript threadId={threadId} reading={reading} />
+            <FreshPresence>
+              <Transcript threadId={threadId} reading={reading} />
+            </FreshPresence>
           </motion.div>
         </AnimatePresence>
       </div>
