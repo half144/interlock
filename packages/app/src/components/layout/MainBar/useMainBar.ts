@@ -1,14 +1,7 @@
-import { SIDEBAR_WIDTH, useSidebarWidth } from "@/hooks/useRail";
-import { TRAFFIC_LIGHT_INSET } from "@/lib/layout";
-import { useStore } from "@/stores/app-store";
+import { useSidebarWidth } from "@/hooks/useRail";
+import { barInset } from "@/lib/layout";
 
-/** With the sidebar folded to its rail the window buttons overhang into this bar, so it steps aside for them. */
+/** Beside the window controls the bar's contents start further in: by whatever the sidebar doesn't already cover. */
 export function useMainBar() {
-  const width = useSidebarWidth();
-  const setSidebar = useStore((s) => s.setSidebar);
-  return {
-    overhang: width > 0 && width < TRAFFIC_LIGHT_INSET,
-    overhangBy: TRAFFIC_LIGHT_INSET - SIDEBAR_WIDTH.rail,
-    expand: () => setSidebar("open"),
-  };
+  return { inset: barInset(useSidebarWidth()) };
 }

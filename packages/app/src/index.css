@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-/* Under a Mac window with the title bar folded into our top bar (see `macChrome`). */
+/* Under a Mac window whose title bar is our own window bar (see `macChrome`). */
 @custom-variant mac (&:where([data-chrome="mac"] *));
 
 @theme {
-  /* The window buttons of a Mac window with the title bar folded into our top bar. */
+  /* What the window bar reserves for the window buttons of a Mac window (see `macChrome`). */
   --spacing-lights: 92px;
   --font-sans:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter Variable", "Segoe UI", ui-sans-serif,

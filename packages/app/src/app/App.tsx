@@ -1,5 +1,5 @@
 import { MotionConfig, motion, useReducedMotion } from "motion/react";
-import { MIN_APP_WIDTH } from "@/lib/layout";
+import { WindowFrame } from "@/components/layout/WindowFrame/WindowFrame";
 import { dock } from "@/lib/motion";
 import { FirstRun } from "@/features/onboarding/components/FirstRun/FirstRun";
 import { CommandPalette } from "@/features/palette/components/CommandPalette/CommandPalette";
@@ -25,7 +25,7 @@ export function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="flex h-full" style={{ minWidth: MIN_APP_WIDTH }}>
+      <WindowFrame>
         {/* Same spring and same frame as the chat column and side panel, so all three edges move as one. */}
         <motion.div
           initial={false}
@@ -39,11 +39,11 @@ export function App() {
         <main className="min-w-0 flex-1 bg-panel">
           <ViewOutlet />
         </main>
-        <CommandPalette />
-        <Toaster />
-        <FirstRun />
-        <DaemonNotice />
-      </div>
+      </WindowFrame>
+      <CommandPalette />
+      <Toaster />
+      <FirstRun />
+      <DaemonNotice />
     </MotionConfig>
   );
 }
