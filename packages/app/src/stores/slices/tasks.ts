@@ -1,6 +1,7 @@
-import type { Agent, Effort, Message, Thread } from "@/types";
+import type { Access, Agent, Effort, Message, Thread } from "@/types";
 import { taskActions } from "../taskActions";
 import { mergeAgent } from "../threads";
+import { turnEnded } from "./queue";
 import type { PlanChoice } from "@/daemon/adapters/holds";
 import type { NewTask, SliceCreator } from "../types";
 
@@ -23,6 +24,8 @@ export interface TaskSlice {
   /** The conversation plans before it edits, from the next message on. */
   startPlanning: (agentId: string) => Promise<void>;
   resolvePlan: (agentId: string, choice: PlanChoice) => Promise<void>;
+  /** Moves the conversation to another autonomy level, from its next permission request on. */
+  setAccess: (agentId: string, access: Access) => Promise<void>;
   setEffort: (agentId: string, effort: Effort) => Promise<void>;
   setModel: (agentId: string, modelId: string) => Promise<void>;
   /** Removes the task: its worktree and branch when it has one, then the agent itself. Leaves the thread if it is open. */
@@ -43,16 +46,22 @@ export const createTaskSlice: SliceCreator<TaskSlice> = (set, get) => ({
       agents: keyed(merged.map((m) => m.agent)),
       threads: keyed(merged.map((m) => m.thread)),
     });
+    for (const { agent } of merged) {
+      if (turnEnded(prev[agent.id], agent)) void get().flushQueue(agent.id);
+    }
   },
 
-  upsertAgent: (agent) =>
+  upsertAgent: (agent) => {
+    const previous = get().agents[agent.id];
     set((s) => {
       const { agent: next, thread } = mergeAgent(s.agents[agent.id], agent, s.threads[agent.id]);
       return {
         agents: { ...s.agents, [agent.id]: next },
         threads: { ...s.threads, [agent.id]: thread },
       };
-    }),
+    });
+    if (turnEnded(previous, agent)) void get().flushQueue(agent.id);
+  },
 
   removeAgent: (agentId) =>
     set((s) => ({

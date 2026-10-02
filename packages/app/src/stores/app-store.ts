@@ -7,6 +7,7 @@ import { createEditorSlice } from "./slices/editor";
 import { createProjectSlice } from "./slices/projects";
 import { createProjectSettingsSlice } from "./slices/projectSettings";
 import { createProviderSlice } from "./slices/providers";
+import { createQueueSlice } from "./slices/queue";
 import { createReviewSlice } from "./slices/review";
 import { createShipSlice } from "./slices/ship";
 import { createSubagentSlice } from "./slices/subagents";
@@ -23,6 +24,7 @@ export const useStore = create<AppState>()((...a) => ({
   ...createProjectSlice(...a),
   ...createProjectSettingsSlice(...a),
   ...createTaskSlice(...a),
+  ...createQueueSlice(...a),
   ...createSubagentSlice(...a),
   ...createProviderSlice(...a),
   ...createUsageSlice(...a),
