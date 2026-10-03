@@ -4,6 +4,8 @@ import { finishLogin, needsSetup, stateOf } from "./diagnostics";
 
 const tool = (id: ToolStatus["id"], patch: Partial<ToolStatus> = {}): ToolStatus => ({
   id,
+  executable: id,
+  path: null,
   installed: true,
   version: "1",
   loggedIn: true,

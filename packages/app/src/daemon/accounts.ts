@@ -1,12 +1,22 @@
 import type { AuthProvider, ToolStatus } from "@/types";
 import { openExternal } from "@/platform/desktop";
-import { toToolStatus } from "./adapters/diagnostics";
+import { toExecutablePatch, toToolStatus } from "./adapters/diagnostics";
 import { getClient } from "./client";
 
 export async function fetchDiagnostics(): Promise<ToolStatus[]> {
-  const result = await getClient().getDiagnostics();
+  const client = getClient();
+  const { config } = await client.getDaemonConfig();
+  const result = await client.getDiagnostics();
   if (result.error) throw new Error(result.error);
-  return result.tools.map(toToolStatus);
+  return result.tools.map((tool) => toToolStatus(tool, config.providers[tool.id] ?? {}));
+}
+
+export async function saveExecutable(provider: AuthProvider, executable: string): Promise<void> {
+  const client = getClient();
+  const { config } = await client.getDaemonConfig();
+  await client.patchDaemonConfig(
+    toExecutablePatch(provider, executable, config.providers[provider] ?? {}),
+  );
 }
 
 export interface LoginStart {

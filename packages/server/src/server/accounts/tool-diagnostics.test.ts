@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { Logger } from "pino";
 import type { CommandRunner } from "./command-runner.js";
 import { collectToolDiagnostics, parseActiveGhAccount } from "./tool-diagnostics.js";
@@ -30,6 +30,54 @@ const run: CommandRunner = async (binary, args) => {
 };
 
 describe("collectToolDiagnostics", () => {
+  it("probes the selected executable and shows its quoted login command", async () => {
+    const findBinary = vi.fn(async (name: string) =>
+      name === "/my tools/claude+60" ? name : null,
+    );
+    const customRun = vi.fn<CommandRunner>(async () => ({
+      exitCode: 0,
+      stdout: "2.1.0",
+      stderr: "",
+    }));
+    const tools = await collectToolDiagnostics({
+      logger,
+      claudeAuth: {
+        status: async () => ({ loggedIn: true, account: "work@example.com", plan: "max" }),
+      },
+      codexAuth: { status: async () => ({ loggedIn: false, account: null, plan: null }) },
+      commands: { claude: ["/my tools/claude+60", "--profile", "work"] },
+      findBinary,
+      run: customRun,
+    });
+    expect(findBinary).toHaveBeenCalledWith("/my tools/claude+60");
+    expect(customRun).toHaveBeenCalledWith("/my tools/claude+60", [
+      "--profile",
+      "work",
+      "--version",
+    ]);
+    expect(tools.find((tool) => tool.id === "claude")).toMatchObject({
+      path: "/my tools/claude+60",
+      account: "work@example.com",
+      loginCommand: "'/my tools/claude+60' --profile work auth login",
+    });
+  });
+
+  it("does not suggest installing the standard CLI when a custom executable is missing", async () => {
+    const tools = await collectToolDiagnostics({
+      logger,
+      claudeAuth: { status: async () => ({ loggedIn: false, account: null, plan: null }) },
+      codexAuth: { status: async () => ({ loggedIn: false, account: null, plan: null }) },
+      commands: { claude: ["missing-wrapper"] },
+      findBinary: async () => null,
+      run,
+    });
+    expect(tools.find((tool) => tool.id === "claude")).toMatchObject({
+      installed: false,
+      installCommand: null,
+      loginCommand: "missing-wrapper auth login",
+    });
+  });
+
   it("reports version, login and account for every installed tool", async () => {
     const tools = await collectToolDiagnostics({
       logger,

@@ -4,6 +4,7 @@ import type { Logger } from "pino";
 import { findExecutable } from "../../executable-resolution/executable-resolution.js";
 import { spawnProcess } from "../../utils/spawn.js";
 import { CodexAppServerClient } from "../agent/providers/codex/app-server-transport.js";
+import type { ProviderCommandPrefix } from "../agent/provider-launch-config.js";
 
 const LOGIN_TIMEOUT_MS = 10 * 60_000;
 
@@ -68,6 +69,7 @@ class CodexCliMissingError extends Error {
 
 export interface CodexAuthDeps {
   logger: Logger;
+  resolveCommand?: () => Promise<ProviderCommandPrefix>;
   createClient?: () => Promise<CodexRpcClient>;
 }
 
@@ -75,7 +77,7 @@ export class CodexAuth {
   private readonly createClient: () => Promise<CodexRpcClient>;
 
   constructor(deps: CodexAuthDeps) {
-    this.createClient = deps.createClient ?? (() => spawnCodexAppServer(deps.logger));
+    this.createClient = deps.createClient ?? (() => spawnCodexAppServer(deps));
   }
 
   async status(): Promise<CodexAccountStatus> {
@@ -184,9 +186,13 @@ async function readAccount(client: CodexRpcClient): Promise<CodexAccountStatus> 
   };
 }
 
-async function spawnCodexAppServer(logger: Logger): Promise<CodexRpcClient> {
-  const binary = await findExecutable("codex");
-  if (!binary) throw new CodexCliMissingError();
-  const child = spawnProcess(binary, ["app-server"], { stdio: ["pipe", "pipe", "pipe"] });
-  return new CodexAppServerClient(child as ChildProcessWithoutNullStreams, logger);
+async function spawnCodexAppServer(deps: CodexAuthDeps): Promise<CodexRpcClient> {
+  const launch = deps.resolveCommand
+    ? await deps.resolveCommand()
+    : { command: await findExecutable("codex"), args: [] };
+  if (!launch.command) throw new CodexCliMissingError();
+  const child = spawnProcess(launch.command, [...launch.args, "app-server"], {
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+  return new CodexAppServerClient(child as ChildProcessWithoutNullStreams, deps.logger);
 }

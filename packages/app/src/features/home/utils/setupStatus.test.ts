@@ -4,6 +4,8 @@ import { setupStatus } from "./setupStatus";
 
 const tool = (id: ToolStatus["id"], change: Partial<ToolStatus> = {}): ToolStatus => ({
   id,
+  executable: id,
+  path: null,
   installed: true,
   version: "1.0.0",
   loggedIn: true,

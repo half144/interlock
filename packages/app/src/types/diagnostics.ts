@@ -11,6 +11,8 @@ export interface ToolStatus {
   plan: string | null;
   installCommand: string | null;
   loginCommand: string | null;
+  executable: string;
+  path: string | null;
 }
 
 export type LoginState =

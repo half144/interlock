@@ -3,7 +3,6 @@ import * as daemon from "@/daemon/accounts";
 import { finishLogin } from "@/lib/diagnostics";
 import type { SliceCreator } from "../types";
 
-/** `auto` shows the first-run screen only while setup is needed; the others are the user's choice. */
 type SetupMode = "auto" | "shown" | "hidden";
 
 interface LoginResult {
@@ -14,13 +13,13 @@ interface LoginResult {
 }
 
 export interface AccountsSlice {
-  /** What `git`, Claude, Codex and `gh` look like on this machine; null until the first check ends. */
   tools: ToolStatus[] | null;
   toolsError: string | null;
   login: LoginState;
   setup: SetupMode;
 
   loadTools: () => Promise<void>;
+  saveExecutable: (provider: AuthProvider, executable: string) => Promise<void>;
   startLogin: (provider: AuthProvider) => Promise<void>;
   cancelLogin: () => void;
   logout: (provider: AuthProvider) => Promise<void>;
@@ -42,6 +41,11 @@ export const createAccountsSlice: SliceCreator<AccountsSlice> = (set, get) => ({
     } catch (error) {
       set({ toolsError: messageOf(error) });
     }
+  },
+
+  saveExecutable: async (provider, executable) => {
+    await daemon.saveExecutable(provider, executable);
+    set({ tools: await daemon.fetchDiagnostics(), toolsError: null });
   },
 
   startLogin: async (provider) => {

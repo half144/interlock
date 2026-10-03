@@ -146,6 +146,7 @@ import { AgentConfigSession } from "./session/agent-config/agent-config-session.
 import { ProjectConfigSession } from "./session/project-config/project-config-session.js";
 import { ProjectSettingsSession } from "./session/project-settings/project-settings-session.js";
 import { AccountsSession } from "./session/accounts/accounts-session.js";
+import { configuredCommand } from "./accounts/provider-command.js";
 import { ProjectDiscoverySession } from "./session/project-discovery/project-discovery-session.js";
 import { dispatchSettingsAndAccountsMessage } from "./session/settings-accounts-dispatch.js";
 import { ProjectSettingsStore } from "./project-settings/project-settings-store.js";
@@ -796,6 +797,7 @@ export class Session {
     this.accountsSession = new AccountsSession({
       host: { emit: (msg) => this.emit(msg) },
       logger: this.sessionLogger,
+      getProviderCommand: (provider) => configuredCommand(daemonConfigStore.get(), provider),
     });
     this.projectDiscoverySession = new ProjectDiscoverySession({
       host: { emit: (msg) => this.emit(msg) },

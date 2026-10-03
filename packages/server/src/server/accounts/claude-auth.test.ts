@@ -36,6 +36,43 @@ function auth(options: { run?: CommandRunner; child?: ReturnType<typeof fakeChil
 }
 
 describe("ClaudeAuth", () => {
+  it("uses the selected wrapper and its prefix arguments for status, login and logout", async () => {
+    const child = fakeChild();
+    const run = vi.fn<CommandRunner>(async () => ({ exitCode: 0, stdout: loggedIn, stderr: "" }));
+    const spawn = vi.fn(() => child as unknown as ChildProcess);
+    const selected = new ClaudeAuth({
+      resolveCommand: async () => ({ command: "/my tools/claude+60", args: ["--profile", "work"] }),
+      run,
+      spawn,
+    });
+    await selected.status();
+    await selected.logout();
+    const pending = selected.startLogin();
+    child.stdout.write("https://claude.ai/login\n");
+    const login = await pending;
+    child.emit("exit", 0);
+    await login.done;
+    expect(run).toHaveBeenCalledWith("/my tools/claude+60", [
+      "--profile",
+      "work",
+      "auth",
+      "status",
+      "--json",
+    ]);
+    expect(run).toHaveBeenCalledWith("/my tools/claude+60", [
+      "--profile",
+      "work",
+      "auth",
+      "logout",
+    ]);
+    expect(spawn).toHaveBeenCalledWith("/my tools/claude+60", [
+      "--profile",
+      "work",
+      "auth",
+      "login",
+    ]);
+  });
+
   it("reads login state, account and plan from `claude auth status --json`", async () => {
     const run = vi.fn<CommandRunner>(async () => ({ exitCode: 0, stdout: loggedIn, stderr: "" }));
 

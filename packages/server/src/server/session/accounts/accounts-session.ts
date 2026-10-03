@@ -4,6 +4,7 @@ import type { SessionInboundMessage, SessionOutboundMessage } from "../../messag
 import { ClaudeAuth } from "../../accounts/claude-auth.js";
 import { CodexAuth } from "../../accounts/codex-auth.js";
 import { collectToolDiagnostics } from "../../accounts/tool-diagnostics.js";
+import { resolveAccountCommand } from "../../accounts/provider-command.js";
 
 type LoginRequest = Extract<SessionInboundMessage, { type: "provider.auth.login.request" }>;
 type LogoutRequest = Extract<SessionInboundMessage, { type: "provider.auth.logout.request" }>;
@@ -19,6 +20,7 @@ export interface AccountsSessionOptions {
   logger: pino.Logger;
   claudeAuth?: ClaudeAuth;
   codexAuth?: CodexAuth;
+  getProviderCommand?: (provider: AuthProvider) => string[] | undefined;
 }
 
 export class AccountsSession {
@@ -27,8 +29,18 @@ export class AccountsSession {
   private readonly activeLogins = new Map<AuthProvider, ActiveLogin>();
 
   constructor(private readonly options: AccountsSessionOptions) {
-    this.claudeAuth = options.claudeAuth ?? new ClaudeAuth();
-    this.codexAuth = options.codexAuth ?? new CodexAuth({ logger: options.logger });
+    this.claudeAuth =
+      options.claudeAuth ??
+      new ClaudeAuth({
+        resolveCommand: () =>
+          resolveAccountCommand("claude", options.getProviderCommand?.("claude")),
+      });
+    this.codexAuth =
+      options.codexAuth ??
+      new CodexAuth({
+        logger: options.logger,
+        resolveCommand: () => resolveAccountCommand("codex", options.getProviderCommand?.("codex")),
+      });
   }
 
   async handleDiagnosticsRequest(msg: DiagnosticsRequest): Promise<void> {
@@ -37,6 +49,10 @@ export class AccountsSession {
         logger: this.options.logger,
         claudeAuth: this.claudeAuth,
         codexAuth: this.codexAuth,
+        commands: {
+          claude: this.options.getProviderCommand?.("claude") ?? ["claude"],
+          codex: this.options.getProviderCommand?.("codex") ?? ["codex"],
+        },
       });
       this.options.host.emit({
         type: "diagnostics.get.response",

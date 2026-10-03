@@ -3,6 +3,7 @@ import { z } from "zod";
 import { findExecutable } from "../../executable-resolution/executable-resolution.js";
 import { spawnProcess } from "../../utils/spawn.js";
 import { runCommand, type CommandRunner } from "./command-runner.js";
+import type { ProviderCommandPrefix } from "../agent/provider-launch-config.js";
 
 const URL_PATTERN = /https?:\/\/[^\s"'<>]+/u;
 const URL_WAIT_MS = 4_000;
@@ -33,6 +34,7 @@ export interface ClaudeLoginHandle {
 }
 
 export interface ClaudeAuthDeps {
+  resolveCommand?: () => Promise<ProviderCommandPrefix>;
   findBinary?: () => Promise<string | null>;
   run?: CommandRunner;
   spawn?: (binary: string, args: string[]) => ChildProcess;
@@ -48,12 +50,15 @@ export class ClaudeCliMissingError extends Error {
 }
 
 export class ClaudeAuth {
+  private readonly resolveCommand: () => Promise<ProviderCommandPrefix>;
   private readonly findBinary: () => Promise<string | null>;
   private readonly run: CommandRunner;
   private readonly spawnChild: (binary: string, args: string[]) => ChildProcess;
 
   constructor(deps: ClaudeAuthDeps = {}) {
     this.findBinary = deps.findBinary ?? (() => findExecutable("claude"));
+    this.resolveCommand =
+      deps.resolveCommand ?? (async () => ({ command: await this.requireBinary(), args: [] }));
     this.run = deps.run ?? runCommand;
     this.spawnChild =
       deps.spawn ??
@@ -61,8 +66,8 @@ export class ClaudeAuth {
   }
 
   async status(): Promise<ClaudeAuthStatus> {
-    const binary = await this.requireBinary();
-    const result = await this.run(binary, ["auth", "status", "--json"]);
+    const { command, args } = await this.resolveCommand();
+    const result = await this.run(command, [...args, "auth", "status", "--json"]);
     const parsed = ClaudeAuthStatusSchema.safeParse(safeJson(result.stdout));
     if (!parsed.success) {
       return { loggedIn: false, account: null, plan: null };
@@ -75,8 +80,8 @@ export class ClaudeAuth {
   }
 
   async logout(): Promise<void> {
-    const binary = await this.requireBinary();
-    const result = await this.run(binary, ["auth", "logout"]);
+    const { command, args } = await this.resolveCommand();
+    const result = await this.run(command, [...args, "auth", "logout"]);
     if (result.exitCode !== 0) {
       throw new Error(
         `Claude logout failed: ${tail(result.stderr || result.stdout)}. Run \`claude auth logout\` in a terminal to see the full error.`,
@@ -85,8 +90,8 @@ export class ClaudeAuth {
   }
 
   async startLogin(): Promise<ClaudeLoginHandle> {
-    const binary = await this.requireBinary();
-    const child = this.spawnChild(binary, ["auth", "login"]);
+    const { command, args } = await this.resolveCommand();
+    const child = this.spawnChild(command, [...args, "auth", "login"]);
     let output = "";
     let resolveUrl: (url: string | null) => void = () => undefined;
     const urlFound = new Promise<string | null>((resolve) => {

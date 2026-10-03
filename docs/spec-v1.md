@@ -36,6 +36,8 @@ Usável = você consegue trabalhar nos seus projetos de verdade pelo Interlock, 
 | 21  | Ambiente estrito      | **quality-kit em modo time** (`.quality/` no repo): gate no fim do turno (inclusive dos subagentes), regras protegidas e prova em tela. **Sem plano por tarefa** (`requirePlan: false`) **e sem o fluxo `task`/`ship`**: a spec é o plano. As regras do projeto (arquitetura, componentes, composição) entram nele. Lint em **ESLint flat config + typescript-eslint** (o quality-kit exige; o oxlint sai) | Faz o agente não conseguir entregar código ruim, em vez de só pedir. Modo time porque o repo vai ser open source       |
 | 22  | Design antes de regra | Mudanças de arquitetura ou de padrão são **conversadas antes** (uma pergunta por vez, com recomendação), registradas na spec ou num ADR, e só então viram regra no quality-kit                                                                                                                                                                                                                             | O quality-kit garante as regras, mas não as decide; é a parte que fizemos nesta sessão                                 |
 
+Escolha de executável (2026-10-03): em Accounts, um comando ou caminho completo por provedor, global neste Mac. A escolha vale para diagnóstico, login/logout e novas tarefas. Wrappers compatíveis com Claude Code/Codex são aceitos; não adiciona novos provedores. Ver ADR 0060.
+
 ## 3. Arquitetura
 
 ```

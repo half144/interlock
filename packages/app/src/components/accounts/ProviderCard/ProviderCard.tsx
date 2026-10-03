@@ -10,6 +10,7 @@ import { LoginProgress } from "./LoginProgress/LoginProgress";
 import { LogoutModal } from "./LogoutModal/LogoutModal";
 import { subtitleOf } from "./subtitle";
 import { useProviderCard } from "./useProviderCard";
+import { ExecutableField } from "./ExecutableField/ExecutableField";
 
 export function ProviderCard({ tool }: { tool: ToolStatus & { id: AuthProvider } }) {
   const card = useProviderCard(tool);
@@ -39,6 +40,8 @@ export function ProviderCard({ tool }: { tool: ToolStatus & { id: AuthProvider }
           </Button>
         )}
       </div>
+
+      <ExecutableField tool={tool} />
 
       {state === "missing" && tool.installCommand && (
         <CommandHint label="Install it, then check again" command={tool.installCommand} />

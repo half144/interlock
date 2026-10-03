@@ -1,9 +1,14 @@
 import type { Logger } from "pino";
-import type { ToolDiagnostic, DiagnosticToolId } from "@interlock/protocol/accounts-schema";
+import type {
+  AuthProvider,
+  ToolDiagnostic,
+  DiagnosticToolId,
+} from "@interlock/protocol/accounts-schema";
 import { findExecutable } from "../../executable-resolution/executable-resolution.js";
 import type { ClaudeAuth } from "./claude-auth.js";
 import type { CodexAuth } from "./codex-auth.js";
 import { runCommand, type CommandRunner } from "./command-runner.js";
+import { displayCommand } from "./provider-command.js";
 
 interface ToolCatalogEntry {
   installCommand: string;
@@ -29,6 +34,7 @@ export interface ToolDiagnosticsDeps {
   codexAuth: Pick<CodexAuth, "status">;
   findBinary?: (name: string) => Promise<string | null>;
   run?: CommandRunner;
+  commands?: Partial<Record<AuthProvider, string[]>>;
 }
 
 interface LoginProbe {
@@ -44,19 +50,21 @@ export async function collectToolDiagnostics(deps: ToolDiagnosticsDeps): Promise
   const run = deps.run ?? runCommand;
   return Promise.all(
     TOOL_ORDER.map(async (id) => {
-      const path = await findBinary(id);
+      const argv = (id === "claude" || id === "codex" ? deps.commands?.[id] : undefined) ?? [id];
+      const executable = argv[0] ?? id;
+      const path = await findBinary(executable);
       const catalog = TOOL_CATALOG[id];
       const base = {
         id,
         path,
-        installCommand: path ? null : catalog.installCommand,
-        loginCommand: catalog.loginCommand,
+        installCommand: path || executable !== id ? null : catalog.installCommand,
+        loginCommand: loginCommandFor(id, argv),
       };
       if (!path) {
         return { ...base, installed: false, version: null, ...UNKNOWN_LOGIN };
       }
       const [version, login] = await Promise.all([
-        readVersion(run, path),
+        readVersion(run, path, argv.slice(1)),
         probeLogin(id, path, deps, run),
       ]);
       return { ...base, installed: true, version, ...login };
@@ -64,8 +72,18 @@ export async function collectToolDiagnostics(deps: ToolDiagnosticsDeps): Promise
   );
 }
 
-async function readVersion(run: CommandRunner, binary: string): Promise<string | null> {
-  const result = await run(binary, ["--version"]);
+function loginCommandFor(id: DiagnosticToolId, argv: string[]): string | null {
+  if (id === "claude") return displayCommand([...argv, "auth", "login"]);
+  if (id === "codex") return displayCommand([...argv, "login"]);
+  return TOOL_CATALOG[id].loginCommand;
+}
+
+async function readVersion(
+  run: CommandRunner,
+  binary: string,
+  args: string[],
+): Promise<string | null> {
+  const result = await run(binary, [...args, "--version"]);
   return result.exitCode === 0 ? (VERSION_PATTERN.exec(result.stdout)?.[0] ?? null) : null;
 }
 
